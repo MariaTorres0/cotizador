@@ -1,0 +1,228 @@
+<?php
+include './conexion.php';
+function pathImg($idProducto){
+    global  $conexion;
+    $sql = "SELECT  id_image FROM ps_image WHERE ps_image.id_product = $idProducto";
+    $resultado = mysqli_query($conexion, $sql);
+    $filas = mysqli_fetch_array($resultado);
+
+    return crearPath($filas[0]);
+}
+
+function crearPath($nombreImg){
+    $cadena = $nombreImg.".jpg";
+
+    $separarId = explode("-", $cadena);
+    $idSeparado = $separarId[0];
+	$idSeparado = $nombreImg;
+    $valorArray = array();
+
+    for ($i = 0; $i < strlen($idSeparado); $i++) {
+        array_push($valorArray, $idSeparado[$i]);
+    }
+    $rutaId = implode("/", $valorArray);
+
+    $rutaFinal = "https://kpchardware.com/img/p/" . $rutaId . "/" . $cadena;
+
+    return $rutaFinal;
+}
+
+function fuentes($id, $tipo,$idPadre)
+{
+    $resultadoSql = sql($id, $tipo, 0);
+    $contador = 1;
+    $numRows = mysqli_num_rows($resultadoSql);
+    echo "<div class='card-body m-0 p-0 p-lg-2'><div class='row align-items-start'>";
+    while ($filas = mysqli_fetch_array($resultadoSql)) {
+
+        if ($idPadre == 100) {
+            if ($filas[7] != 0) {
+                $cantidad = $filas[7];
+            } else {
+                $cantidad = 1;
+            }
+            $precioNormal = redondear($filas[4] * 1.13);
+            $precioEfectivo = redondear($precioNormal * 0.95);
+            $srcImg = pathImg($filas[3]);
+            echo "<div class='col-lg-4 col-md-6 col-sm-12 col-xs-12' >
+                <div class='card bg-light mb-3' style='max-width: 18rem;'>
+                    <div class='card-header p-1'>
+                        <img src='$srcImg' style='max-width: 75px; max-height: 75px;' class='zoom'>
+                        <p>$filas[2]</p>
+                    </div>
+                    <div class='card-body p-1 col-12'>
+                        <p class='card-title font-weight-bold' style='color:#6D6D6B'>Precio normal: $ " . $precioNormal . "</p>
+                        <p class='card-title text-success font-weight-bold'>Precio efectivo: $ " . $precioEfectivo . "</p>
+                        <a class='btn btn-info btn-lg btn-block' style='color: #fff' href='javascript:void(0)' onclick='agregarTabla(\"$filas[2]\", $precioNormal, $precioEfectivo, $cantidad, $filas[3], $filas[0], $filas[6], \"$filas[1]\",0 ,$filas[8], $filas[9], $filas[10], $filas[11])'>+ Añadir</a>
+                    </div>
+                </div>
+            </div>";
+            $contador++;
+        }
+    }
+    echo "</div>";
+}
+
+if (!empty($_POST["id"])) {
+    global $conexion;
+    $id = mysqli_real_escape_string($conexion, $_POST["id"]);
+    $idPadre = mysqli_real_escape_string($conexion, $_POST["idPadre"]);
+    $tipo = mysqli_real_escape_string($conexion, $_POST["tipo"]);
+    $socket = mysqli_real_escape_string($conexion, $_POST["socket"]);
+//echo $socket . "<br>";
+    if ($tipo == 3 && $id > 10) {
+        fuentes($id, $tipo, $idPadre);
+    }else{
+        productos($id, $tipo, $idPadre, $socket);
+    }
+} else {
+    echo "<div class='alert-danger'>Debe seleccionar los componentes en el orden de los botones.</div>";
+}
+
+function sql($id, $tipo, $socket)
+{
+
+    global $conexion;
+    $cateNum = $socket;
+    if ($tipo == 1) {
+        $search = "ps_product.tamano =";
+        if ($socket > 0){
+            $socket = " AND ps_product.asociacion LIKE \"%$socket%\" ";
+        }else{
+            $socket = "";
+        }
+
+        $and = "";
+    } else if ($tipo == 3) {
+        $search = "ps_product.voltaje >=";
+        $and = "AND ps_product.id_category_default = 109 AND ps_category_lang.name = \"FUENTE DE PODER\"";
+        $socket = "";
+    } else if ($tipo == 0) {
+        $search = "ps_category_product.id_category =";
+        $socket = "";
+        $and = "";
+    }
+
+    if($cateNum == 186){
+        $noDupAire = ' && ps_product.id_category_default = ps_category_product.id_category';
+    }else{
+        $noDupAire = '';
+    }
+
+    $sql = "SELECT ps_category_product.id_category AS categoria,
+                   ps_category_lang.name           AS nombreCategoria,
+                   ps_product_lang.name            AS productoNombre,
+                   ps_product_lang.id_product,
+                   ps_product.price,
+                   ps_product.asociacion,
+                   ps_product.id_category_default,
+                   ps_product.slots_ram,
+                   ps_product.voltaje,
+                   ps_product.cooler,
+                   ps_product.gpu,
+                   ps_product.socketCooler
+            FROM ps_category_product,
+                 ps_product_lang,
+                 ps_category_lang,
+                 ps_product
+            WHERE $search$id$socket AND ps_category_product.id_category = ps_category_lang.id_category &&
+                  ps_category_product.id_product = ps_product_lang.id_product && ps_product_lang.id_product = ps_product.id_product
+              AND ps_product.active = 1 $noDupAire $and
+              AND ps_product_lang.id_lang=2 AND ps_category_lang.id_lang=2
+            ORDER BY price ASC;";
+    //echo $sql;
+    $resultado = mysqli_query($conexion, $sql);
+
+    if (isset($id)) {
+
+        return $resultado;
+    }
+}
+
+function traerAsoc($id)
+{
+    global $conexion;
+
+    $sql = "SELECT asociacion, ps_product.id_category_default FROM ps_product WHERE ps_product.id_product = $id";
+
+    $resultado = mysqli_query($conexion, $sql) or die(mysqli_error($conexion));
+    $filas = mysqli_fetch_assoc($resultado);
+
+    return [
+        $filas["asociacion"],
+        $filas["id_category_default"]
+    ];
+}
+
+function sacarVoltaje($idProd)
+{
+    global $conexion;
+
+    $sql = "SELECT ps_product.voltaje FROM ps_product WHERE ps_product.id_product  = $idProd";
+    $resultado = mysqli_query($conexion, $sql) or die(mysqli_error($conexion));
+    $filas = mysqli_fetch_array($resultado);
+
+    return $sql;
+//    return[
+//        $filas[0]
+//    ];
+
+}
+function productos($id, $tipo,$idPadre, $socket){
+    $asociaciones = traerAsoc($id);
+
+    $numAsoc = explode(",", $asociaciones[0]);
+
+    echo "<div class='card-body m-0 p-0 p-lg-2'><div class='row align-items-start'>";
+    $contador = 1;
+
+    if (empty($asociaciones[0])) {
+        echo "<div class='alert-danger col-12'>No se encontraron productos compatibles con su configuración.</div>";
+        exit();
+    } else {
+        for ($i = 0; $i < count($numAsoc); $i++) {
+            $resultadoSql = sql($numAsoc[$i], $tipo, $socket);
+
+            $numRows = mysqli_num_rows($resultadoSql);
+
+            while ($filas = mysqli_fetch_array($resultadoSql)) {
+
+                if ($idPadre == $filas[6]) {
+
+//                if($idPadre == 104 || $idPadre == 105){
+//                    $filas[6] = 104;
+//                }
+                    if ($filas[7] != 0) {
+                        $cantidad = $filas[7];
+                    } else {
+                        $cantidad = 1;
+                    }
+                    $precioNormal = redondear($filas[4] * 1.13);
+                    $precioEfectivo = redondear($precioNormal * 0.95);
+                    $srcImg = pathImg($filas[3]);
+                    echo "<div class='col-lg-4 col-md-6 col-sm-12 col-xs-12' >
+                <div class='card bg-light mb-3' style='max-width: 18rem;'>
+                    <div class='card-header p-1'>
+                        <img src='$srcImg' style='max-width: 75px; max-height: 75px;' class='zoom'>
+                        <p>$filas[2]</p>
+                    </div>
+                    <div class='card-body p-1 col-12'>
+                        <p class='card-title font-weight-bold' style='color:#6D6D6B'>Precio normal: $ " . $precioNormal . "</p>
+                        <p class='card-title text-success font-weight-bold'>Precio efectivo: $ " . $precioEfectivo . "</p>
+                        <a class='btn btn-info btn-lg btn-block' style='color: #fff' href='javascript:void(0)' onclick='agregarTabla(\"$filas[2]\", $precioNormal, $precioEfectivo, $cantidad, $filas[3], $filas[0], $filas[6], \"$filas[1]\",0 ,$filas[8], $filas[9], $filas[10], $filas[10])'>+ Añadir</a>
+                    </div>
+                </div>
+            </div>";
+                    $contador++;
+                }
+            }
+        }
+        echo '</div>';
+    }
+}
+function redondear($valor)
+{
+    $float_redondeado = round($valor * 100) / 100;
+    $float_redondeado = number_format($float_redondeado, 2, ".", "");
+    return $float_redondeado;
+}
