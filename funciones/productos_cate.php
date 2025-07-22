@@ -14,7 +14,7 @@ function pathImg($idProducto)
     global $conexion;
     $sql = "SELECT  id_image FROM ps_image WHERE ps_image.id_product = $idProducto";
     $resultado = mysqli_query($conexion, $sql);
-    if(mysqli_num_rows($resultado)>0){
+    if (mysqli_num_rows($resultado) > 0) {
         $filas = mysqli_fetch_array($resultado);
 
         return crearPath($filas[0]);
@@ -28,7 +28,7 @@ function crearPath($nombreImg)
 
     $separarId = explode("-", $cadena);
     $idSeparado = $separarId[0];
-	$idSeparado = $nombreImg;
+    $idSeparado = $nombreImg;
     $valorArray = array();
 
     for ($i = 0; $i < strlen($idSeparado); $i++) {
@@ -54,7 +54,7 @@ function listarTodo($categoria)
     $resultado = mysqli_query($conexion, $consulta);
 
 
-    while ($filas = mysqli_fetch_row($resultado)) {//trabaja con índices por eso se trae como [1]...
+    while ($filas = mysqli_fetch_row($resultado)) { //trabaja con índices por eso se trae como [1]...
         $sqlCuenta = "SELECT ps_category_product.id_category AS categoria,
                                ps_category_lang.name           AS nombreCategoria,
                                ps_product_lang.name            AS productoNombre,
@@ -73,7 +73,7 @@ function listarTodo($categoria)
                               ps_category_product.id_product = ps_product_lang.id_product && ps_product_lang.id_product = ps_product.id_product &&
                               ps_product.active = 1 AND ps_product_lang.id_lang=2 AND ps_category_lang.id_lang=2
                         order by price ASC;";
-                        
+
         $resCuenta = mysqli_query($conexion, $sqlCuenta);
 
         if (mysqli_num_rows($resCuenta) > 0) {
@@ -113,7 +113,7 @@ function listarTodo($categoria)
                 $style = "display:none";
                 echo "<div class='col-12 alert-danger'><p class='text-center font-weight-bold.'>No se encontraron productos en esta categoría</div>";
             }
-            while ($filasProd = mysqli_fetch_row($resultadoProds)) {//trabaja con índices por eso se trae como [1]...
+            while ($filasProd = mysqli_fetch_row($resultadoProds)) { //trabaja con índices por eso se trae como [1]...
                 $precioNormal = $filasProd[4] * 1.13;
                 $precioEfectivo = $precioNormal * $factorClass->getValor('FTJ')['valor'];
 
@@ -142,14 +142,12 @@ function listarTodo($categoria)
                     </div>
                 </div>
             </div>";
-
             }
             echo "</div></div>
                 </div>
             </div>";
         }
     }
-
 }
 
 function listarPeri($categoria)
@@ -202,4 +200,55 @@ function listarPeri($categoria)
             </div>";
     }
     echo "</div>";
+}
+
+function obtenerCategoriasCoti($conexion)
+{
+    $query = "SELECT * FROM category_coti WHERE activo = 1 ORDER BY id_category_coti ASC";
+    $result = mysqli_query($conexion, $query);
+    $categorias = [];
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $categorias[] = $row;
+    }
+
+    return $categorias;
+}
+
+
+$perifericos_ids = [110, 111, 113];
+
+function mostrarCategoria($categoria, $index, $show = false, $color = '#565652', $collapsed = false, $showIcon = true)
+{
+    $btnId = $categoria['id_btn'] ?? "btn{$index}";
+    $collapseId = "collapse{$index}";
+    $headingId = "heading{$index}";
+    $bodyId = $categoria['nombre'] . 'Body';
+    $expanded = $show ? 'true' : 'false';
+    $collapseClass = $show ? 'collapse show' : 'collapse';
+    $btnCollapsed = $collapsed ? 'collapsed' : '';
+
+    echo "<div class='card'>
+            <div class='card-header degradadoGris' id='{$headingId}'>
+                <h2 class='mb-0 text-left'>
+                    <button class='btn btn-link {$btnCollapsed}' id='{$btnId}Btn' style='color: {$color};' type='button' 
+                        data-toggle='collapse' data-target='#{$collapseId}' aria-expanded='{$expanded}' aria-controls='{$collapseId}'>";
+
+    if ($showIcon) {
+        $iconColor = ($categoria['obligatorio'] ?? 0) == 1 ? 'red' : '';
+        $iconClass = ($categoria['obligatorio'] ?? 0) == 1 ? 'fas fa-times' : 'fas fa-exclamation';
+        echo "<img src='iconos_cat/{$categoria['icono']}' width='40' height='40' style='vertical-align: middle; margin-right: 6px;' />";
+        echo "<span>{$categoria['nombre']}</span>";
+        echo "<i class='{$iconClass}' id='{$categoria['id_category']}' style='color: {$iconColor}; margin-left: 6px;'></i>";
+    } else {
+        echo $categoria['nombre'];
+    }
+
+    echo       "</button>
+                </h2>
+            </div>
+            <div id='{$collapseId}' class='{$collapseClass}' aria-labelledby='{$headingId}'>
+                <div class='card-body' id='{$bodyId}'></div>
+            </div>
+        </div>";
 }

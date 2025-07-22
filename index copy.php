@@ -116,45 +116,103 @@ $categorias = obtenerCategoriasCoti($conexion);
 
                             <!-- -->
 
+                            <?php
+                            $perifericos_ids = [110, 111, 113];
+                            ?>
                             <div class="accordion" id="accordionExample">
-                                <?php
-                                foreach ($categorias as $index => $categoria) {
-                                    if (!in_array($categoria['id_category'], $perifericos_ids)) {
-                                        mostrarCategoria($categoria, $index, $index === 0);
+                                <?php foreach ($categorias as $index => $categoria): ?>
+                                    <?php if ($categoria['id_category'] == 105): ?>
+                                        <div class="card">
+                                            <div class="card-header degradadoGris" id="heading<?= $index ?>">
+                                                <h2 class="mb-0 text-left">
+                                                    <button class="btn btn-link"
+                                                        id="<?= $categoria['id_btn'] ?>Btn"
+                                                        style="color: #565652;" type="button"
+                                                        data-toggle="collapse" data-target="#collapse<?= $index ?>"
+                                                        aria-expanded="<?= $index === 0 ? 'true' : 'false' ?>"
+                                                        aria-controls="collapse<?= $index ?>">
+                                                        <img src="iconos_cat/<?= $categoria['icono'] ?>" width="40" height="40" style="vertical-align: middle; margin-right: 6px;" />
+                                                        <span><?= $categoria['nombre'] ?></span>
+                                                        <?php if ($categoria['obligatorio'] == 1): ?>
+                                                            <i class="fas fa-times" id="<?= $categoria['id_category'] ?>" style="color: red"></i>
+                                                        <?php else: ?>
+                                                            <i class="fas fa-exclamation" id="<?= $categoria['id_category'] ?>"></i>
+                                                        <?php endif; ?>
+                                                    </button>
+                                                </h2>
+                                            </div>
+                                            <div id="collapse<?= $index ?>" class="collapse <?= $index === 0 ? 'show' : '' ?>" aria-labelledby="heading<?= $index ?>">
+                                                <div class="card-body" id="<?= strtolower($categoria['nombre']) ?>Body"></div>
+                                            </div>
+                                        </div>
 
-                                        if ($categoria['id_category'] == 105) {
-                                            ?>
-                                            <div class="card">
-                                                <div class="card-header degradadoGris" id="headingPerifericos">
-                                                    <h2 class="mb-0 text-left">
-                                                        <button class="btn btn-link collapsed" style="color: #565652;" type="button"
-                                                            data-toggle="collapse" data-target="#collapsePerifericos"
-                                                            aria-expanded="false" aria-controls="collapsePerifericos">
-                                                            <img src="iconos_cat/perifericos.png" width="40" height="40" style="vertical-align: middle; margin-right: 6px;" />
-                                                            <span>PERIFÉRICOS</span>
-                                                            <i class="fas fa-exclamation" id="perifericos" style="margin-left: 6px;"></i>
-                                                        </button>
-                                                    </h2>
-                                                </div>
-                                                <div id="collapsePerifericos" class="collapse" aria-labelledby="headingPerifericos">
-                                                    <div class="card-body">
-                                                        <div class="accordion" id="accordionPerifericos">
-                                                            <?php
-                                                            foreach ($categorias as $sub) {
-                                                                if (in_array($sub['id_category'], $perifericos_ids)) {
-                                                                    mostrarCategoria($sub, $sub['id_category'], false, '#007bff', true, false);
-                                                                }
-                                                            }
-                                                            ?>
-                                                        </div>
+                                        <div class="card">
+                                            <div class="card-header degradadoGris" id="headingPerifericos">
+                                                <h2 class="mb-0 text-left">
+                                                    <button class="btn btn-link collapsed" style="color: #565652;" type="button"
+                                                        data-toggle="collapse" data-target="#collapsePerifericos"
+                                                        aria-expanded="false" aria-controls="collapsePerifericos">
+                                                        <img src="iconos_cat/perifericos.png" width="40" height="40" style="vertical-align: middle; margin-right: 6px;" />
+                                                        <span>PERIFÉRICOS</span>
+                                                        <i class="fas fa-exclamation" id="perifericos"></i>
+                                                    </button>
+                                                </h2>
+                                            </div>
+                                            <div id="collapsePerifericos" class="collapse" aria-labelledby="headingPerifericos">
+                                                <div class="card-body">
+                                                    <div class="accordion" id="accordionPerifericos">
+                                                        <?php foreach ($categorias as $sub): ?>
+                                                            <?php if (in_array($sub['id_category'], $perifericos_ids)): ?>
+                                                                <div class="card">
+                                                                    <div class="card-header card-gris" id="headingSub<?= $sub['id_category'] ?>">
+                                                                        <h2 class="mb-0 text-left">
+                                                                            <button class="btn btn-link collapsed" id="<?= $sub['id_btn'] ?>Btn"
+                                                                                style="color: #007bff;" type="button"
+                                                                                data-toggle="collapse" data-target="#collapseSub<?= $sub['id_category'] ?>"
+                                                                                aria-expanded="false" aria-controls="collapseSub<?= $sub['id_category'] ?>">
+                                                                                <span><?= $sub['nombre'] ?></span>
+                                                                                <?php if ($sub['obligatorio'] == 1): ?>
+                                                                                    <i class="fas fa-times" id="<?= $sub['id_category'] ?>" style="color: red"></i>
+                                                                                <?php endif; ?>
+                                                                            </button>
+                                                                        </h2>
+                                                                    </div>
+                                                                    <div id="collapseSub<?= $sub['id_category'] ?>" class="collapse" aria-labelledby="headingSub<?= $sub['id_category'] ?>">
+                                                                        <div class="card-body" id="<?= strtolower($sub['nombre']) ?>Body"></div>
+                                                                    </div>
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        <?php endforeach; ?>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <?php
-                                        }
-                                    }
-                                }
-                                ?>
+                                        </div>
+                                    <?php elseif (!in_array($categoria['id_category'], $perifericos_ids)): ?>
+                                        <div class="card">
+                                            <div class="card-header degradadoGris" id="heading<?= $index ?>">
+                                                <h2 class="mb-0 text-left">
+                                                    <button class="btn btn-link"
+                                                        id="<?= $categoria['id_btn'] ?>Btn"
+                                                        style="color: #565652;" type="button"
+                                                        data-toggle="collapse" data-target="#collapse<?= $index ?>"
+                                                        aria-expanded="<?= $index === 0 ? 'true' : 'false' ?>"
+                                                        aria-controls="collapse<?= $index ?>">
+                                                        <img src="iconos_cat/<?= $categoria['icono'] ?>" width="40" height="40" style="vertical-align: middle; margin-right: 6px;" />
+                                                        <span><?= $categoria['nombre'] ?></span>
+                                                        <?php if ($categoria['obligatorio'] == 1): ?>
+                                                            <i class="fas fa-times" id="<?= $categoria['id_category'] ?>" style="color: red"></i>
+                                                        <?php else: ?>
+                                                            <i class="fas fa-exclamation" id="<?= $categoria['id_category'] ?>"></i>
+                                                        <?php endif; ?>
+                                                    </button>
+                                                </h2>
+                                            </div>
+                                            <div id="collapse<?= $index ?>" class="collapse <?= $index === 0 ? 'show' : '' ?>" aria-labelledby="heading<?= $index ?>">
+                                                <div class="card-body" id="<?= strtolower($categoria['nombre']) ?>Body"></div>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
                             </div>
 
                             <!-- -->

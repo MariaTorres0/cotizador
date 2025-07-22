@@ -192,3 +192,7 @@ img.zoom{
         margin-top: -80px;
     }
 }
+
+.card-gris {
+    background-color: #f8f9fa; /* gris claro tipo Bootstrap */
+}
