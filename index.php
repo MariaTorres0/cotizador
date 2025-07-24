@@ -199,22 +199,19 @@ $categorias = obtenerCategoriasCoti($conexion);
                         <hr>
                         <hr>
                         <div class="col-11 col-lg-12">
-
                             <h3 class="col-12 col-sm-8 ml-0">Mis componentes</h3>
-
-                            <div class="table-responsive">
-                                <table class="table table-hover table-sm" id="lista">
+                            <div class="table-responsive tabla-mis-componentes">
+                                <table class="table table-bordered table-hover table-sm text-center" id="lista">
                                     <thead class="thead-dark">
-                                        <tr id="encabezado">
-                                            <th scope="col" style="min-width: 400px">Componente</th>
-                                            <th scope="col">Precio</th>
-                                            <th scope="col" style="min-width: 60px">Total</th>
-                                            <th scope="col">Cantidad</th>
-                                            <th scope="col">Quitar</th>
+                                        <tr>
+                                            <th>Componente</th>
+                                            <th>Precio</th>
+                                            <th>Total</th>
+                                            <th>Cantidad</th>
+                                            <th>Quitar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>

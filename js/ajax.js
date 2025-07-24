@@ -7,28 +7,28 @@ $('#caseBtn').on('click', function () {
     buscarProductos(idMobo.value, 'bodyCase', 103, 0, 0);
 });
 
-$('#ramBtn').on('click', function () {
+$('#memoriaRamBtn').on('click', function () {
     var idMobo = document.getElementById('idMobo');
     buscarProductos(idMobo.value, 'ramBody', 101, 0, 0);
 });
 
-$('#gpuBtn').on('click', function () {
+$('#tarjetaGraficaBtn').on('click', function () {
     var idMobo = document.getElementById('idMobo');
     buscarProductos(idMobo.value, 'gpuBody', 102, 0, 0);
 });
 
-$('#airBtn').on('click', function () {
+$('#coolerAireBtn').on('click', function () {
     var idCase = document.getElementById('idCase');
     var socketCool = document.getElementById('socketCool');
     buscarProductos(idCase.value, 'airBody', 104, 1, socketCool.value);
 });
 
-$('#fuenteBtn').on('click', function () {
+$('#fuentePoderBtn').on('click', function () {
     var voltaje = document.getElementById('voltaje');
     buscarProductos(voltaje.value, 'fuenteBody', 100, 3, 0);
 });
 
-$('#liquiBtn').on('click', function () {
+$('#coolerLiquidoBtn').on('click', function () {
     var idCase = document.getElementById('idCase');
     var socketCool = document.getElementById('socketCool');
     buscarProductos(idCase.value, 'liquiBody', 105, 1, socketCool.value);

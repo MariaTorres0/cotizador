@@ -202,6 +202,8 @@ function listarPeri($categoria)
     echo "</div>";
 }
 
+//Nuevas funciones para cotizaciones
+
 function obtenerCategoriasCoti($conexion)
 {
     $query = "SELECT * FROM category_coti WHERE activo = 1 ORDER BY id_category_coti ASC";
@@ -218,7 +220,7 @@ function obtenerCategoriasCoti($conexion)
 
 $perifericos_ids = [110, 111, 113];
 
-function mostrarCategoria($categoria, $index, $show = false, $color = '#565652', $collapsed = false, $showIcon = true)
+function mostrarCategoria($categoria, $index, $show = false, $color = '#565652', $showIcon = true)
 {
     $btnId = $categoria['id_btn'] ?? "btn{$index}";
     $collapseId = "collapse{$index}";
@@ -226,20 +228,21 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
     $bodyId = $categoria['nombre'] . 'Body';
     $expanded = $show ? 'true' : 'false';
     $collapseClass = $show ? 'collapse show' : 'collapse';
-    $btnCollapsed = $collapsed ? 'collapsed' : '';
+    $btnCollapsed = $show ? '' : 'collapsed';
 
     echo "<div class='card'>
             <div class='card-header degradadoGris' id='{$headingId}'>
                 <h2 class='mb-0 text-left'>
-                    <button class='btn btn-link {$btnCollapsed}' id='{$btnId}Btn' style='color: {$color};' type='button' 
-                        data-toggle='collapse' data-target='#{$collapseId}' aria-expanded='{$expanded}' aria-controls='{$collapseId}'>";
+                    <button class='btn btn-link {$btnCollapsed}' id='{$btnId}Btn' style='color: {$color};' type='button'
+                        data-toggle='collapse' data-target='#{$collapseId}' aria-expanded='{$expanded}' aria-controls='{$collapseId}'>
+                        ";
 
     if ($showIcon) {
         $iconColor = ($categoria['obligatorio'] ?? 0) == 1 ? 'red' : '';
         $iconClass = ($categoria['obligatorio'] ?? 0) == 1 ? 'fas fa-times' : 'fas fa-exclamation';
-        echo "<img src='iconos_cat/{$categoria['icono']}' width='40' height='40' style='vertical-align: middle; margin-right: 6px;' />";
+        echo "<img src='iconos_cat/{$categoria['icono']}' width='40' height='40' style='vertical-align: middle; margin-right: 8px;' />";
         echo "<span>{$categoria['nombre']}</span>";
-        echo "<i class='{$iconClass}' id='{$categoria['id_category']}' style='color: {$iconColor}; margin-left: 6px;'></i>";
+        echo "<i class='{$iconClass}' id='{$categoria['id_category']}' style='color: {$iconColor}; margin-left: 8px;'></i>";
     } else {
         echo $categoria['nombre'];
     }
@@ -247,7 +250,7 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
     echo       "</button>
                 </h2>
             </div>
-            <div id='{$collapseId}' class='{$collapseClass}' aria-labelledby='{$headingId}'>
+            <div id='{$collapseId}' class='{$collapseClass}' aria-labelledby='{$headingId}' data-parent='#accordionExample'>
                 <div class='card-body' id='{$bodyId}'></div>
             </div>
         </div>";
