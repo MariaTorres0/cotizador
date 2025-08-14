@@ -119,39 +119,66 @@ $categorias = obtenerCategoriasCoti($conexion);
                             <div class="accordion" id="accordionExample">
                                 <?php
                                 foreach ($categorias as $index => $categoria) {
-                                    if (!in_array($categoria['id_category'], $perifericos_ids)) {
-                                        mostrarCategoria($categoria, $index, $index === 0);
+                                    // Categorías normales (excepto Periféricos)
+                                    if (!in_array($categoria['id_category'], $perifericos_ids) && $categoria['id_category'] != 105) {
+                                        mostrarCategoria($categoria, $index, $index === 0, '#565652', true, '#accordionExample');
+                                    }
 
-                                        if ($categoria['id_category'] == 105) {
-                                            ?>
-                                            <div class="card">
-                                                <div class="card-header degradadoGris" id="headingPerifericos">
-                                                    <h2 class="mb-0 text-left">
-                                                        <button class="btn btn-link collapsed" style="color: #565652;" type="button"
-                                                            data-toggle="collapse" data-target="#collapsePerifericos"
-                                                            aria-expanded="false" aria-controls="collapsePerifericos">
-                                                            <img src="iconos_cat/perifericos.png" width="40" height="40" style="vertical-align: middle; margin-right: 6px;" />
-                                                            <span>PERIFÉRICOS</span>
-                                                            <i class="fas fa-exclamation" id="perifericos" style="margin-left: 6px;"></i>
-                                                        </button>
-                                                    </h2>
-                                                </div>
-                                                <div id="collapsePerifericos" class="collapse" aria-labelledby="headingPerifericos">
-                                                    <div class="card-body">
-                                                        <div class="accordion" id="accordionPerifericos">
-                                                            <?php
-                                                            foreach ($categorias as $sub) {
-                                                                if (in_array($sub['id_category'], $perifericos_ids)) {
-                                                                    mostrarCategoria($sub, $sub['id_category'], false, '#007bff', true, false);
-                                                                }
+                                    // Categoría Periféricos
+                                    if ($categoria['id_category'] == 105) {
+                                ?>
+                                        <div class="card">
+                                            <div class="card-header degradadoGris" id="headingPerifericos">
+                                                <h2 class="mb-0 text-left">
+                                                    <button class="btn btn-link collapsed" style="color: #565652;" type="button"
+                                                        data-toggle="collapse"
+                                                        data-target="#collapsePerifericos"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapsePerifericos"
+                                                        data-parent="#accordionExample">
+                                                        <img src="iconos_cat/perifericos.png" width="40" height="40" style="vertical-align: middle; margin-right: 6px;" />
+                                                        <span>PERIFÉRICOS</span>
+                                                        <i class="fas fa-exclamation" id="perifericos" style="margin-left: 6px;"></i>
+                                                    </button>
+                                                </h2>
+                                            </div>
+
+                                            <div id="collapsePerifericos" class="collapse" aria-labelledby="headingPerifericos" data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    <div class="accordion" id="accordionPerifericos">
+                                                        <?php
+                                                        foreach ($categorias as $sub) {
+                                                            if (in_array($sub['id_category'], $perifericos_ids)) {
+                                                                $subCollapseId = "collapseSub{$sub['id_category']}";
+                                                                $subHeadingId = "headingSub{$sub['id_category']}";
+                                                        ?>
+                                                                <div class="card">
+                                                                    <div class="card-header" id="<?= $subHeadingId ?>">
+                                                                        <h2 class="mb-0 text-left">
+                                                                            <button class="btn btn-link collapsed" type="button"
+                                                                                data-toggle="collapse"
+                                                                                data-target="#<?= $subCollapseId ?>"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="<?= $subCollapseId ?>">
+                                                                                <?= $sub['nombre'] ?>
+                                                                            </button>
+                                                                        </h2>
+                                                                    </div>
+                                                                    <div id="<?= $subCollapseId ?>" class="collapse" aria-labelledby="<?= $subHeadingId ?>" data-parent="#accordionPerifericos">
+                                                                        <div class="card-body p-1">
+                                                                            <?php listarPeri($sub['id_category']); ?>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                        <?php
                                                             }
-                                                            ?>
-                                                        </div>
+                                                        }
+                                                        ?>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <?php
-                                        }
+                                        </div>
+                                <?php
                                     }
                                 }
                                 ?>
@@ -285,7 +312,6 @@ $categorias = obtenerCategoriasCoti($conexion);
                 </div>
             </center>
         </div>
-        <!--MODAL-->
         <!-- Modal -->
         <div class="modal fade" id="modalFinal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
             aria-hidden="true">

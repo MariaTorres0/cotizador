@@ -220,7 +220,7 @@ function obtenerCategoriasCoti($conexion)
 
 $perifericos_ids = [110, 111, 113];
 
-function mostrarCategoria($categoria, $index, $show = false, $color = '#565652', $showIcon = true)
+function mostrarCategoria($categoria, $index, $show = false, $color = '#565652', $showIcon = true, $parentId = '#accordionExample')
 {
     $btnId = $categoria['id_btn'] ?? "btn{$index}";
     $collapseId = "collapse{$index}";
@@ -234,8 +234,7 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
             <div class='card-header degradadoGris' id='{$headingId}'>
                 <h2 class='mb-0 text-left'>
                     <button class='btn btn-link {$btnCollapsed}' id='{$btnId}Btn' style='color: {$color};' type='button'
-                        data-toggle='collapse' data-target='#{$collapseId}' aria-expanded='{$expanded}' aria-controls='{$collapseId}'>
-                        ";
+                        data-toggle='collapse' data-target='#{$collapseId}' aria-expanded='{$expanded}' aria-controls='{$collapseId}'>";
 
     if ($showIcon) {
         $iconColor = ($categoria['obligatorio'] ?? 0) == 1 ? 'red' : '';
@@ -250,7 +249,7 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
     echo       "</button>
                 </h2>
             </div>
-            <div id='{$collapseId}' class='{$collapseClass}' aria-labelledby='{$headingId}' data-parent='#accordionExample'>
+            <div id='{$collapseId}' class='{$collapseClass}' aria-labelledby='{$headingId}' data-parent='{$parentId}'>
                 <div class='card-body' id='{$bodyId}'></div>
             </div>
         </div>";
