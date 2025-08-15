@@ -74,304 +74,294 @@ $categorias = obtenerCategoriasCoti($conexion);
     </style>
 </head>
 
-<body>
+  <body>
     <form action="funciones/enviar.php" method="POST" target="_blank">
-        <div class="container first container-first">
-            <a href="https://www.kpchardware.com" target="_blank">
-                <img src="img/5.png" class="img-fluid logo" alt="Responsive image">
-            </a>
-        </div>
-        <input type="hidden" id="catProce">
-        <input type="hidden" id="catMobo">
-        <input type="hidden" id="idMobo">
-        <input type="hidden" id="idCase">
-        <input type="hidden" id="idRam">
-        <input type="hidden" id="idGpu">
-        <input type="hidden" id="idFuente">
-        <input type="hidden" id="idDisco">
-        <input type="hidden" id="slotsMobo">
-        <input type="hidden" id="totalCantidad">
-        <input type="hidden" id="cooler">
-        <input type="hidden" name="totalVentaEfectivo" id="totalVentaEfectivo">
-        <input type="hidden" name="totalVentaNormal" id="totalVentaNormal">
-        <input type="hidden" name="voltaje" id="voltaje" value="0">
-        <input type="hidden" id="voltajecpu" value="0">
-        <input type="hidden" id="voltajegpu" value="0">
-        <input type="hidden" id="coolNeed" value="0">
-        <input type="hidden" id="gpuNeed" value="0">
-        <input type="hidden" id="socketCool" value="0">
-        <div class="container second mb-4 pt-4 pt-lg-5 pb-4">
-            <center>
+      <div class="container first container-first">
+        <a href="https://www.kpchardware.com" target="_blank" rel="noopener">
+          <img src="img/5.png" class="img-fluid logo" alt="KPC Hardware" />
+        </a>
+      </div>
 
-                <div class="row tercer pt-3 pt-lg-4">
-                    <div class="container p-0 p-lg-0 pl-4 m-0 interior1 col-12 col-lg-8 mb-0 mb-lg-4">
+      <input type="hidden" id="catProce" />
+      <input type="hidden" id="catMobo" />
+      <input type="hidden" id="idMobo" />
+      <input type="hidden" id="idCase" />
+      <input type="hidden" id="idRam" />
+      <input type="hidden" id="idGpu" />
+      <input type="hidden" id="idFuente" />
+      <input type="hidden" id="idDisco" />
+      <input type="hidden" id="slotsMobo" />
+      <input type="hidden" id="totalCantidad" />
+      <input type="hidden" id="cooler" />
+      <input type="hidden" name="totalVentaEfectivo" id="totalVentaEfectivo" />
+      <input type="hidden" name="totalVentaNormal" id="totalVentaNormal" />
+      <input type="hidden" name="voltaje" id="voltaje" value="0" />
+      <input type="hidden" id="voltajecpu" value="0" />
+      <input type="hidden" id="voltajegpu" value="0" />
+      <input type="hidden" id="coolNeed" value="0" />
+      <input type="hidden" id="gpuNeed" value="0" />
+      <input type="hidden" id="socketCool" value="0" />
 
-                        <div class="col-12 col-lg-12 pr-5 pl-8">
-                            <h3 class="font-weight-bold" style="color: #e73d2c">¡ARMA LA KPC DE TUS SUEÑOS!</h3>
-                            <p class="font-weight-bold text-center">• El configurador de PC personalizada de KPC
-                                Hardware,
-                                es la herramienta perfecta para que selecciones una a una las piezas de tu computadora,
-                                y pruebes distintas configuraciones y presupuestos.</p>
-                            <hr>
+      <div class="container second mb-4 pt-4 pt-lg-5 pb-4">
+        <center>
+          <div class="row tercer pt-3 pt-lg-4">
+            <!-- Columna izquierda: categorías -->
+            <div class="container p-0 p-lg-0 pl-4 m-0 interior1 col-12 col-lg-8 mb-0 mb-lg-4">
+              <div class="col-12 col-lg-12 pr-5 pl-8">
+                <h3 class="font-weight-bold" style="color: #e73d2c">¡ARMA LA KPC DE TUS SUEÑOS!</h3>
+                <p class="font-weight-bold text-center">
+                  • El configurador de PC personalizada de KPC Hardware, es la herramienta perfecta para que selecciones una a una las piezas de tu computadora, y pruebes distintas configuraciones y presupuestos.
+                </p>
+                <hr />
 
-                            <!-- -->
+                <!-- Acordeón principal -->
+                <div class="accordion" id="accordionExample">
+                  <?php foreach ($categorias as $index => $categoria) {
+                    if (!in_array($categoria['id_category'], $perifericos_ids)) {
+                      mostrarCategoria($categoria, $index, $index === 0, '#565652', true, '#accordionExample');
 
-                            <div class="accordion" id="accordionExample">
-                                <?php
-                                foreach ($categorias as $index => $categoria) {
-                                    // Categorías normales (excepto Periféricos)
-                                    if (!in_array($categoria['id_category'], $perifericos_ids) && $categoria['id_category'] != 105) {
-                                        mostrarCategoria($categoria, $index, $index === 0, '#565652', true, '#accordionExample');
-                                    }
+                      // Si la categoría es 105, renderizar bloque de Periféricos con subcategorías
+                      if ($categoria['id_category'] == 105) { ?>
+                        <div class="card">
+                          <div class="card-header degradadoGris" id="headingPerifericos">
+                            <h2 class="mb-0 text-left">
+                              <button
+                                class="btn btn-link collapsed"
+                                style="color: #565652;"
+                                type="button"
+                                data-toggle="collapse"
+                                data-target="#collapsePerifericos"
+                                aria-expanded="false"
+                                aria-controls="collapsePerifericos"
+                                data-parent="#accordionExample"
+                              >
+                                <img
+                                  src="iconos_cat/perifericos.png"
+                                  width="40"
+                                  height="40"
+                                  style="vertical-align: middle; margin-right: 6px;"
+                                  alt="Periféricos"
+                                />
+                                <span>PERIFÉRICOS</span>
+                                <i class="fas fa-exclamation" id="perifericos" style="margin-left: 6px;"></i>
+                              </button>
+                            </h2>
+                          </div>
 
-                                    // Categoría Periféricos
-                                    if ($categoria['id_category'] == 105) {
-                                ?>
-                                        <div class="card">
-                                            <div class="card-header degradadoGris" id="headingPerifericos">
-                                                <h2 class="mb-0 text-left">
-                                                    <button class="btn btn-link collapsed" style="color: #565652;" type="button"
-                                                        data-toggle="collapse"
-                                                        data-target="#collapsePerifericos"
-                                                        aria-expanded="false"
-                                                        aria-controls="collapsePerifericos"
-                                                        data-parent="#accordionExample">
-                                                        <img src="iconos_cat/perifericos.png" width="40" height="40" style="vertical-align: middle; margin-right: 6px;" />
-                                                        <span>PERIFÉRICOS</span>
-                                                        <i class="fas fa-exclamation" id="perifericos" style="margin-left: 6px;"></i>
-                                                    </button>
-                                                </h2>
-                                            </div>
-
-                                            <div id="collapsePerifericos" class="collapse" aria-labelledby="headingPerifericos" data-parent="#accordionExample">
-                                                <div class="card-body">
-                                                    <div class="accordion" id="accordionPerifericos">
-                                                        <?php
-                                                        foreach ($categorias as $sub) {
-                                                            if (in_array($sub['id_category'], $perifericos_ids)) {
-                                                                $subCollapseId = "collapseSub{$sub['id_category']}";
-                                                                $subHeadingId = "headingSub{$sub['id_category']}";
-                                                        ?>
-                                                                <div class="card">
-                                                                    <div class="card-header" id="<?= $subHeadingId ?>">
-                                                                        <h2 class="mb-0 text-left">
-                                                                            <button class="btn btn-link collapsed" type="button"
-                                                                                data-toggle="collapse"
-                                                                                data-target="#<?= $subCollapseId ?>"
-                                                                                aria-expanded="false"
-                                                                                aria-controls="<?= $subCollapseId ?>">
-                                                                                <?= $sub['nombre'] ?>
-                                                                            </button>
-                                                                        </h2>
-                                                                    </div>
-                                                                    <div id="<?= $subCollapseId ?>" class="collapse" aria-labelledby="<?= $subHeadingId ?>" data-parent="#accordionPerifericos">
-                                                                        <div class="card-body p-1">
-                                                                            <?php listarPeri($sub['id_category']); ?>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                        <?php
-                                                            }
-                                                        }
-                                                        ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                <?php
-                                    }
-                                }
-                                ?>
+                          <div
+                            id="collapsePerifericos"
+                            class="collapse"
+                            aria-labelledby="headingPerifericos"
+                            data-parent="#accordionExample"
+                          >
+                            <div class="card-body">
+                              <!-- Acordeón interno para subcategorías -->
+                              <div class="accordion" id="accordionPerifericos">
+                                <?php foreach ($categorias as $sub) {
+                                  if (in_array($sub['id_category'], $perifericos_ids)) {
+                                    mostrarCategoria($sub, $sub['id_category'], false, '#007bff', false, '#accordionPerifericos');
+                                  }
+                                } ?>
+                              </div>
                             </div>
-
-                            <!-- -->
-
+                          </div>
                         </div>
-                        <hr>
-
-                    </div>
-                    <div class="col-12 col-lg-4 container interior2 pt-3 pt-lg-2">
-
-                        <div class="col-11 col-lg-12 pb-1 p-0 bordes fondokpc">
-                            <div class="col-12 col-lg-12"></div>
-                            <h4 class="font-weight-bold pt-3 tamaño400" style="font-family: sans-serif; color: #fff">TOTAL
-                                ACUMULADO</h4>
-                        </div>
-
-                        <div class="col-11 col-lg-12 p-0  degradadoGris pb-1">
-                            <h4 class="font-weight-bold pt-3 textoPrecio tamaño400" style="font-family: sans-serif"><i
-                                    class="far fa-credit-card"></i> Precio normal: $<label
-                                    id="totalVentaTarjeta">0.00</label></h4>
-                        </div>
-
-                        <div class="col-11 col-lg-12 p-0 total1 degradadoGris">
-                            <div class="col-12 col-lg-12  internoTotal1"></div>
-                            <h4 class="font-weight-bold pt-3 pb-3 text-success tamaño400" style="font-family: sans-serif"><i
-                                    class="far fa-money-bill-alt"></i> Precio efectivo: $<label id="totalVenta">0.00</label>
-                            </h4>
-                        </div>
-                        <div class="col-11 col-lg-12 pb-1 p-0 bordes fondokpc">
-                            <div class="col-12 col-lg-12"></div>
-                            <h4 class="font-weight-bold pt-3 tamaño400" style="font-family: sans-serif; color: #fff;">
-                                Consumo estimado de componentes
-                                seleccionados</h4>
-                        </div>
-
-                        <div class="col-11 col-lg-12 p-0  degradadoGris pb-1">
-                            <h4 class="font-weight-bold pt-3 textoPrecio tamaño400"
-                                style="font-family: sans-serif; color: #EE7B27"><i class="fas fa-bolt"></i> Total: <label
-                                    id="totalWatts">0.00</label> Watts</h4>
-                        </div>
-
-                        <hr>
-                        <hr>
-                        <div class="col-11 col-lg-12">
-                            <h3 class="col-12 col-sm-8 ml-0">Mis componentes</h3>
-                            <div class="table-responsive tabla-mis-componentes">
-                                <table class="table table-bordered table-hover table-sm text-center" id="lista">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>Componente</th>
-                                            <th>Precio</th>
-                                            <th>Total</th>
-                                            <th>Cantidad</th>
-                                            <th>Quitar</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <hr>
-
-                        <div class="col-11 col-lg-12 p-2 mt-3">
-                            <div class="row">
-                                <div class="col-12 col-lg-12 mr-4 mr-lg-2 text-center">
-                                    <p>* ¡Si lo que buscas es un súper precio por tu configuración, por favor haz clic en el
-                                        botón de abajo!</p>
-                                    <button type="button" onclick="validarTabla()" style="text-align: center;"
-                                        class="btn-env btn-lg">Enviar mi cotización a KPC
-                                    </button>
-                                </div>
-
-                            </div>
-                        </div>
-                        <hr>
-                        <div>
-                            <p class="font-weight-bold">Para enviar tu cotización, debes tener en cuenta la siguiente
-                                simbología: </p>
-
-                            <p>
-                                &nbsp;<i class="fas fa-times" style="color: red"></i> Componente obligatorio.
-                                <br>
-                                <i class="fas fa-exclamation"></i> Componente opcional.
-                                <br>
-                                <i class="fas fa-check" style="color: green"></i> Componente agregado.
-                            </p>
-                        </div>
-
-                        <hr>
-                        <div class="wrapper">
-                            <div class="col-11 col-lg-12 cuadroCel p-2" id="buenPrec">
-                                <div class="row">
-                                    <div class="col-12 col-lg-12 mr-4 mr-lg-2 m-0 m-lg-0 text-center">
-                                        <i class="fas fa-desktop" style="font-size: 40px"></i>
-                                        <h5 class="text-center" style="font-size: 25px">
-                                            Recuerda que el precio final de tu configuración tendrá un <b>BUEN DESCUENTO</b>
-                                            cuando envíes tu cotización a KPC.
-                                        </h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-11 col-lg-12 cuadroVer p-2 mt-3">
-                            <div class="row">
-                                <div class="col-12 col-lg-12 mr-4 mr-lg-2 text-center">
-                                    <i class="fas fa-exclamation-triangle" style="font-size: 40px; "></i>
-                                    <h5 class="text-center">
-                                        KPC revisará y evaluará tu configuración por posibles incompatibilidades, y, de
-                                        haberlas, te notificaremos a los contactos que nos proporciones.
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-11 col-lg-12 cuadroRed p-2 mt-3">
-                            <div class="row">
-                                <div class="col-12 col-lg-12 mr-4 mr-lg-2 text-center">
-                                    <i class="fas fa-medal" style="font-size: 40px"></i>
-                                    <h5 class="text-center">
-                                        Todas las máquinas ensambladas en KPC Hardware cuentan con un año de garantía.
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
+                      <?php }
+                    }
+                  } ?>
                 </div>
-            </center>
-        </div>
-        <!-- Modal -->
-        <div class="modal fade" id="modalFinal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title font-weight-bold" id="exampleModalLongTitle">
-                            <center>Enviar a KPC Hardware</center>
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p style="font-weight: bold; font-size: 13px"> Por favor, asegúrate de brindarnos datos que son
-                            correctos para ponernos en contacto contigo lo más pronto posible.</p>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">¿Cuál es tu nombre?</label>
-                            <input type="text" class="form-control" name="nombreCliente" id="recipient-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">¿Cuál es tu correo electrónico?</label>
-                            <input type="email" class="form-control" placeholder="alguien@ejemplo.com"
-                                name="correoCliente" id="recipient-name" required="">
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">¿Cuál es tu número telefónico?</label>
-                            <input type="text" placeholder="xxxx-xxxx" name="telCliente" title="00000000"
-                                class="form-control" id="recipient-name" required="">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">¿Deseas agregar algo más?
-                                (opcional)</label>
-                            <textarea class="form-control" id="message-text" name="comentarios"></textarea>
-                        </div>
-
-                        <label class="form-check-label" for="exampleCheck1">¿Deseas que un asesor te contacte por el
-                            teléfono brindado para darle seguimiento a tu solicitud de cotización?</label><br><br>
-                        <center>
-                            <label class="radio-inline">
-                                <input type="radio" value="Sí" name="terminos" required> Sí
-                            </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <label class="radio-inline">
-                                <input type="radio" value="No" name="terminos" required> No
-                            </label>
-                        </center>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary" name="enviado">Enviar</button>
-                    </div>
-                </div>
+                <!-- /Acordeón principal -->
+              </div>
+              <hr />
             </div>
+
+            <!-- Columna derecha: totales y resumen -->
+            <div class="col-12 col-lg-4 container interior2 pt-3 pt-lg-2">
+              <div class="col-11 col-lg-12 pb-1 p-0 bordes fondokpc">
+                <div class="col-12 col-lg-12"></div>
+                <h4 class="font-weight-bold pt-3 tamaño400" style="font-family: sans-serif; color: #fff">TOTAL ACUMULADO</h4>
+              </div>
+
+              <div class="col-11 col-lg-12 p-0 degradadoGris pb-1">
+                <h4 class="font-weight-bold pt-3 textoPrecio tamaño400" style="font-family: sans-serif">
+                  <i class="far fa-credit-card"></i> Precio normal: $
+                  <label id="totalVentaTarjeta">0.00</label>
+                </h4>
+              </div>
+
+              <div class="col-11 col-lg-12 p-0 total1 degradadoGris">
+                <div class="col-12 col-lg-12 internoTotal1"></div>
+                <h4 class="font-weight-bold pt-3 pb-3 text-success tamaño400" style="font-family: sans-serif">
+                  <i class="far fa-money-bill-alt"></i> Precio efectivo: $
+                  <label id="totalVenta">0.00</label>
+                </h4>
+              </div>
+
+              <div class="col-11 col-lg-12 pb-1 p-0 bordes fondokpc">
+                <div class="col-12 col-lg-12"></div>
+                <h4 class="font-weight-bold pt-3 tamaño400" style="font-family: sans-serif; color: #fff;">
+                  Consumo estimado de componentes seleccionados
+                </h4>
+              </div>
+
+              <div class="col-11 col-lg-12 p-0 degradadoGris pb-1">
+                <h4 class="font-weight-bold pt-3 textoPrecio tamaño400" style="font-family: sans-serif; color: #EE7B27">
+                  <i class="fas fa-bolt"></i> Total:
+                  <label id="totalWatts">0.00</label>
+                  Watts
+                </h4>
+              </div>
+
+              <hr />
+              <hr />
+
+              <div class="col-11 col-lg-12">
+                <h3 class="col-12 col-sm-8 ml-0">Mis componentes</h3>
+                <div class="table-responsive tabla-mis-componentes">
+                  <table class="table table-bordered table-hover table-sm text-center" id="lista">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>Componente</th>
+                        <th>Precio</th>
+                        <th>Total</th>
+                        <th>Cantidad</th>
+                        <th>Quitar</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <hr />
+
+              <div class="col-11 col-lg-12 p-2 mt-3">
+                <div class="row">
+                  <div class="col-12 col-lg-12 mr-4 mr-lg-2 text-center">
+                    <p>* ¡Si lo que buscas es un súper precio por tu configuración, por favor haz clic en el botón de abajo!</p>
+                    <button type="button" onclick="validarTabla()" class="btn-env btn-lg" style="text-align: center;">
+                      Enviar mi cotización a KPC
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <hr />
+
+              <div>
+                <p class="font-weight-bold">Para enviar tu cotización, debes tener en cuenta la siguiente simbología:</p>
+                <p>
+                  &nbsp;<i class="fas fa-times" style="color: red"></i> Componente obligatorio.<br />
+                  <i class="fas fa-exclamation"></i> Componente opcional.<br />
+                  <i class="fas fa-check" style="color: green"></i> Componente agregado.
+                </p>
+              </div>
+
+              <hr />
+
+              <div class="wrapper">
+                <div class="col-11 col-lg-12 cuadroCel p-2" id="buenPrec">
+                  <div class="row">
+                    <div class="col-12 col-lg-12 mr-4 mr-lg-2 m-0 m-lg-0 text-center">
+                      <i class="fas fa-desktop" style="font-size: 40px"></i>
+                      <h5 class="text-center" style="font-size: 25px">
+                        Recuerda que el precio final de tu configuración tendrá un <b>BUEN DESCUENTO</b> cuando envíes tu cotización a KPC.
+                      </h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-11 col-lg-12 cuadroVer p-2 mt-3">
+                <div class="row">
+                  <div class="col-12 col-lg-12 mr-4 mr-lg-2 text-center">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 40px;"></i>
+                    <h5 class="text-center">
+                      KPC revisará y evaluará tu configuración por posibles incompatibilidades, y, de haberlas, te notificaremos a los contactos que nos proporciones.
+                    </h5>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-11 col-lg-12 cuadroRed p-2 mt-3">
+                <div class="row">
+                  <div class="col-12 col-lg-12 mr-4 mr-lg-2 text-center">
+                    <i class="fas fa-medal" style="font-size: 40px"></i>
+                    <h5 class="text-center">Todas las máquinas ensambladas en KPC Hardware cuentan con un año de garantía.</h5>
+                  </div>
+                </div>
+              </div>
+
+              <hr />
+            </div>
+          </div>
+        </center>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="modalFinal" tabindex="-1" role="dialog" aria-labelledby="modalEnviarTitulo" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title font-weight-bold" id="modalEnviarTitulo"><center>Enviar a KPC Hardware</center></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <p style="font-weight: bold; font-size: 13px">
+                Por favor, asegúrate de brindarnos datos que son correctos para ponernos en contacto contigo lo más pronto posible.
+              </p>
+
+              <div class="form-group">
+                <label for="nombreCliente" class="col-form-label">¿Cuál es tu nombre?</label>
+                <input type="text" class="form-control" name="nombreCliente" id="nombreCliente" required />
+              </div>
+
+              <div class="form-group">
+                <label for="correoCliente" class="col-form-label">¿Cuál es tu correo electrónico?</label>
+                <input type="email" class="form-control" placeholder="alguien@ejemplo.com" name="correoCliente" id="correoCliente" required />
+              </div>
+
+              <div class="form-group">
+                <label for="telCliente" class="col-form-label">¿Cuál es tu número telefónico?</label>
+                <input type="text" placeholder="xxxx-xxxx" name="telCliente" title="00000000" class="form-control" id="telCliente" required />
+              </div>
+
+              <div class="form-group">
+                <label for="comentarios" class="col-form-label">¿Deseas agregar algo más? (opcional)</label>
+                <textarea class="form-control" id="comentarios" name="comentarios"></textarea>
+              </div>
+
+              <label class="form-check-label" for="contactoTelefono">¿Deseas que un asesor te contacte por el teléfono brindado para darle seguimiento a tu solicitud de cotización?</label>
+              <br /><br />
+
+              <center>
+                <label class="radio-inline mr-4">
+                  <input type="radio" value="Sí" name="terminos" id="contactoTelefono" required />
+                  Sí
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" value="No" name="terminos" required />
+                  No
+                </label>
+              </center>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-primary" name="enviado">Enviar</button>
+            </div>
+          </div>
         </div>
+      </div>
     </form>
+
+    <!-- App scripts -->
     <script src="js/ajax.js?v1.1" type="text/javascript"></script>
     <script src="js/alertify.min.js" type="text/javascript"></script>
     <script src="js/tabla.js" type="text/javascript"></script>
     <script src="js/obtenerFactorPrecio.js" type="text/javascript"></script>
-</body>
-
+  </body>
 </html>
