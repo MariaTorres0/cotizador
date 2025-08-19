@@ -72,23 +72,25 @@ $categorias = obtenerCategoriasCoti($conexion);
       color: #fff;
     }
 
-    .product-card {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
 
-    .product-card .card-body {
-      flex-grow: 1;
-    }
+.product-card .card-body {
+    flex-grow: 1;
+}
 
+    
     .row .product-header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      height: 100%;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+}
+
   </style>
 </head>
 
@@ -131,63 +133,105 @@ $categorias = obtenerCategoriasCoti($conexion);
                 • El configurador de PC personalizada de KPC Hardware, es la herramienta perfecta para que selecciones una a una las piezas de tu computadora, y pruebes distintas configuraciones y presupuestos.
               </p>
               <hr />
+
               <!-- Acordeón principal -->
               <div class="accordion" id="accordionExample">
                 <?php foreach ($categorias as $index => $categoria) {
                   if (!in_array($categoria['id_category'], $perifericos_ids)) {
 
-                    // PROCESADOR
-                    if ($categoria['id_category'] == 100) { ?>
+                    if ($categoria['id_category'] == 100) {
+                ?>
                       <div class="card">
                         <div class="card-header degradadoGris" id="headingCPU">
                           <h2 class="mb-0 text-left">
-                            <button class="btn btn-link" style="color: #565652;" type="button"
-                              data-toggle="collapse" data-target="#collapseCPU" aria-expanded="true"
-                              aria-controls="collapseCPU" data-parent="#accordionExample">
-                              <img src="iconos_cat/<?php echo $categoria['icono']; ?>" width="40" height="40"
-                                style="vertical-align: middle; margin-right: 6px;" alt="CPU" />
+                            <button
+                              class="btn btn-link"
+                              style="color: #565652;"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapseCPU"
+                              aria-expanded="true"
+                              aria-controls="collapseCPU"
+                              data-parent="#accordionExample">
+                              <img
+                                src="iconos_cat/<?php echo $categoria['icono']; ?>"
+                                width="40"
+                                height="40"
+                                style="vertical-align: middle; margin-right: 6px;"
+                                alt="CPU" />
                               <span><?php echo $categoria['nombre']; ?></span>
-                              <i class="fas fa-times" id="100" style="color: red; margin-left: 6px;"></i>
+                              <i class="fas fa-times" id="100" style=" color: red; margin-left: 6px;"></i>
+
                             </button>
                           </h2>
                         </div>
-                        <div id="collapseCPU" class="collapse show" aria-labelledby="headingCPU"
+
+                        <div
+                          id="collapseCPU"
+                          class="collapse show"
+                          aria-labelledby="headingCPU"
                           data-parent="#accordionExample">
-                          <div class="accordion" id="accordionCPUInterno">
-                            <?php mostrarProce(100, '#accordionCPUInterno'); ?>
+                          <div class="card-body">
+                            <div class="accordion" id="accordionCPUInterno">
+                              <?php mostrarProce(100, '#accordionCPUInterno'); ?>
+                            </div>
                           </div>
                         </div>
                       </div>
-                  <?php
-                      }
-
-                      // UNIDADES DE DATOS
-                      elseif ($categoria['id_category'] == 118) {
-                        mostrarCardProducto('unidades', $categoria['nombre'], 118, '#accordionExample', $categoria['icono']);
-                      }
-
-                      // PERIFÉRICOS
-                      elseif ($categoria['id_category'] == 999) {
-                        mostrarCardProducto('perifericos', 'PERIFÉRICOS', null, '#accordionExample');
-                      }
-
-                      // MONITORES
-                      elseif ($categoria['id_category'] == 119) {
-                        mostrarCardProducto('monitores', 'MONITORES', 119, '#accordionExample', 'monitor.png');
-                      }
-
-                      // UPS
-                      elseif ($categoria['id_category'] == 122) {
-                        mostrarCardProducto('ups', $categoria['nombre'], 122, '#accordionExample', $categoria['icono']);
-                      }
-
-                      // Otras categorías normales
-                      else {
-                        mostrarCategoria($categoria, $index, false, '#565652', true, '#accordionExample');
-                      }
+                    <?php
+                    } else {
+                      // resto de categorías normales
+                      mostrarCategoria($categoria, $index, $index === 0, '#565652', true, '#accordionExample');
                     }
-                  } ?>
+
+                    // Bloque de Periféricos (id 105)
+                    if ($categoria['id_category'] == 105) { ?>
+                      <div class="card">
+                        <div class="card-header degradadoGris" id="headingPerifericos">
+                          <h2 class="mb-0 text-left">
+                            <button
+                              class="btn btn-link collapsed"
+                              style="color: #565652;"
+                              type="button"
+                              data-toggle="collapse"
+                              data-target="#collapsePerifericos"
+                              aria-expanded="false"
+                              aria-controls="collapsePerifericos"
+                              data-parent="#accordionExample">
+                              <img
+                                src="iconos_cat/perifericos.png"
+                                width="40"
+                                height="40"
+                                style="vertical-align: middle; margin-right: 6px;"
+                                alt="Periféricos" />
+                              <span>PERIFÉRICOS</span>
+                              <i class="fas fa-exclamation" id="perifericos" style="margin-left: 6px;"></i>
+                            </button>
+                          </h2>
+                        </div>
+
+                        <div
+                          id="collapsePerifericos"
+                          class="collapse"
+                          aria-labelledby="headingPerifericos"
+                          data-parent="#accordionExample">
+                          <div class="card-body">
+                            <!-- Acordeón interno para subcategorías -->
+                            <div class="accordion" id="accordionPerifericos">
+                              <?php foreach ($categorias as $sub) {
+                                if (in_array($sub['id_category'], $perifericos_ids)) {
+                                  mostrarCategoria($sub, $sub['id_category'], false, '#007bff', false, '#accordionPerifericos');
+                                }
+                              } ?>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                <?php }
+                  }
+                } ?>
               </div>
+
               <!-- /Acordeón principal -->
             </div>
             <hr />

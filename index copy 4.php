@@ -131,6 +131,7 @@ $categorias = obtenerCategoriasCoti($conexion);
                 • El configurador de PC personalizada de KPC Hardware, es la herramienta perfecta para que selecciones una a una las piezas de tu computadora, y pruebes distintas configuraciones y presupuestos.
               </p>
               <hr />
+
               <!-- Acordeón principal -->
               <div class="accordion" id="accordionExample">
                 <?php foreach ($categorias as $index => $categoria) {
@@ -158,36 +159,118 @@ $categorias = obtenerCategoriasCoti($conexion);
                           </div>
                         </div>
                       </div>
-                  <?php
-                      }
-
-                      // UNIDADES DE DATOS
-                      elseif ($categoria['id_category'] == 118) {
-                        mostrarCardProducto('unidades', $categoria['nombre'], 118, '#accordionExample', $categoria['icono']);
-                      }
-
-                      // PERIFÉRICOS
-                      elseif ($categoria['id_category'] == 999) {
-                        mostrarCardProducto('perifericos', 'PERIFÉRICOS', null, '#accordionExample');
-                      }
-
-                      // MONITORES
-                      elseif ($categoria['id_category'] == 119) {
-                        mostrarCardProducto('monitores', 'MONITORES', 119, '#accordionExample', 'monitor.png');
-                      }
-
-                      // UPS
-                      elseif ($categoria['id_category'] == 122) {
-                        mostrarCardProducto('ups', $categoria['nombre'], 122, '#accordionExample', $categoria['icono']);
-                      }
-
-                      // Otras categorías normales
-                      else {
-                        mostrarCategoria($categoria, $index, false, '#565652', true, '#accordionExample');
-                      }
+                    <?php
                     }
-                  } ?>
+
+                    // UNIDADES DE DATOS
+                    else if ($categoria['id_category'] == 118) { ?>
+                      <div class="card">
+                        <div class="card-header degradadoGris" id="headingUnidadesDatos">
+                          <h2 class="mb-0 text-left">
+                            <button class="btn btn-link collapsed" style="color: #565652;" type="button"
+                              data-toggle="collapse" data-target="#collapseUnidadesDatos" aria-expanded="false"
+                              aria-controls="collapseUnidadesDatos" data-parent="#accordionExample">
+                              <img src="iconos_cat/<?php echo $categoria['icono']; ?>" width="40" height="40"
+                                style="vertical-align: middle; margin-right: 6px;" alt="Unidades de Datos" />
+                              <span><?php echo $categoria['nombre']; ?></span>
+                              <i class="fas fa-exclamation" id="118" style="margin-left: 6px;"></i>
+                            </button>
+                          </h2>
+                        </div>
+                        <div id="collapseUnidadesDatos" class="collapse" aria-labelledby="headingUnidadesDatos"
+                          data-parent="#accordionExample">
+                          <div class="accordion" id="accordionUnidadesDatosInterno">
+                            <?php mostrarProductos('unidades', 118, '#accordionUnidadesDatosInterno'); ?>
+                          </div>
+                        </div>
+                      </div>
+                    <?php
+                    }
+
+                    // PERIFÉRICOS
+                    else if ($categoria['id_category'] == 999) { ?>
+                      <div class="card">
+                        <div class="card-header degradadoGris" id="headingPerifericos">
+                          <h2 class="mb-0 text-left">
+                            <button class="btn btn-link collapsed" style="color: #565652;" type="button"
+                              data-toggle="collapse" data-target="#collapsePerifericos" aria-expanded="false"
+                              aria-controls="collapsePerifericos" data-parent="#accordionExample">
+                              <img src="iconos_cat/perifericos.png" width="40" height="40"
+                                style="vertical-align: middle; margin-right: 6px;" alt="Periféricos" />
+                              <span>PERIFÉRICOS</span>
+                              <i class="fas fa-exclamation" id="perifericos" style="margin-left: 6px;"></i>
+                            </button>
+                          </h2>
+                        </div>
+                        <div id="collapsePerifericos" class="collapse" aria-labelledby="headingPerifericos"
+                          data-parent="#accordionExample">
+                          <div class="accordion" id="accordionPerifericos">
+                            <?php mostrarProductos('perifericos', null, '#accordionPerifericos'); ?>
+                          </div>
+                        </div>
+                      </div>
+                    <?php
+                    }
+
+                    // MONITORES
+                    else if ($categoria['id_category'] == 119) { ?>
+                      <div class="card">
+                        <div class="card-header degradadoGris" id="headingMonitores">
+                          <h2 class="mb-0 text-left">
+                            <button class="btn btn-link collapsed" style="color: #565652;" type="button"
+                              data-toggle="collapse" data-target="#collapseMonitores" aria-expanded="false"
+                              aria-controls="collapseMonitores" data-parent="#accordionExample">
+                              <img src="iconos_cat/monitor.png" width="40" height="40"
+                                style="vertical-align: middle; margin-right: 6px;" alt="Monitores" />
+                              <span>MONITORES</span>
+                              <i class="fas fa-exclamation" id="119" style="margin-left: 6px;"></i>
+                            </button>
+                          </h2>
+                        </div>
+                        <div id="collapseMonitores" class="collapse" aria-labelledby="headingMonitores"
+                          data-parent="#accordionExample">
+                          <div class="accordion" id="accordionMonitoresInterno">
+                            <?php mostrarProductos('monitores', 119, '#accordionMonitoresInterno'); ?>
+                          </div>
+                        </div>
+                      </div>
+                    <?php
+                    }
+
+                    // UPS
+                    else if ($categoria['id_category'] == 122) { ?>
+                      <div class="card">
+                        <div class="card-header degradadoGris" id="headingUPS">
+                          <h2 class="mb-0 text-left">
+                            <button class="btn btn-link collapsed" style="color: #565652;" type="button"
+                              data-toggle="collapse" data-target="#collapseUPS" aria-expanded="false"
+                              aria-controls="collapseUPS" data-parent="#accordionExample">
+                              <img src="iconos_cat/<?php echo $categoria['icono']; ?>" width="40" height="40"
+                                style="vertical-align: middle; margin-right: 6px;" alt="UPS" />
+                              <span><?php echo $categoria['nombre']; ?></span>
+                              <i class="fas fa-exclamation" id="122" style="margin-left: 6px;"></i>
+                            </button>
+                          </h2>
+                        </div>
+                        <div id="collapseUPS" class="collapse" aria-labelledby="headingUPS" data-parent="#accordionExample">
+                          <div class="card-body">
+                            <div class="accordion" id="accordionUPSInterno">
+                              <?php mostrarProductos('ups', 122, '#accordionUPSInterno'); ?>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                <?php
+                    }
+
+                    // Otras categorías normales
+                    else {
+                      mostrarCategoria($categoria, $index, false, '#565652', true, '#accordionExample');
+                    }
+                  }
+                } ?>
               </div>
+
               <!-- /Acordeón principal -->
             </div>
             <hr />
