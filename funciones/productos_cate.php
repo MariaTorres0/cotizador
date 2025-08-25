@@ -218,6 +218,7 @@ function obtenerCategoriasCoti($conexion)
 
 $perifericos_ids = [110, 111, 113];
 
+
 function mostrarCategoria($categoria, $index, $show = false, $color = '#565652', $showIcon = true, $parentId = '#accordionExample')
 {
     $btnId = $categoria['id_btn'] ?? "btn{$index}";
@@ -228,18 +229,21 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
     $collapseClass = $show ? 'collapse show' : 'collapse';
     $btnCollapsed = $show ? '' : 'collapsed';
 
-    echo "<div class='card'>
+    // Agregar id de categoría al card principal
+    $catId = isset($categoria['id_category']) ? $categoria['id_category'] : $index;
+
+    echo "<div class='card' id='cat-{$catId}'>
             <div class='card-header degradadoGris' id='{$headingId}'>
                 <h2 class='mb-0 text-left'>
                     <button class='btn btn-link {$btnCollapsed}' id='{$btnId}Btn' style='color: {$color};' type='button'
-                        data-toggle='collapse' data-target='#{$collapseId}' aria-expanded='{$expanded}' aria-controls='{$collapseId}'>";
+                        data-toggle='collapse' data-target='#{$collapseId}' aria-expanded='{$expanded}' aria-controls='{$collapseId}' data-cat-id='{$catId}'>";
 
     if ($showIcon) {
         $iconColor = ($categoria['obligatorio'] ?? 0) == 1 ? 'red' : '';
         $iconClass = ($categoria['obligatorio'] ?? 0) == 1 ? 'fas fa-times' : 'fas fa-exclamation';
         echo "<img src='iconos_cat/{$categoria['icono']}' width='40' height='40' style='vertical-align: middle; margin-right: 8px;' />";
         echo "<span>{$categoria['nombre']}</span>";
-        echo "<i class='{$iconClass}' id='{$categoria['id_category']}' style='color: {$iconColor}; margin-left: 6px;'></i>";
+        echo "<i class='{$iconClass}' id='{$catId}' style='color: {$iconColor}; margin-left: 6px;'></i>";
     } else {
         echo $categoria['nombre'];
     }
@@ -270,11 +274,12 @@ function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
         $sIndex++;
         $collapseSub = "collapseSub{$sIndex}";
         $headingSub = "headingSub{$sIndex}";
+        $subId = $sub['id_category'];
 
-        echo "<div class='card'>
+        echo "<div class='card' id='cat-{$subId}'>
                 <div class='card-header' id='{$headingSub}'>
                     <h2 class='mb-0 text-left'>
-                        <button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;'>
+                        <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
                             " . strtoupper($sub['name']) . "
                         </button>
                     </h2>
@@ -304,11 +309,12 @@ function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
                 $ssIndex++;
                 $collapseSubSub = "collapseSubSub{$sIndex}{$ssIndex}";
                 $headingSubSub = "headingSubSub{$sIndex}{$ssIndex}";
+                $subsubId = $subsub['id_category'];
 
-                echo "<div class='card'>
+                echo "<div class='card' id='cat-{$subsubId}'>
                         <div class='card-header' id='{$headingSubSub}'>
                             <h2 class='mb-0'>
-                                <button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#{$collapseSubSub}' aria-expanded='false' aria-controls='{$collapseSubSub}' style='color:#007bff;'>
+                                <button class='btn btn-link collapsed' id='btnSubSub{$subsubId}' type='button' data-toggle='collapse' data-target='#{$collapseSubSub}' aria-expanded='false' aria-controls='{$collapseSubSub}' style='color:#007bff;' data-cat-id='{$subsubId}'>
                                     {$subsub['name']}
                                 </button>
                             </h2>
@@ -373,304 +379,6 @@ function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
     }
 }
 
-function mostrarUnidadesDatos($idCategoriaPadre = 118, $parentId = '#accordionUnidadesDatos')
-{
-    global $conexion, $factorClass;
-
-    // SUBCATEGORÍAS activas con al menos un producto
-    $sqlSub = "SELECT c.id_category, cl.name
-               FROM ps_category c
-               INNER JOIN ps_category_lang cl ON c.id_category = cl.id_category
-               WHERE c.level_depth = 3 
-                 AND c.active = 1 
-                 AND cl.id_lang = 2 
-                 AND c.id_parent = $idCategoriaPadre
-                 AND c.id_category NOT IN (183, 178)
-               ORDER BY cl.name ASC";
-    $resSub = mysqli_query($conexion, $sqlSub);
-
-    $sIndex = 0;
-
-    while ($sub = mysqli_fetch_assoc($resSub)) {
-        // Verificar si la subcategoría tiene productos activos
-        $sqlProdCheck = "SELECT COUNT(*) as total 
-                         FROM ps_category_product cp 
-                         INNER JOIN ps_product p ON cp.id_product = p.id_product 
-                         WHERE cp.id_category = {$sub['id_category']} AND p.active = 1";
-        $resProdCheck = mysqli_query($conexion, $sqlProdCheck);
-        $prodCount = mysqli_fetch_assoc($resProdCheck)['total'];
-
-        if ($prodCount > 0) {
-            $sIndex++;
-            $collapseSub = "collapseSub{$sIndex}";
-            $headingSub = "headingSub{$sIndex}";
-
-            echo "<div class='card'>
-                    <div class='card-header' id='{$headingSub}'>
-                        <h2 class='mb-0 text-left'>
-                            <button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;'>
-                                " . strtoupper($sub['name']) . "
-                            </button>
-                        </h2>
-                    </div>
-                    <div id='{$collapseSub}' class='collapse' aria-labelledby='{$headingSub}' data-parent='{$parentId}'>
-                        <div class='card-body'>
-                            <div class='row'>";
-
-            // PRODUCTOS de la subcategoría
-            $sqlProd = "SELECT cp.id_product, pl.name AS productoNombre, p.price, p.reference, p.slots, p.voltaje, p.cooler, p.gpu, p.socketCooler,
-                               cl.name AS nombreCategoria
-                        FROM ps_category_product cp
-                        INNER JOIN ps_product_lang pl ON cp.id_product = pl.id_product
-                        INNER JOIN ps_product p ON cp.id_product = p.id_product
-                        INNER JOIN ps_category_lang cl ON cp.id_category = cl.id_category
-                        WHERE cp.id_category = {$sub['id_category']} AND p.active = 1 AND pl.id_lang = 2 AND cl.id_lang = 2";
-            $resProd = mysqli_query($conexion, $sqlProd);
-
-            while ($prod = mysqli_fetch_assoc($resProd)) {
-                $precioNormal = redondear($prod['price'] * 1.13);
-                $precioEfectivo = redondear($precioNormal * $factorClass->getValor('FTJ')['valor']);
-                $srcImg = pathImg($prod['id_product']);
-
-                // Sanitizar nombres para evitar problemas en JS
-                $nombreProductoJS = str_replace(['"', "'"], '', $prod['productoNombre']);
-                $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
-
-                echo "<div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
-                        <div class='card bg-light mb-8 product-card'>
-                            <div class='card-header p-1 text-center product-header'>
-                                <img src='{$srcImg}' style='max-width: 75px; max-height: 75px;' class='zoom mt-3'><br>
-                                <p>{$prod['productoNombre']}</p>
-                            </div>
-                            <div class='card-body p-2'>
-                                <p class='card-title font-weight-bold' style='color:#6D6D6B'>Precio normal: $ " . redondear($precioNormal) . "</p>
-                                <p class='card-title text-success font-weight-bold'>Precio efectivo: $ " . redondear($precioEfectivo) . "</p>
-                                <a class='btn btn-info btn-lg btn-block' style='color:#fff' href='javascript:void(0)' 
-                                onclick='agregarTabla(\"{$nombreProductoJS}\", " . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, {$prod['id_product']}, {$sub['id_category']}, $idCategoriaPadre, \"{$nombreCategoriaJS}\", 1, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\")'>
-                                    + Añadir
-                                </a>
-                            </div>
-                        </div>
-                    </div>";
-            }
-
-            echo "      </div>
-                    </div>
-                </div>
-              </div>";
-        }
-    }
-}
-
-
-
-function mostrarPerifericos($parentId = '#accordionPerifericos')
-{
-    global $conexion, $factorClass;
-
-    // IDs de las categorías que tratamos como periféricos
-    $perifericosIds = [110, 111, 155];
-
-    $sIndex = 0;
-    foreach ($perifericosIds as $catId) {
-        // Traer categoría
-        $sqlCat = "SELECT c.id_category, cl.name 
-                   FROM ps_category c
-                   INNER JOIN ps_category_lang cl ON c.id_category = cl.id_category
-                   WHERE c.id_category = $catId AND cl.id_lang = 2";
-        $resCat = mysqli_query($conexion, $sqlCat);
-        $cat = mysqli_fetch_assoc($resCat);
-
-        // Chequear si tiene productos activos
-        $sqlCheck = "SELECT COUNT(*) AS total 
-                     FROM ps_category_product cp
-                     INNER JOIN ps_product p ON cp.id_product = p.id_product
-                     WHERE cp.id_category = {$cat['id_category']} AND p.active = 1";
-        $resCheck = mysqli_query($conexion, $sqlCheck);
-        $totalProd = mysqli_fetch_assoc($resCheck)['total'];
-
-        if ($totalProd > 0) {
-            $sIndex++;
-            $collapseSub = "collapsePeri{$sIndex}";
-            $headingSub = "headingPeri{$sIndex}";
-
-            echo "<div class='card'>
-                    <div class='card-header text-left' id='{$headingSub}'>
-                        <h2 class='mb-0'>
-                            <button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;'>
-                                " . strtoupper($cat['name']) . "
-                            </button>
-                        </h2>
-                    </div>
-                    <div id='{$collapseSub}' class='collapse' aria-labelledby='{$headingSub}' data-parent='{$parentId}'>
-                        <div class='card-body'>
-                            <div class='row'>";
-
-            // Productos de esta categoría
-            $sqlProd = "SELECT cp.id_product, pl.name AS productoNombre, p.price, p.reference, cl.name AS nombreCategoria
-                        FROM ps_category_product cp
-                        INNER JOIN ps_product_lang pl ON cp.id_product = pl.id_product
-                        INNER JOIN ps_product p ON cp.id_product = p.id_product
-                        INNER JOIN ps_category_lang cl ON cp.id_category = cl.id_category
-                        WHERE cp.id_category = {$cat['id_category']} AND p.active = 1 AND pl.id_lang = 2 AND cl.id_lang = 2";
-            $resProd = mysqli_query($conexion, $sqlProd);
-
-            while ($prod = mysqli_fetch_assoc($resProd)) {
-                $precioNormal = redondear($prod['price'] * 1.13);
-                $precioEfectivo = redondear($precioNormal * $factorClass->getValor('FTJ')['valor']);
-                $srcImg = pathImg($prod['id_product']);
-
-                // Quitar comillas de nombres para JS
-                $nombreProductoJS = str_replace(['"', "'"], '', $prod['productoNombre']);
-                $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
-
-                echo "<div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
-                        <div class='card bg-light mb-8 product-card'>
-                            <div class='card-header p-1 text-center product-header'>
-                                <img src='{$srcImg}' style='max-width: 75px; max-height: 75px;' class='zoom mt-3'><br>
-                                <p>{$prod['productoNombre']}</p>
-                            </div>
-                            <div class='card-body p-2'>
-                                <p class='card-title font-weight-bold' style='color:#6D6D6B'>Precio normal: $ " . redondear($precioNormal) . "</p>
-                                <p class='card-title text-success font-weight-bold'>Precio efectivo: $ " . redondear($precioEfectivo) . "</p>
-                                <a class='btn btn-info btn-lg btn-block' style='color:#fff' href='javascript:void(0)' 
-                                onclick='agregarTabla(\"{$nombreProductoJS}\", " . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, {$prod['id_product']}, {$cat['id_category']}, 105, \"{$nombreCategoriaJS}\")'>+ Añadir
-                                </a>
-                            </div>
-                        </div>
-                    </div>";
-            }
-
-            echo "          </div>
-                        </div>
-                    </div>
-                  </div>";
-        }
-    }
-}
-
-
-function mostrarMonitores($idCategoriaPadre = 119, $parentId = '#accordionMonitores')
-{
-    global $conexion, $factorClass;
-
-    // SUBCATEGORÍAS con al menos un producto activo
-    $sqlSub = "SELECT c.id_category, cl.name, COUNT(p.id_product) AS totalProductos
-               FROM ps_category c
-               INNER JOIN ps_category_lang cl ON c.id_category = cl.id_category
-               INNER JOIN ps_category_product cp ON cp.id_category = c.id_category
-               INNER JOIN ps_product p ON cp.id_product = p.id_product AND p.active = 1
-               WHERE c.level_depth = 3 AND c.active = 1 AND cl.id_lang = 2 AND c.id_parent = $idCategoriaPadre
-               GROUP BY c.id_category
-               HAVING totalProductos > 0
-               ORDER BY cl.name ASC";
-    $resSub = mysqli_query($conexion, $sqlSub);
-
-    $sIndex = 0;
-
-    while ($sub = mysqli_fetch_assoc($resSub)) {
-        $sIndex++;
-        $collapseSub = "collapseMonSub{$sIndex}";
-        $headingSub = "headingMonSub{$sIndex}";
-
-        echo "<div class='card'>
-                <div class='card-header' id='{$headingSub}'>
-                    <h2 class='mb-0 text-left'>
-                        <button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;'>
-                            " . strtoupper($sub['name']) . "
-                        </button>
-                    </h2>
-                </div>
-                <div id='{$collapseSub}' class='collapse' aria-labelledby='{$headingSub}' data-parent='{$parentId}'>
-                    <div class='card-body'>
-                        <div class='row'>";
-
-        // PRODUCTOS de la subcategoría
-        $sqlProd = "SELECT cp.id_product, pl.name AS productoNombre, p.price, p.reference, cl.name AS nombreCategoria
-                    FROM ps_category_product cp
-                    INNER JOIN ps_product_lang pl ON cp.id_product = pl.id_product
-                    INNER JOIN ps_product p ON cp.id_product = p.id_product
-                    INNER JOIN ps_category_lang cl ON cp.id_category = cl.id_category
-                    WHERE cp.id_category = {$sub['id_category']} AND p.active = 1 AND pl.id_lang = 2 AND cl.id_lang = 2";
-        $resProd = mysqli_query($conexion, $sqlProd);
-
-        while ($prod = mysqli_fetch_assoc($resProd)) {
-            $precioNormal = redondear($prod['price'] * 1.13);
-            $precioEfectivo = redondear($precioNormal * $factorClass->getValor('FTJ')['valor']);
-            $srcImg = pathImg($prod['id_product']);
-
-            // Quitar comillas de nombres para evitar errores JS
-            $nombreProductoJS = str_replace(['"', "'"], '', $prod['productoNombre']);
-            $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
-
-            echo "<div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
-                    <div class='card bg-light mb-8 product-card'>
-                        <div class='card-header p-1 text-center product-header'>
-                            <img src='{$srcImg}' style='max-width: 75px; max-height: 75px;' class='zoom mt-3'><br>
-                            <p>{$prod['productoNombre']}</p>
-                        </div>
-                        <div class='card-body p-2'>
-                            <p class='card-title font-weight-bold' style='color:#6D6D6B'>Precio normal: $ " . redondear($precioNormal) . "</p>
-                            <p class='card-title text-success font-weight-bold'>Precio efectivo: $ " . redondear($precioEfectivo) . "</p>
-                            <a class='btn btn-info btn-lg btn-block' style='color:#fff' href='javascript:void(0)' 
-                            onclick='agregarTabla(\"{$nombreProductoJS}\", " . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, {$prod['id_product']}, {$sub['id_category']}, $idCategoriaPadre, \"{$nombreCategoriaJS}\")'>+ Añadir
-                            </a>
-                        </div>
-                    </div>
-                </div>";
-        }
-
-        echo "      </div>
-                    </div>
-                </div>
-              </div>";
-    }
-}
-
-function mostrarUPS($idCategoria = 122, $parentId = '#accordionUPS', $indexUPS = 122)
-{
-    global $conexion, $factorClass;
-
-    // PRODUCTOS 
-    $sqlProd = "SELECT cp.id_product, pl.name AS productoNombre, p.price, p.reference, p.slots, p.voltaje, p.cooler, p.gpu, p.socketCooler,
-                       cl.name AS nombreCategoria
-                FROM ps_category_product cp
-                INNER JOIN ps_product_lang pl ON cp.id_product = pl.id_product
-                INNER JOIN ps_product p ON cp.id_product = p.id_product
-                INNER JOIN ps_category_lang cl ON cp.id_category = cl.id_category
-                WHERE cp.id_category = {$idCategoria} AND p.active = 1 AND pl.id_lang = 2 AND cl.id_lang = 2";
-    $resProd = mysqli_query($conexion, $sqlProd);
-
-    echo "<div class='row'>"; 
-
-    while ($prod = mysqli_fetch_assoc($resProd)) {
-        $precioNormal = redondear($prod['price'] * 1.13);
-        $precioEfectivo = redondear($precioNormal * $factorClass->getValor('FTJ')['valor']);
-        $srcImg = pathImg($prod['id_product']);
-
-        $nombreProductoJS = str_replace(['"', "'"], '', $prod['productoNombre']);
-        $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
-
-        echo "<div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
-                <div class='card bg-light mb-8 product-card'>
-                    <div class='card-header p-1 text-center product-header'>
-                        <img src='{$srcImg}' style='max-width: 75px; max-height: 75px;' class='zoom mt-3'><br>
-                        <p>{$prod['productoNombre']}</p>
-                    </div>
-                    <div class='card-body p-2'>
-                        <p class='card-title font-weight-bold' style='color:#6D6D6B'>Precio normal: $ " . redondear($precioNormal) . "</p>
-                        <p class='card-title text-success font-weight-bold'>Precio efectivo: $ " . redondear($precioEfectivo) . "</p>
-                        <a class='btn btn-info btn-lg btn-block' style='color:#fff' href='javascript:void(0)' 
-                        onclick='agregarTabla(\"{$nombreProductoJS}\", " . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, {$prod['id_product']}, {$idCategoria}, {$idCategoria}, \"{$nombreCategoriaJS}\")'>+ Añadir
-                        </a>
-                    </div>
-                </div>
-              </div>";
-    }
-
-    echo "</div>";
-}
-
 function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentId = null)
 {
     global $conexion, $factorClass;
@@ -704,11 +412,12 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
                 $sIndex++;
                 $collapseSub = "collapseSub{$sIndex}";
                 $headingSub = "headingSub{$sIndex}";
+                $subId = $sub['id_category'];
 
-                echo "<div class='card'>
+                echo "<div class='card' id='cat-{$subId}'>
                         <div class='card-header' id='{$headingSub}'>
                             <h2 class='mb-0 text-left'>
-                                <button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;'>
+                                <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
                                     " . strtoupper($sub['name']) . "
                                 </button>
                             </h2>
@@ -723,9 +432,7 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
                       </div>";
             }
         }
-    }
-
-    elseif ($tipo === 'perifericos') {
+    } elseif ($tipo === 'perifericos') {
         $parentId = $parentId ?? '#accordionPerifericos';
         $perifericosIds = [110, 111, 155];
 
@@ -746,11 +453,12 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
                 $sIndex++;
                 $collapseSub = "collapsePeri{$sIndex}";
                 $headingSub = "headingPeri{$sIndex}";
+                $subId = $cat['id_category'];
 
-                echo "<div class='card'>
+                echo "<div class='card' id='cat-{$subId}'>
                         <div class='card-header text-left' id='{$headingSub}'>
                             <h2 class='mb-0'>
-                                <button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;'>
+                                <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
                                     " . strtoupper($cat['name']) . "
                                 </button>
                             </h2>
@@ -765,9 +473,7 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
                       </div>";
             }
         }
-    }
-
-    elseif ($tipo === 'monitores') {
+    } elseif ($tipo === 'monitores') {
         $parentId = $parentId ?? '#accordionMonitores';
         $idCategoriaPadre = $idCategoriaPadre ?? 119;
 
@@ -786,11 +492,12 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
             $sIndex++;
             $collapseSub = "collapseMonSub{$sIndex}";
             $headingSub = "headingMonSub{$sIndex}";
+            $subId = $sub['id_category'];
 
-            echo "<div class='card'>
+            echo "<div class='card' id='cat-{$subId}'>
                     <div class='card-header' id='{$headingSub}'>
                         <h2 class='mb-0 text-left'>
-                            <button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;'>
+                            <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
                                 " . strtoupper($sub['name']) . "
                             </button>
                         </h2>
@@ -804,9 +511,7 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
                     </div>
                   </div>";
         }
-    }
-
-    elseif ($tipo === 'ups') {
+    } elseif ($tipo === 'ups') {
         $parentId = $parentId ?? '#accordionUPS';
         $idCategoria = $idCategoriaPadre ?? 122;
 
@@ -815,7 +520,6 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
         echo "</div>";
     }
 }
-
 
 function mostrarProductosPorCategoria($idCategoria, $idCategoriaPadre, $tipo)
 {
@@ -863,7 +567,8 @@ function mostrarProductosPorCategoria($idCategoria, $idCategoriaPadre, $tipo)
     }
 }
 
-function mostrarCardProducto($tipo, $categoriaNombre, $categoriaId = null, $parentAccordion, $icono = null) {
+function mostrarCardProducto($tipo, $categoriaNombre, $categoriaId = null, $parentAccordion, $icono = null)
+{
     $headingId = "heading" . ucfirst($tipo);
     $collapseId = "collapse" . ucfirst($tipo);
     $accordionInternoId = "accordion" . ucfirst($tipo) . "Interno";
@@ -885,7 +590,7 @@ function mostrarCardProducto($tipo, $categoriaNombre, $categoriaId = null, $pare
             <div id='{$collapseId}' class='collapse' aria-labelledby='{$headingId}' data-parent='{$parentAccordion}'>
                 <div class='card-body'>
                     <div class='accordion' id='{$accordionInternoId}'>";
-    
+
     mostrarProductos($tipo, $categoriaId, "#{$accordionInternoId}");
 
     echo "      </div>
@@ -893,4 +598,3 @@ function mostrarCardProducto($tipo, $categoriaNombre, $categoriaId = null, $pare
             </div>
           </div>";
 }
-

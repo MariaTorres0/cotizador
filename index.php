@@ -158,39 +158,39 @@ $categorias = obtenerCategoriasCoti($conexion);
                           </div>
                         </div>
                       </div>
-                  <?php
-                      }
-
-                      // UNIDADES DE DATOS
-                      elseif ($categoria['id_category'] == 118) {
-                        mostrarCardProducto('unidades', $categoria['nombre'], 118, '#accordionExample', $categoria['icono']);
-                      }
-
-                      // PERIFÉRICOS
-                      elseif ($categoria['id_category'] == 999) {
-                        mostrarCardProducto('perifericos', 'PERIFÉRICOS', null, '#accordionExample');
-                      }
-
-                      // MONITORES
-                      elseif ($categoria['id_category'] == 119) {
-                        mostrarCardProducto('monitores', 'MONITORES', 119, '#accordionExample', 'monitor.png');
-                      }
-
-                      // UPS
-                      elseif ($categoria['id_category'] == 122) {
-                        mostrarCardProducto('ups', $categoria['nombre'], 122, '#accordionExample', $categoria['icono']);
-                      }
-
-                      // Otras categorías normales
-                      else {
-                        mostrarCategoria($categoria, $index, false, '#565652', true, '#accordionExample');
-                      }
+                <?php
                     }
-                  } ?>
+
+                    // UNIDADES DE DATOS
+                    elseif ($categoria['id_category'] == 118) {
+                      mostrarCardProducto('unidades', $categoria['nombre'], 118, '#accordionExample', $categoria['icono']);
+                    }
+
+                    // PERIFÉRICOS
+                    elseif ($categoria['id_category'] == 999) {
+                      mostrarCardProducto('perifericos', 'PERIFÉRICOS', null, '#accordionExample');
+                    }
+
+                    // MONITORES
+                    elseif ($categoria['id_category'] == 119) {
+                      mostrarCardProducto('monitores', 'MONITORES', 119, '#accordionExample', 'monitor.png');
+                    }
+
+                    // UPS
+                    elseif ($categoria['id_category'] == 122) {
+                      mostrarCardProducto('ups', $categoria['nombre'], 122, '#accordionExample', $categoria['icono']);
+                    }
+
+                    // Otras categorías normales
+                    else {
+                      mostrarCategoria($categoria, $index, false, '#565652', true, '#accordionExample');
+                    }
+                  }
+                } ?>
               </div>
               <!-- /Acordeón principal -->
+              <hr />
             </div>
-            <hr />
           </div>
 
           <!-- Columna derecha: totales y resumen -->
@@ -229,7 +229,6 @@ $categorias = obtenerCategoriasCoti($conexion);
               </h4>
             </div>
 
-            <hr />
             <hr />
 
             <div class="col-11 col-lg-12">
@@ -300,7 +299,7 @@ $categorias = obtenerCategoriasCoti($conexion);
               </div>
             </div>
 
-            <div class="col-11 col-lg-12 cuadroRed p-2 mt-3">
+            <div class="col-11 col-lg-12 cuadroRed p-2 mt-3 mb-2">
               <div class="row">
                 <div class="col-12 col-lg-12 mr-4 mr-lg-2 text-center">
                   <i class="fas fa-medal" style="font-size: 40px"></i>
@@ -308,8 +307,8 @@ $categorias = obtenerCategoriasCoti($conexion);
                 </div>
               </div>
             </div>
+            <br>
 
-            <hr />
           </div>
         </div>
       </center>
@@ -382,6 +381,7 @@ $categorias = obtenerCategoriasCoti($conexion);
   <script src="js/alertify.min.js" type="text/javascript"></script>
   <script src="js/tabla.js" type="text/javascript"></script>
   <script src="js/obtenerFactorPrecio.js" type="text/javascript"></script>
+  <script src="js/obtenerProductos.js" type="text/javascript"></script>
 </body>
 
 </html>
