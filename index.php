@@ -89,6 +89,14 @@ $categorias = obtenerCategoriasCoti($conexion);
       justify-content: flex-start;
       height: 100%;
     }
+    .fuente-hint {
+    margin-left: 8px;
+    font-size: 13px;
+    color: #9B3A3A;       
+    font-weight: 400;
+    letter-spacing: 0.2px;
+}
+
   </style>
 </head>
 
@@ -126,11 +134,12 @@ $categorias = obtenerCategoriasCoti($conexion);
           <!-- Columna izquierda: categorías -->
           <div class="container p-0 p-lg-0 pl-4 m-0 interior1 col-12 col-lg-8 mb-0 mb-lg-4">
             <div class="col-12 col-lg-12 pr-5 pl-8">
+              <hr>
               <h3 class="font-weight-bold" style="color: #e73d2c">¡ARMA LA KPC DE TUS SUEÑOS!</h3>
               <p class="font-weight-bold text-center">
                 • El configurador de PC personalizada de KPC Hardware, es la herramienta perfecta para que selecciones una a una las piezas de tu computadora, y pruebes distintas configuraciones y presupuestos.
               </p>
-              <hr />
+              <hr>
               <!-- Acordeón principal -->
               <div class="accordion" id="accordionExample">
                 <?php foreach ($categorias as $index => $categoria) {
@@ -163,22 +172,22 @@ $categorias = obtenerCategoriasCoti($conexion);
 
                     // UNIDADES DE DATOS
                     elseif ($categoria['id_category'] == 118) {
-                      mostrarCardProducto('unidades', $categoria['nombre'], 118, '#accordionExample', $categoria['icono']);
+                      mostrarCardProducto('unidades', $categoria['nombre'], 118, '#accordionExample', $categoria['icono'], $categoria['id_btn'], $categoria['obligatorio']);
                     }
 
                     // PERIFÉRICOS
                     elseif ($categoria['id_category'] == 999) {
-                      mostrarCardProducto('perifericos', 'PERIFÉRICOS', null, '#accordionExample');
+                      mostrarCardProducto('perifericos', 'PERIFÉRICOS', 999, '#accordionExample', null,  $categoria['id_btn'], $categoria['obligatorio']);
                     }
 
                     // MONITORES
                     elseif ($categoria['id_category'] == 119) {
-                      mostrarCardProducto('monitores', 'MONITORES', 119, '#accordionExample', 'monitor.png');
+                      mostrarCardProducto('monitores', 'MONITORES', 119, '#accordionExample', $categoria['icono'], $categoria['id_btn'], $categoria['obligatorio']);
                     }
 
                     // UPS
                     elseif ($categoria['id_category'] == 122) {
-                      mostrarCardProducto('ups', $categoria['nombre'], 122, '#accordionExample', $categoria['icono']);
+                      mostrarCardProducto('ups', $categoria['nombre'], 122, '#accordionExample', $categoria['icono'], $categoria['id_btn'], $categoria['obligatorio']);
                     }
 
                     // Otras categorías normales
@@ -188,12 +197,11 @@ $categorias = obtenerCategoriasCoti($conexion);
                   }
                 } ?>
               </div>
-              <!-- /Acordeón principal -->
-              <hr />
             </div>
           </div>
 
           <!-- Columna derecha: totales y resumen -->
+
           <div class="col-12 col-lg-4 container interior2 pt-3 pt-lg-2">
             <div class="col-11 col-lg-12 pb-1 p-0 bordes fondokpc">
               <div class="col-12 col-lg-12"></div>
@@ -381,7 +389,7 @@ $categorias = obtenerCategoriasCoti($conexion);
   <script src="js/alertify.min.js" type="text/javascript"></script>
   <script src="js/tabla.js" type="text/javascript"></script>
   <script src="js/obtenerFactorPrecio.js" type="text/javascript"></script>
-  <script src="js/obtenerProductos.js" type="text/javascript"></script>
+  <!--  <script src="js/obtenerProductos.js" type="text/javascript"></script> -->
 </body>
 
 </html>
