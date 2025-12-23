@@ -41,60 +41,6 @@ function crearPath($nombreImg)
     return $rutaFinal;
 }
 
-
-
-function listarPeri($categoria)
-{
-    global $factorClass;
-    global $conexion;
-    $sql = "SELECT
-              ps_category_product.id_category AS categoria,
-              ps_category_lang.name AS nombreCategoria,
-              ps_product_lang.name AS productoNombre,
-              ps_product_lang.id_product,
-              ps_product.price,
-              ps_product.slots
-            FROM
-              ps_category_product,
-              ps_product_lang,
-              ps_category_lang,
-              ps_product
-            WHERE
-              ps_category_product.id_category = $categoria AND ps_category_product.id_category = ps_category_lang.id_category && ps_category_product.id_product = ps_product_lang.id_product && ps_product_lang.id_product = ps_product.id_product && ps_product.active = 1
-              AND ps_product_lang.id_lang=2 AND ps_category_lang.id_lang=2
-            ORDER BY
-              price ASC;";
-
-    $resultado = mysqli_query($conexion, $sql);
-    echo "<div class='row align-items-start'>";
-    if ($categoria == 82 || $categoria == 81 || $categoria == 80) {
-        $categoria = 118;
-    }
-    if ($categoria == 50 || $categoria == 51 || $categoria == 52 || $categoria == 53) {
-        $categoria = 119;
-    }
-    while ($filas = mysqli_fetch_row($resultado)) {
-        $precioNormal = $filas[4] * 1.13;
-        $precioEfectivo = $precioNormal * $factorClass->getValor('FTJ')['valor'];
-        $cadenaNueva = str_replace("''", " ´´ ", $filas[2]);
-        $srcImg = pathImg($filas[3]);
-        echo "<div class='col-lg-4 col-md-6 col-sm-12 col-xs-12' >
-                <div class='card bg-light mb-3' style='max-width: 18rem;'>
-                    <div class='card-header p-1'>
-                        <img src='$srcImg' style='max-width: 75px; max-height: 75px;' class='zoom'>
-                        <p>$filas[2]</p>
-                    </div>
-                    <div class='card-body p-1 col-12'>
-                        <p class='card-title font-weight-bold' style='color:#6D6D6B'>Precio normal: $ " . redondear($precioNormal) . "</p>
-                        <p class='card-title text-success font-weight-bold'>Precio efectivo: $ " . redondear($precioEfectivo) . "</p>
-                        <a class='btn btn-info btn-lg btn-block' style='color: #fff' href='javascript:void(0)' onclick='agregarTabla(\"$cadenaNueva\"," . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, $filas[3], $filas[0], $categoria,\"$filas[1]\", 1)'>+ Añadir</a>
-                    </div>
-                </div>
-            </div>";
-    }
-    echo "</div>";
-}
-
 //Nuevas funciones para cotizaciones
 function obtenerCategoriasCoti($conexion)
 {
@@ -178,7 +124,7 @@ function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
         echo "<div class='card' id='cat-{$subId}'>
                 <div class='card-header' id='{$headingSub}'>
                     <h2 class='mb-0 text-left'>
-                        <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
+                        <button class='btn btn-link collapsed' id='btnSub{$subId}'  type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
                             " . strtoupper($sub['name']) . "
                         </button>
                     </h2>
@@ -213,7 +159,7 @@ function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
                 echo "<div class='card' id='cat-{$subsubId}'>
                         <div class='card-header' id='{$headingSubSub}'>
                             <h2 class='mb-0'>
-                                <button class='btn btn-link collapsed' id='btnSubSub{$subsubId}' type='button' data-toggle='collapse' data-target='#{$collapseSubSub}' aria-expanded='false' aria-controls='{$collapseSubSub}' style='color:#007bff;' data-cat-id='{$subsubId}'>
+                                <button class='btn btn-link collapsed' id='btnSubSub{$subsubId}' data-level='subsub' type='button' data-toggle='collapse' data-target='#{$collapseSubSub}' aria-expanded='false' aria-controls='{$collapseSubSub}' style='color:#007bff;' data-cat-id='{$subsubId}'>
                                     {$subsub['name']}
                                 </button>
                             </h2>
@@ -441,8 +387,7 @@ function mostrarProductosPorCategoria($idCategoria, $idCategoriaPadre, $tipo)
         $nombreProductoJS = str_replace(['"', "'"], '', $prod['productoNombre']);
         $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
 
-        $onclick = "agregarTabla(\"{$nombreProductoJS}\", " . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, {$prod['id_product']}, {$idCategoria}, {$idCategoriaPadre}, \"{$nombreCategoriaJS}\"";
-
+        $onclick = "agregarTabla(\"{$nombreProductoJS}\", " . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, {$prod['id_product']}, {$idCategoria}, {$idCategoriaPadre}, \"{$nombreCategoriaJS}\", 1, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\")";
         // Extra parámetros solo para unidades y UPS
         if (in_array($tipo, ['unidades', 'ups'])) {
             $onclick .= ", 1, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\"";

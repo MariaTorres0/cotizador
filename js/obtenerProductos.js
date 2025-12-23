@@ -1,41 +1,55 @@
-let cate_principal = null;
-let cate_padre = null;
+$(document).ready(function() {
+    
+    // Variable global para almacenar el ID de la sub-subcategoría seleccionada
+    var idProcesadorSeleccionado = null;
 
-function traerProductosAsociados(cate_principal, cate_padre) {
-    fetch('funciones/traer_productos.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `cate_principal=${cate_principal}&cate_padre=${cate_padre}`
-    })
-    .then(response => response.text())
-    .then(html => {
-        // Mostrar los productos en el contenedor de productos de la categoría padre
-        const contenedor = document.querySelector(`#cat-${cate_padre} .card-body`);
-        contenedor.innerHTML = html;
-    })
-    .catch(err => console.error(err));
-}
+    // Lista de IDs de categorías que dependen del procesador
+    var categoriasDependientes = [99, 103, 101, 102, 109, 104, 105];
 
+    $(document).on('click', "button[data-level='subsub']", function() {
+        idProcesadorSeleccionado = $(this).data('cat-id');
+        
+        console.log("Procesador ID seleccionado: " + idProcesadorSeleccionado);
+        
+        categoriasDependientes.forEach(function(catId) {
+             ejecutarCargaAsociados(idProcesadorSeleccionado, catId);
+        });
+    });
 
-document.addEventListener('click', function(e) {
-    const btn = e.target.closest('button[data-cat-id]');
-    if (btn) {
-        const clickedId = btn.getAttribute('data-cat-id');
+    $(document).on('click', "button[data-cat-id]", function() {
+        var catIdClickeado = $(this).data('cat-id');
 
-        // Si ya tenemos un cate_principal seleccionado, el siguiente clic será cate_padre
-        if (!cate_principal) {
-            cate_principal = clickedId;
-            console.log('Cate principal seleccionado:', cate_principal);
-        } else {
-            cate_padre = clickedId;
-            console.log('Cate padre seleccionado:', cate_padre);
-
-            // Llamada AJAX para traer productos asociados
-            traerProductosAsociados(cate_principal, cate_padre);
-
-            // Resetear cate_principal para la próxima selección
-            cate_principal = null;
-            cate_padre = null;
+        if (categoriasDependientes.includes(catIdClickeado)) {
+            if (!idProcesadorSeleccionado) {
+                return;
+            }
+            ejecutarCargaAsociados(idProcesadorSeleccionado, catIdClickeado);
         }
+    });
+
+    function ejecutarCargaAsociados(principalId, padreId) {
+        var btnCategoria = $("button[data-cat-id='" + padreId + "']");
+        var targetId = btnCategoria.data('target'); 
+        var contenedorBody = $(targetId).find('.card-body');
+
+        $.ajax({
+            url: 'ajax/obtener_asociados.php',
+            type: 'POST',
+            data: {
+                cate_principal: principalId,
+                cate_padre: padreId
+            },
+            beforeSend: function() {
+                if(contenedorBody.html().trim() === "") {
+                    contenedorBody.html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Cargando...</div>');
+                }
+            },
+            success: function(response) {
+                contenedorBody.html(response);
+            },
+            error: function() {
+                console.error("Error al cargar productos asociados para la categoría: " + padreId);
+            }
+        });
     }
 });

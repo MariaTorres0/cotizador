@@ -389,7 +389,7 @@ $categorias = obtenerCategoriasCoti($conexion);
   <script src="js/alertify.min.js" type="text/javascript"></script>
   <script src="js/tabla.js" type="text/javascript"></script>
   <script src="js/obtenerFactorPrecio.js" type="text/javascript"></script>
-  <!--  <script src="js/obtenerProductos.js" type="text/javascript"></script> -->
+  <script src="js/obtenerProductos.js" type="text/javascript"></script>
 </body>
 
 </html>
