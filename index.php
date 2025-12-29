@@ -46,7 +46,7 @@ $categorias = obtenerCategoriasCoti($conexion);
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 
   <!-- Popper JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <cript src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></cript>
 
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -148,19 +148,19 @@ $categorias = obtenerCategoriasCoti($conexion);
                     // PROCESADOR
                     if ($categoria['id_category'] == 100) { ?>
                       <div class="card">
-                        <div class="card-header degradadoGris" id="headingCPU">
+                        <div class="card-header degradadoGris" id="headingCpu">
                           <h2 class="mb-0 text-left">
                             <button class="btn btn-link" style="color: #565652;" type="button"
-                              data-toggle="collapse" data-target="#collapseCPU" aria-expanded="true"
-                              aria-controls="collapseCPU" data-parent="#accordionExample">
+                              data-toggle="collapse" data-target="#collapseCpu" aria-expanded="true"
+                              aria-controls="collapseCpu" data-parent="#accordionExample">
                               <img src="iconos_cat/<?php echo $categoria['icono']; ?>" width="40" height="40"
-                                style="vertical-align: middle; margin-right: 6px;" alt="CPU" />
+                                style="vertical-align: middle; margin-right: 6px;" alt="Cpu" />
                               <span><?php echo $categoria['nombre']; ?></span>
                               <i class="fas fa-times" id="100" style="color: red; margin-left: 6px;"></i>
                             </button>
                           </h2>
                         </div>
-                        <div id="collapseCPU" class="collapse show" aria-labelledby="headingCPU"
+                        <div id="collapseCpu" class="collapse show" aria-labelledby="headingCpu"
                           data-parent="#accordionExample">
                           <div class="accordion" id="accordionCPUInterno">
                             <?php mostrarProce(100, '#accordionCPUInterno'); ?>
@@ -182,7 +182,7 @@ $categorias = obtenerCategoriasCoti($conexion);
 
                     // MONITORES
                     elseif ($categoria['id_category'] == 119) {
-                      mostrarCardProducto('monitores', 'MONITORES', 119, '#accordionExample', $categoria['icono'], $categoria['id_btn'], $categoria['obligatorio']);
+                      mostrarCardProducto('monitores', $categoria['nombre'], 119, '#accordionExample', $categoria['icono'], $categoria['id_btn'], $categoria['obligatorio']);
                     }
 
                     // UPS
@@ -192,7 +192,7 @@ $categorias = obtenerCategoriasCoti($conexion);
 
                     // Otras categorías normales
                     else {
-                      mostrarCategoria($categoria, $index, false, '#565652', true, '#accordionExample');
+                      mostrarCategoria($categoria, ucfirst($categoria['id_btn']), false, '#565652', true, '#accordionExample');
                     }
                   }
                 } ?>
@@ -277,7 +277,7 @@ $categorias = obtenerCategoriasCoti($conexion);
               <p>
                 &nbsp;<i class="fas fa-times" style="color: red"></i> Componente obligatorio.<br />
                 <i class="fas fa-exclamation"></i> Componente opcional.<br />
-                <i class="fas fa-check" style="color: green"></i> Componente agregado.
+                <i class="fas fa-check" style="color: green; animation: none;"></i> Componente agregado.
               </p>
             </div>
 

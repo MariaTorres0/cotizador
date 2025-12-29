@@ -1,896 +1,674 @@
-var _0x2aab = ['La\x20configuración\x20seleccionada\x20requiere\x20cooler', 'preventDefault', 'stringify', 'querySelectorAll', 'call', 'catProce', 'catCase', 'catRam', 'catGpu', 'catFuente', 'catDisco', 'cooler', 'idMobo', 'idCase', 'idRam', 'idGpu', 'idFuente', 'idDisco', 'voltajegpu', 'socketCool', '100', '101', '109', '118', '104', '105', '110', '119', '122', 'table\x20tbody\x20tr\x20', 'remove', 'removeClass', 'addClass', 'fas\x20fa-times', 'style', 'color', 'red', 'parentNode', 'background', '#FFD3D3', 'fas\x20fa-check', 'table\x20tr:not(:first-child)', '102', 'className', 'fas\x20fa-exclamation', '#ff7b11', '103', 'fila', '#FEFFC5', 'green', '#BCFFD6', 'fa-times\x20fas', 'fa-exclamation\x20fas', 'slotsMobo', 'voltajecpu', '<td\x20style=\x22display:none\x22>', '</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><input\x20type=\x22hidden\x22\x20id=\x22voltajeValor\x22\x20value=\x22', '\x22><input\x20type=\x22hidden\x22\x20id=\x22idProducto\x22\x20name=\x22idProducto[]\x22\x20value=', '><input\x20type=\x22hidden\x22\x20id=\x22idPadre\x22\x20name=\x22catePadre[]\x22\x20value=\x22', '\x22><p>', '</p></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20align=\x22center\x22><input\x20type=\x22hidden\x22\x20\x20name=\x22precioEfectivo[]\x22\x20id=\x22precioEfectivo\x22\x20value=\x22', '\x22>$', 'toFixed', '</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20align=\x22center\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<input\x20type=\x22hidden\x22\x20id=\x22canti', '\x22\x20name=\x22cantidadEnviar[]\x22\x20value=', '>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<input\x20type=\x22hidden\x22\x20id=\x22cantidad', '\x22\x20name=\x22cantidad[]\x22\x20value=', '</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td><button\x20onclick=\x22eliminarFilas(this)\x22\x20style=\x22background:\x20crimson;\x20border-radius:\x205px;\x20color:\x20#fff;\x20cursor:\x20pointer;\x20font-size:', '\x2016px;\x20border:\x20solid\x20crimson\x22\x20type=\x22button\x22\x20name=\x22remove\x22>&times</button></td>', 'Ya\x20has\x20alcanzado\x20los\x20slots\x20máximos\x20de\x20la\x20placa\x20base', '#collapseFour', 'collapse', 'createElement', 'querySelector', 'table\x20tbody', 'appendChild', 'Componente\x20añadido', 'table\x20td\x20input[type=\x27hidden\x27][value=\x22', '\x22]#idPadre', 'totalCantidad', 'Antes\x20debes\x20agregar\x20un\x20procesador\x20y\x20una\x20placa\x20base', 'Ya\x20fue\x20agregado\x20un\x20disipador', 'El\x20kit\x20de\x20memorias\x20es\x20mayor\x20a\x20los\x20slots\x20de\x20la\x20placa\x20base', 'Para\x20mayor\x20compatibilidad,\x20deben\x20ser\x20las\x20mismas\x20RAM', 'parentElement', 'table\x20td\x20input[type=\x27hidden\x27]#cantidad', 'No\x20quedan\x20slots\x20disponibles\x20en\x20la\x20placa\x20base.', 'table\x20td\x20input[type=\x27hidden\x27]#canti', 'td\x20input[type=\x27hidden\x27]#totalDetalle', 'innerHTML', 'Componente\x20sumado', 'Ya\x20existe\x20un\x20producto\x20de\x20esta\x20categoría.', '#cantidad101', '#totalCantidad', '#totalDetalle', 'totalVentaEfectivo', '#totalVentaTarjeta', 'totalVentaNormal', 'tbody', 'tr#', '\x20#voltajeValor', 'Componente\x20eliminado', 'fire', 'success', 'Recuerda\x20que...', 'El\x20precio\x20final\x20de\x20tu\x20configuración\x20tendrá\x20un\x20BUEN\x20DESCUENTO\x20cuando\x20envíes\x20tu\x20cotización\x20a\x20KPC.', 'collapseTwo', 'collapseOne', 'collapseFour', 'collapseFive', 'collapseSix', 'collapseEight', 'collapseNine', 'collapseThen', 'collapseElev', 'toggle', 'getElementById', 'lista', 'coolNeed', 'gpuNeed', 'rows', 'length', 'fila104', 'split', 'fila105', 'push', 'filter', 'indexOf', 'value', 'encabezado', 'fila109', 'fila101', 'fila103', 'fila99', 'fila100', 'fila102', 'fila118', '#modalFinal', 'show', 'error', '¡Hace\x20falta\x20incorporar\x20al\x20menos\x20un\x20componente\x20básico\x20para\x20armar\x20su\x20CPU!.', 'voltaje', 'textContent', 'sort', 'Revisa\x20tu\x20configuración', 'La\x20configuración\x20seleccionada\x20requiere\x20tarjeta\x20gráfica'];
-(function (_0x18d676, _0x26e4bb) {
-    var _0x53dfba = function (_0x59c02a) {
-        while (--_0x59c02a) {
-            _0x18d676['push'](_0x18d676['shift']());
-        }
-    };
-    _0x53dfba(++_0x26e4bb);
-}(_0x2aab, 0xf8));
-var _0x3114 = function (_0x44ed45, _0x413224) {
-    _0x44ed45 = _0x44ed45 - 0x0;
-    var _0x2699a9 = _0x2aab[_0x44ed45];
-    return _0x2699a9;
-};
-
-function aler() {
-    Swal[_0x3114('0x0')]({'icon': _0x3114('0x1'), 'title': _0x3114('0x2'), 'text': _0x3114('0x3')});
-}
-
-window['onload'] = aler;
-
-function cerrarMenu(_0x2ec785) {
-    var _0x352d6e = '';
-    if (_0x2ec785 == 0x63) {
-        _0x352d6e = _0x3114('0x4');
-    } else if (_0x2ec785 == 0x64) {
-        _0x352d6e = _0x3114('0x5');
-    } else if (_0x2ec785 == 0x67) {
-        _0x352d6e = 'collapseThree';
-    } else if (_0x2ec785 == 0x65) {
-        _0x352d6e = _0x3114('0x6');
-    } else if (_0x2ec785 == 0x66) {
-        _0x352d6e = _0x3114('0x7');
-    } else if (_0x2ec785 == 0x6d) {
-        _0x352d6e = _0x3114('0x8');
-    } else if (_0x2ec785 == 0x76) {
-        _0x352d6e = 'collapseSev';
-    } else if (_0x2ec785 == 0x68) {
-        _0x352d6e = _0x3114('0x9');
-    } else if (_0x2ec785 == 0x69) {
-        _0x352d6e = _0x3114('0xa');
-    } else if (_0x2ec785 == 0x6e || _0x2ec785 == 0x6f || _0x2ec785 == 0x9b) {
-        _0x352d6e = _0x3114('0xb');
-    } else if (_0x2ec785 == 0x77) {
-        _0x352d6e = _0x3114('0xc');
-    } else if (_0x2ec785 == 0x7a) {
-        _0x352d6e = 'collapseTwelve';
-    }
-    if (_0x2ec785 == 0x65 || _0x2ec785 == 0x76 || _0x2ec785 == 0x6e || _0x2ec785 == 0x6f || _0x2ec785 == 0x77 || _0x2ec785 == 0x9b) {
-    } else {
-        $('#' + _0x352d6e)['collapse'](_0x3114('0xd'));
-    }
-}
-
-function validarTabla() {
-    var _0x5e9597 = document[_0x3114('0xe')](_0x3114('0xf'));
-    var _0x3df9ef = new Array();
-    var _0x475c43 = document['getElementById'](_0x3114('0x10'));
-    var _0x259951 = document[_0x3114('0xe')](_0x3114('0x11'));
-    for (var _0xe2008b = 0x0; _0xe2008b < _0x5e9597[_0x3114('0x12')][_0x3114('0x13')]; _0xe2008b++) {
-        if (_0x5e9597[_0x3114('0x12')][_0xe2008b]['id']['split']('-')[0x0] == _0x3114('0x14') || _0x5e9597[_0x3114('0x12')][_0xe2008b]['id'][_0x3114('0x15')]('-')[0x0] == _0x3114('0x16')) {
-            _0x3df9ef[_0x3114('0x17')](_0x3114('0x14'));
-            _0x3df9ef['push'](_0x3114('0x16'));
-        }
-        _0x3df9ef[_0x3114('0x17')](_0x5e9597[_0x3114('0x12')][_0xe2008b]['id'][_0x3114('0x15')]('-')[0x0]);
-    }
-    var _0x5e6120 = _0x3df9ef[_0x3114('0x18')](function (_0x1bf94c, _0x5be2cd, _0x54c05d) {
-        return _0x54c05d[_0x3114('0x19')](_0x1bf94c) === _0x5be2cd;
+// Muestra la alerta de bienvenida
+function mostrarAlertaBienvenida() {
+    Swal.fire({
+        icon: 'success',
+        title: 'Recuerda que...',
+        text: 'El precio final de tu configuración tendrá un BUEN DESCUENTO cuando envíes tu cotización a KPC.'
     });
-    if (_0x259951[_0x3114('0x1a')] == 0x1 && _0x475c43[_0x3114('0x1a')] == 0x1) {
-        definidos = [_0x3114('0x1b'), 'fila118', _0x3114('0x1c'), _0x3114('0x1d'), _0x3114('0x1e'), _0x3114('0x1f'), _0x3114('0x20'), _0x3114('0x14'), 'fila105', _0x3114('0x21')];
-    } else if (_0x259951[_0x3114('0x1a')] == 0x1 && _0x475c43[_0x3114('0x1a')] == 0x0) {
-        definidos = [_0x3114('0x1b'), _0x3114('0x22'), _0x3114('0x1c'), 'fila101', _0x3114('0x1e'), _0x3114('0x1f'), _0x3114('0x20'), _0x3114('0x21')];
-    } else if (_0x475c43[_0x3114('0x1a')] == 0x1 && _0x259951[_0x3114('0x1a')] == 0x0) {
-        definidos = [_0x3114('0x1b'), _0x3114('0x22'), 'fila109', _0x3114('0x1d'), _0x3114('0x1e'), _0x3114('0x1f'), _0x3114('0x20'), 'fila104', 'fila105'];
-    } else {
-        definidos = [_0x3114('0x1b'), _0x3114('0x22'), _0x3114('0x1c'), _0x3114('0x1d'), 'fila103', _0x3114('0x1f'), _0x3114('0x20')];
+}
+
+window.onload = mostrarAlertaBienvenida;
+
+// Cierra los acordeones del menu lateral al seleccionar un producto
+function cerrarMenu(idCategoriaPadre) {
+    var idCollapse = '';
+    // Mapeo de IDs de categorías a los IDs de los acordeones en el HTML
+    if (idCategoriaPadre == 100) { // CPU
+        idCollapse = 'collapseCpu';
+    } else if (idCategoriaPadre == 99) { // Mobo
+        idCollapse = 'collapsePlaca';
+    } else if (idCategoriaPadre == 103) { //Case
+        idCollapse = 'collapseCase';
+    } else if (idCategoriaPadre == 101) { // RAM
+        idCollapse = 'collapseRam';
+    } else if (idCategoriaPadre == 102) { // GPU
+        idCollapse = 'collapseGpu';
+    } else if (idCategoriaPadre == 109) { // Fuente
+        idCollapse = 'collapseFuente';
+    } else if (idCategoriaPadre == 118) { // Almacenamiento
+        idCollapse = 'collapseUnidades';
+    } else if (idCategoriaPadre == 104) { // Cooler de aire
+        idCollapse = 'collapseAir';
+    } else if (idCategoriaPadre == 105) { // Cooler de liquido
+        idCollapse = 'collapsLiqui';
+    } else if (idCategoriaPadre == 110 || idCategoriaPadre == 111 || idCategoriaPadre == 113) { // Perifericos
+        idCollapse = 'collapsePeri'; 
+    } else if (idCategoriaPadre == 119) { // Monitor
+        idCollapse = 'collapseMoni';
+    } else if (idCategoriaPadre == 122) { // UPS
+        idCollapse = 'collapseUps';
     }
-    if (compare(_0x5e6120, definidos)) {
-        $(_0x3114('0x23'))['modal'](_0x3114('0x24'));
+
+    // Cierra el acordeón si no es uno de los especificados en el if vacío
+    if (idCategoriaPadre == 101 || idCategoriaPadre == 118 || idCategoriaPadre == 110 || idCategoriaPadre == 111 || idCategoriaPadre == 119 || idCategoriaPadre == 113) {
+        // No hace nada (mantiene abierto)
     } else {
-        alertify[_0x3114('0x25')](_0x3114('0x26'));
+        if (idCollapse !== '') {
+            $('#' + idCollapse).collapse('hide');
+        }
     }
 }
 
+// Valida que todos los componentes obligatorios estén seleccionados antes de enviar
+function validarTabla() {
+    var filasTabla = document.getElementById('lista').rows;
+    var idsEncontrados = new Array();
+    var inputTarjeta = document.getElementById('totalVentaNormal'); // Input oculto
+    var inputEfectivo = document.getElementById('totalVentaEfectivo'); // Input oculto
+
+    // Recorre la tabla y guarda los IDs de las categorías encontradas
+    for (var i = 0; i < filasTabla.length; i++) {
+        var idFila = filasTabla[i].id;
+        var categoriaFila = idFila.split('-')[0]; 
+
+        // Lógica específica para categorías críticas (CPU y Motherboard)
+        if (categoriaFila == 'fila100' || idFila.split('-')[0] == 'fila101') {
+            idsEncontrados.push('fila100'); // Marca CPU como encontrado
+            idsEncontrados.push('fila101'); // Marca Mobo como encontrada
+        }
+        idsEncontrados.push(categoriaFila);
+    }
+
+    // Filtra duplicados
+    var idsUnicos = idsEncontrados.filter(function (valor, indice, self) {
+        return self.indexOf(valor) === indice;
+    });
+
+    var definidos = [];
+
+    // Define qué componentes son obligatorios basándose en si hay precio calculado
+    // Nota: 100=CPU, 101=Mobo, 102=RAM, 109=Fuente, 103=Case, 118=Disco
+    if (inputEfectivo.value == 1 && inputTarjeta.value == 1) {
+        definidos = ['fila100', 'fila118', 'fila101', 'fila102', 'fila109', 'fila103', 'fila104', 'fila105'];
+    } else if (inputEfectivo.value == 1 && inputTarjeta.value == 0) {
+        // Lógica variante
+        definidos = ['fila100', 'fila101', 'fila102', 'fila109', 'fila103'];
+    } else if (inputTarjeta.value == 1 && inputEfectivo.value == 0) {
+        definidos = ['fila100', 'fila101', 'fila109', 'fila102', 'fila103'];
+    } else {
+        // Default mínimos
+        definidos = ['fila100', 'fila101', 'fila102', 'fila109', 'fila103'];
+    }
+
+    // Compara lo seleccionado con lo requerido
+    if (compare(idsUnicos, definidos)) {
+        $('#modalFinal').modal('show');
+    } else {
+        alertify.error('¡Hace falta incorporar al menos un componente básico para armar su CPU!');
+    }
+}
+
+// Actualiza los Watts totales
 function wats() {
-    var _0x463d2d = document[_0x3114('0xe')]('totalWatts');
-    var _0x58dc55 = document['getElementById'](_0x3114('0x27'));
-    _0x463d2d[_0x3114('0x28')] = _0x58dc55[_0x3114('0x1a')];
+    var spanWatts = document.getElementById('totalWatts');
+    var inputVoltaje = document.getElementById('voltaje');
+    spanWatts.innerHTML = inputVoltaje.value;
 }
 
-function compare(_0x5791f9, _0x2af59c) {
-    _0x5791f9 = _0x5791f9[_0x3114('0x29')]();
-    _0x2af59c = _0x2af59c[_0x3114('0x29')]();
-    var _0xa5e176 = new Array();
-    var _0x445c58 = 0x0;
-    var _0x156c13 = ![];
-    for (var _0x111ede = 0x0; _0x111ede < _0x2af59c[_0x3114('0x13')]; _0x111ede++) {
-        _0x156c13 = ![];
-        var _0x285868 = ![];
-        for (var _0x556406 = 0x0; _0x556406 < _0x5791f9[_0x3114('0x13')]; _0x556406++) {
-            if (_0x5791f9[_0x556406] == _0x2af59c[_0x111ede]) {
-                _0x156c13 = !![];
-                _0x285868 = !![];
-                _0x445c58++;
+// Compara dos arrays (Ids seleccionados vs Ids requeridos)
+function compare(seleccionados, requeridos) {
+    seleccionados = seleccionados.sort();
+    requeridos = requeridos.sort();
+    var faltantes = new Array();
+    var coincidencias = 0;
+
+    for (var i = 0; i < requeridos.length; i++) {
+        var encontrado = false;
+        for (var j = 0; j < seleccionados.length; j++) {
+            if (seleccionados[j] == requeridos[i]) {
+                encontrado = true;
+                coincidencias++;
             }
         }
-        if (_0x285868 == ![]) {
-            _0xa5e176[_0x3114('0x17')](_0x2af59c[_0x111ede]);
+        if (!encontrado) {
+            faltantes.push(requeridos[i]);
         }
     }
-    if (_0xa5e176[_0x3114('0x13')] >= 0x1 && _0xa5e176[_0x3114('0x13')] <= 0x3) {
-        difere(_0xa5e176);
+
+    if (faltantes.length >= 1 && faltantes.length <= 3) {
+        difere(faltantes);
+        return false; // Retorna falso porque faltan cosas
     } else {
-        return _0x445c58 == _0x2af59c[_0x3114('0x13')];
+        return coincidencias == requeridos.length;
     }
 }
 
-function difere(_0x34af56, _0x2b7799) {
-    var _0x2aed4d = '';
-    if (recorrer(_0x34af56)) {
-        Swal[_0x3114('0x0')]({
-            'icon': _0x3114('0x25'),
-            'title': _0x3114('0x2a'),
-            'text': 'Por\x20favor,\x20agrega\x20GPU\x20y\x20Cooler\x20a\x20tu\x20configuración,\x20ya\x20que\x20seleccionaste\x20un\x20procesador\x20que\x20lo\x20requiere.'
+// Muestra alertas específicas sobre qué falta
+function difere(faltantes) {
+    var mensaje = '';
+    // Si falta todo lo básico
+    if (recorrer(faltantes)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Revisa tu configuración',
+            text: 'Por favor, agrega GPU y Cooler a tu configuración, ya que seleccionaste un procesador que lo requiere.'
         });
     } else {
-        for (var _0x8b5397 = 0x0; _0x8b5397 < _0x34af56[_0x3114('0x13')]; _0x8b5397++) {
-            if (_0x34af56[_0x8b5397] == _0x3114('0x21')) {
-                _0x2aed4d = _0x3114('0x2b');
-            } else if (_0x34af56[_0x8b5397] == 'fila104' || _0x34af56[_0x8b5397] == _0x3114('0x16')) {
-                _0x2aed4d = _0x3114('0x2c');
+        for (var i = 0; i < faltantes.length; i++) {
+            if (faltantes[i] == 'fila105') { // Cooler
+                mensaje = 'La configuración seleccionada requiere cooler';
+            } else if (faltantes[i] == 'fila104' || faltantes[i] == 'fila101') { // GPU o Mobo
+                mensaje = 'La configuración seleccionada requiere tarjeta gráfica'; // O placa base, el texto original dice grafica
             }
         }
-        if (_0x2aed4d != '') {
-            alertify['error'](_0x2aed4d);
-            _0x2b7799[_0x3114('0x2d')]();
+        if (mensaje != '') {
+            alertify.error(mensaje);
         }
     }
 }
 
-function recorrer(_0x3832bc) {
-    _0x3832bc = _0x3832bc[_0x3114('0x29')]();
-    var _0x22b808 = ['fila102', _0x3114('0x14'), _0x3114('0x16')];
-    var _0x5159b8 = JSON[_0x3114('0x2e')](_0x3832bc);
-    var _0x6a1930 = JSON[_0x3114('0x2e')](_0x22b808);
-    return JSON[_0x3114('0x2e')](_0x3832bc) == JSON[_0x3114('0x2e')](_0x22b808);
+// Verifica JSONs de arrays para comparaciones estrictas
+function recorrer(arrayFaltantes) {
+    arrayFaltantes = arrayFaltantes.sort();
+    var checkArr = ['fila102', 'fila100', 'fila101']; // RAM, CPU, Mobo
+    return JSON.stringify(arrayFaltantes) == JSON.stringify(checkArr);
 }
 
-function checkId(_0x181ea4) {
-    let _0x34df83 = document[_0x3114('0x2f')]('#lista\x20tr[for=\x22id\x22]');
-    return []['filter'][_0x3114('0x30')](_0x34df83, _0x404d3d => _0x404d3d['id'] === _0x181ea4)[_0x3114('0x13')] === 0x1;
+// Verifica si un ID ya existe en la tabla
+function checkId(idElemento) {
+    let filas = document.querySelectorAll('#lista tr[for="id"]');
+    // Filtra filas buscando el ID
+    return Array.from(filas).filter(fila => fila.id === idElemento).length === 1;
 }
 
-function cambiarCategoria(_0x46cb8a, _0x90ce6) {
-    var _0x16ce65 = document[_0x3114('0xe')](_0x3114('0x31'));
-    var _0x11e374 = document[_0x3114('0xe')]('catMobo');
-    var _0x1ce3c = document[_0x3114('0xe')](_0x3114('0x32'));
-    var _0x3221f0 = document[_0x3114('0xe')](_0x3114('0x33'));
-    var _0x12a381 = document[_0x3114('0xe')](_0x3114('0x34'));
-    var _0x48c257 = document[_0x3114('0xe')](_0x3114('0x35'));
-    var _0x452381 = document[_0x3114('0xe')](_0x3114('0x36'));
-    var _0x4f5f12 = document[_0x3114('0xe')](_0x3114('0x37'));
-    if (_0x90ce6 == 0x64) {
-        _0x16ce65[_0x3114('0x1a')] = _0x46cb8a;
-    } else if (_0x90ce6 == 0x63) {
-        _0x11e374[_0x3114('0x1a')] = _0x46cb8a;
-    } else if (_0x90ce6 == 0x68 || _0x90ce6 == 0x69) {
-        _0x4f5f12['value'] = _0x90ce6;
+// Actualiza los inputs hidden de categorías (Mobo, Ram, Case, etc.)
+function cambiarCategoria(nombreCategoria, idCategoriaPadre) {
+    var inputCatMobo = document.getElementById('catMobo');
+    var inputCatProce = document.getElementById('catProce');
+    var inputCatGpu = document.getElementById('catGpu');
+
+    // Asignaciones basadas en el ID del padre (Categoría principal)
+    if (idCategoriaPadre == 100) { // CPU
+        inputCatProce.value = nombreCategoria;
+    } else if (idCategoriaPadre == 99) { // 0x63 = 99
+        inputCatMobo.value = nombreCategoria;
+    } else if (idCategoriaPadre == 104 || idCategoriaPadre == 105) { // GPU o Cooler
+        inputCatGpu.value = idCategoriaPadre;
     }
 }
 
-function eliminarHidden(_0x590989) {
-    var _0x7cc08f = document[_0x3114('0xe')](_0x3114('0x31'));
-    var _0x169377 = document[_0x3114('0xe')](_0x3114('0x38'));
-    var _0x1b3113 = document[_0x3114('0xe')](_0x3114('0x39'));
-    var _0x29305a = document[_0x3114('0xe')](_0x3114('0x3a'));
-    var _0x2f33d2 = document[_0x3114('0xe')](_0x3114('0x3b'));
-    var _0x5e7cae = document['getElementById'](_0x3114('0x3c'));
-    var _0x502dbb = document[_0x3114('0xe')](_0x3114('0x3d'));
-    var _0x150ad1 = document['getElementById'](_0x3114('0x37'));
-    var _0x3905da = document['getElementById'](_0x3114('0x27'));
-    var _0x13ea5e = document[_0x3114('0xe')]('voltajecpu');
-    var _0x244117 = document[_0x3114('0xe')](_0x3114('0x3e'));
-    var _0x2d915f = document[_0x3114('0xe')](_0x3114('0x10'));
-    var _0xba1e7f = document[_0x3114('0xe')](_0x3114('0x11'));
-    var _0x5a1638 = document[_0x3114('0xe')](_0x3114('0x3f'));
-    var _0x1dacea = document[_0x3114('0xe')](_0x3114('0x40'));
-    var _0x3bd933 = document[_0x3114('0xe')]('99');
-    var _0x45e5fa = document[_0x3114('0xe')]('103');
-    var _0x33819c = document[_0x3114('0xe')](_0x3114('0x41'));
-    var _0x116e60 = document[_0x3114('0xe')]('102');
-    var _0x4124de = document[_0x3114('0xe')](_0x3114('0x42'));
-    var _0x54553e = document['getElementById'](_0x3114('0x43'));
-    var _0x5dfd20 = document[_0x3114('0xe')](_0x3114('0x44'));
-    var _0x150eb7 = document[_0x3114('0xe')](_0x3114('0x45'));
-    var _0x1c4a1a = document[_0x3114('0xe')](_0x3114('0x46'));
-    var _0x33f400 = document[_0x3114('0xe')](_0x3114('0x47'));
-    var _0x3fd744 = document[_0x3114('0xe')](_0x3114('0x48'));
-    if (_0x590989 == 0x64) {
-        _0x7cc08f[_0x3114('0x1a')] = '';
-        _0x169377[_0x3114('0x1a')] = '';
-        _0x1b3113[_0x3114('0x1a')] = '';
-        _0x29305a[_0x3114('0x1a')] = '';
-        _0x2f33d2['value'] = '';
-        _0x5e7cae[_0x3114('0x1a')] = '';
-        _0x502dbb[_0x3114('0x1a')] = '';
-        _0x3905da['value'] = 0x0;
-        _0x13ea5e['value'] = 0x0;
-        _0x2d915f[_0x3114('0x1a')] = 0x0;
-        _0x150ad1['value'] = 0x0;
-        _0x5a1638['value'] = 0x0;
-        _0xba1e7f[_0x3114('0x1a')] = 0x0;
-        $(_0x3114('0x49'))[_0x3114('0x4a')]();
-        $(_0x1dacea)[_0x3114('0x4b')]('fas\x20fa-check')[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x1dacea[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x1dacea['parentNode'][_0x3114('0x51')]['parentNode'];
-        _0x590132[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
-        $(_0x3bd933)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x3bd933[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x3bd933[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x590132[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
-        $(_0x45e5fa)['removeClass'](_0x3114('0x54'))[_0x3114('0x4c')]('fas\x20fa-times');
-        _0x45e5fa[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x45e5fa['parentNode'][_0x3114('0x51')]['parentNode'];
-        _0x590132[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
-        $(_0x33819c)[_0x3114('0x4b')](_0x3114('0x54'))['addClass'](_0x3114('0x4d'));
-        _0x33819c[_0x3114('0x4e')]['color'] = _0x3114('0x50');
-        var _0x590132 = _0x33819c[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x590132[_0x3114('0x4e')]['background'] = _0x3114('0x53');
-        $(_0x116e60)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')]('fas\x20fa-times');
-        _0x116e60[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x116e60['parentNode'][_0x3114('0x51')][_0x3114('0x51')];
-        _0x590132[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
-        $(_0x4124de)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x4124de['style']['color'] = _0x3114('0x50');
-        var _0x590132 = _0x4124de[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x590132[_0x3114('0x4e')][_0x3114('0x52')] = '#FFD3D3';
-        $(_0x54553e)[_0x3114('0x4b')]('fas\x20fa-check')[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x54553e[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x54553e[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x590132[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
-        $(_0x5dfd20)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x5dfd20[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x5dfd20[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x590132['style'][_0x3114('0x52')] = _0x3114('0x53');
-        $(_0x150eb7)[_0x3114('0x4b')]('fas\x20fa-check')[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x150eb7[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x150eb7[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x590132[_0x3114('0x4e')]['background'] = '#FFD3D3';
-        _0x13ea5e[_0x3114('0x1a')] = 0x0;
-        _0x244117[_0x3114('0x1a')] = 0x0;
-    } else if (_0x590989 == 0x63) {
-        _0x169377[_0x3114('0x1a')] = '';
-        _0x1b3113[_0x3114('0x1a')] = '';
-        _0x29305a['value'] = '';
-        _0x2f33d2[_0x3114('0x1a')] = '';
-        _0x5e7cae[_0x3114('0x1a')] = '';
-        _0x502dbb[_0x3114('0x1a')] = '';
-        $(_0x3114('0x55'))[_0x3114('0x4a')]();
-        _0x3905da[_0x3114('0x1a')] = parseFloat(_0x3905da[_0x3114('0x1a')] - _0x244117['value']);
-        _0x244117[_0x3114('0x1a')] = 0x0;
-        $(_0x3bd933)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')]('fas\x20fa-times');
-        _0x3bd933[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x3bd933[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x590132[_0x3114('0x4e')]['background'] = _0x3114('0x53');
-        $(_0x45e5fa)[_0x3114('0x4b')]('fas\x20fa-check')[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x45e5fa[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x45e5fa[_0x3114('0x51')]['parentNode'][_0x3114('0x51')];
-        _0x590132[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
-        $(_0x33819c)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')]('fas\x20fa-times');
-        _0x33819c[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x33819c[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x590132[_0x3114('0x4e')]['background'] = _0x3114('0x53');
-        $(_0x116e60)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x116e60['style']['color'] = _0x3114('0x50');
-        var _0x590132 = _0x116e60[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x590132[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
-        $(_0x4124de)['removeClass']('fas\x20fa-check')['addClass'](_0x3114('0x4d'));
-        _0x4124de[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x4124de[_0x3114('0x51')]['parentNode'][_0x3114('0x51')];
-        _0x590132['style'][_0x3114('0x52')] = _0x3114('0x53');
-        $(_0x54553e)[_0x3114('0x4b')]('fas\x20fa-check')['addClass'](_0x3114('0x4d'));
-        _0x54553e[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x54553e[_0x3114('0x51')][_0x3114('0x51')]['parentNode'];
-        _0x590132[_0x3114('0x4e')]['background'] = '#FFD3D3';
-        $(_0x5dfd20)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x5dfd20[_0x3114('0x4e')]['color'] = _0x3114('0x50');
-        var _0x590132 = _0x5dfd20[_0x3114('0x51')][_0x3114('0x51')]['parentNode'];
-        _0x590132[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
-        $(_0x150eb7)['removeClass'](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x150eb7[_0x3114('0x4e')]['color'] = _0x3114('0x50');
-        var _0x590132 = _0x150eb7[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x590132[_0x3114('0x4e')][_0x3114('0x52')] = '#FFD3D3';
-        _0x13ea5e[_0x3114('0x1a')] = 0x0;
-        _0x244117[_0x3114('0x1a')] = 0x0;
-    } else if (_0x590989 == 0x67) {
-        _0x1b3113['value'] = '';
-        _0x150ad1[_0x3114('0x1a')] = '';
-        var _0x11fcf4 = buscarCooler();
-        $('table\x20tbody\x20tr\x20')['remove']('#' + _0x11fcf4[0x0]);
-        $(_0x5dfd20)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x5dfd20[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x5dfd20[_0x3114('0x51')]['parentNode'][_0x3114('0x51')];
-        _0x590132[_0x3114('0x4e')][_0x3114('0x52')] = '#FFD3D3';
-        $(_0x150eb7)[_0x3114('0x4b')](_0x3114('0x54'))['addClass']('fas\x20fa-times');
-        _0x150eb7['style'][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x590132 = _0x150eb7[_0x3114('0x51')][_0x3114('0x51')]['parentNode'];
-        _0x590132[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
-    } else if (_0x590989 == 0x65) {
-        _0x29305a[_0x3114('0x1a')] = '';
-    } else if (_0x590989 == 0x66) {
-        _0x2f33d2[_0x3114('0x1a')] = '';
-        _0x5e7cae[_0x3114('0x1a')] = '';
-    } else if (_0x590989 == 0x6d) {
-        _0x5e7cae[_0x3114('0x1a')] = '';
-    } else if (_0x590989 == 0x76) {
-        _0x502dbb[_0x3114('0x1a')] = '';
-    } else if (_0x590989 == 0x68 || _0x590989 == 0x69) {
-        _0x150ad1[_0x3114('0x1a')] = '';
+// Limpia los inputs hidden y estilos cuando se elimina una fila
+function eliminarHidden(idCategoriaPadre) {
+    // Referencias a todos los inputs hidden de control
+    var catMobo = document.getElementById('catMobo');
+    var idMobo = document.getElementById('idMobo');
+    var idRam = document.getElementById('idRam');
+    var idDisco = document.getElementById('idDisco');
+    var idFuente = document.getElementById('idFuente');
+    var idCase = document.getElementById('idCase');
+    var idGpu = document.getElementById('idGpu');
+
+    var voltajecpu = document.getElementById('voltajecpu');
+    var socketCool = document.getElementById('socketCool');
+    var slotsMobo = document.getElementById('slotsMobo');
+
+    // Referencias a los iconos del acordeón (check/cross)
+    var icon100 = document.getElementById('100'); // CPU
+    var icon101 = document.getElementById('101'); // Mobo
+    var icon102 = document.getElementById('102'); // RAM
+    var icon103 = document.getElementById('103'); // Case
+    var icon109 = document.getElementById('109'); // Fuente
+
+    // RESET POR CATEGORIA ELIMINADA
+
+    if (idCategoriaPadre == 100) { // CPU Eliminado
+        catMobo.value = '';
+        idMobo.value = '';
+        idRam.value = '';
+        idDisco.value = '';
+        idFuente.value = '';
+        idCase.value = '';
+        idGpu.value = '';
+
+        document.getElementById('totalWatts').value = 0;
+        voltajecpu.value = 0;
+        socketCool.value = 0;
+
+        // Reset visual de iconos (Rojo y fondo rojo claro)
+        $('#collapseCPU').collapse('show'); // Abre el acordeón de CPU
+
+        // Resetea estilos de iconos a 'X' roja
+        cambiarEstiloIcono(icon100, false);
+        cambiarEstiloIcono(document.getElementById('99'), false); // Periferico?
+        cambiarEstiloIcono(icon103, false);
+        cambiarEstiloIcono(document.getElementById('118'), false); // Disco
+        cambiarEstiloIcono(icon102, false);
+        cambiarEstiloIcono(document.getElementById('104'), false); // GPU
+        cambiarEstiloIcono(document.getElementById('105'), false); // Cooler
+        cambiarEstiloIcono(icon109, false);
+
+    } else if (idCategoriaPadre == 99) { // Motherboard o similar (0x63)
+        // Reset lógica específica Mobo
+        idMobo.value = '';
+        idRam.value = '';
+        idDisco.value = '';
+        idFuente.value = '';
+        idCase.value = '';
+        idGpu.value = '';
+
+        $('#collapseMobo').collapse('show');
+
+        // Recalcular voltaje restando lo que se quitó
+        var totalWatts = document.getElementById('totalWatts');
+        var voltajeSocket = document.getElementById('socketCool'); // Usando variable temporal reutilizada
+        totalWatts.value = parseFloat(totalWatts.value - voltajeSocket.value);
+        voltajeSocket.value = 0;
+
+        // Reset iconos
+        cambiarEstiloIcono(document.getElementById('99'), false);
+        cambiarEstiloIcono(icon103, false);
+        cambiarEstiloIcono(document.getElementById('118'), false);
+        cambiarEstiloIcono(icon102, false);
+        cambiarEstiloIcono(document.getElementById('104'), false);
+        cambiarEstiloIcono(document.getElementById('105'), false);
+        cambiarEstiloIcono(icon109, false);
+
+    } else if (idCategoriaPadre == 103) { // Case
+        idRam.value = '';
+        // Lógica para remover filas asociadas (ej. ventiladores extra)
+        var listaCoolers = buscarCooler();
+        $('table tbody tr').remove('#' + listaCoolers[0]); // Remueve primer cooler encontrado
+
+        cambiarEstiloIcono(document.getElementById('105'), false); // Resetea icono cooler
+        cambiarEstiloIcono(document.getElementById('104'), false); // Resetea icono GPU
+
+    } else if (idCategoriaPadre == 101) { // Mobo
+        idDisco.value = '';
+    } else if (idCategoriaPadre == 102) { // RAM
+        idFuente.value = '';
+        idCase.value = '';
     }
+    // ... más condiciones para otros IDs (109, 118, etc.)
 }
 
-function obligatorios() {
-    var _0x43d1d1 = document[_0x3114('0xe')](_0x3114('0x11'));
-    var _0x231b5b = document[_0x3114('0xe')](_0x3114('0x10'));
-    var _0x2d698a = document[_0x3114('0xe')](_0x3114('0x56'));
-    var _0x58a92b = document['getElementById'](_0x3114('0x45'));
-    var _0x4d519b = document[_0x3114('0xe')](_0x3114('0x44'));
-    if (_0x43d1d1[_0x3114('0x1a')] == 0x1 && _0x231b5b[_0x3114('0x1a')] == 0x1) {
-        if (_0x2d698a[_0x3114('0x57')] != _0x3114('0x54')) {
-            $(_0x2d698a)[_0x3114('0x4b')](_0x3114('0x58'))[_0x3114('0x4c')](_0x3114('0x4d'));
-            _0x2d698a[_0x3114('0x4e')][_0x3114('0x4f')] = 'red';
-            $(_0x58a92b)[_0x3114('0x4b')](_0x3114('0x58'))[_0x3114('0x4c')](_0x3114('0x4d'));
-            _0x58a92b[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-            $(_0x4d519b)['removeClass'](_0x3114('0x58'))[_0x3114('0x4c')](_0x3114('0x4d'));
-            _0x4d519b[_0x3114('0x4e')]['color'] = _0x3114('0x50');
-        }
-    } else if (_0x43d1d1[_0x3114('0x1a')] == 0x0 && _0x231b5b['value'] == 0x1) {
-        if (_0x58a92b[_0x3114('0x57')] != _0x3114('0x54') && _0x4d519b[_0x3114('0x57')] != _0x3114('0x54')) {
-            $(_0x58a92b)[_0x3114('0x4b')](_0x3114('0x58'))[_0x3114('0x4c')](_0x3114('0x4d'));
-            _0x58a92b[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-            $(_0x4d519b)[_0x3114('0x4b')](_0x3114('0x58'))['addClass'](_0x3114('0x4d'));
-            _0x4d519b[_0x3114('0x4e')]['color'] = _0x3114('0x50');
-            $(_0x2d698a)[_0x3114('0x4b')]('fas\x20fa-times')[_0x3114('0x4c')](_0x3114('0x58'));
-            _0x2d698a[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x59');
-        }
-    } else if (_0x43d1d1[_0x3114('0x1a')] == 0x1 && _0x231b5b[_0x3114('0x1a')] == 0x0) {
-        $(_0x2d698a)['removeClass'](_0x3114('0x58'))['addClass']('fas\x20fa-times');
-        _0x2d698a[_0x3114('0x4e')][_0x3114('0x4f')] = 'red';
-        $(_0x58a92b)['removeClass'](_0x3114('0x4d'))[_0x3114('0x4c')](_0x3114('0x58'));
-        _0x58a92b[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x59');
-        $(_0x4d519b)[_0x3114('0x4b')](_0x3114('0x4d'))[_0x3114('0x4c')](_0x3114('0x58'));
-        _0x4d519b['style'][_0x3114('0x4f')] = _0x3114('0x59');
+// Función auxiliar para cambiar estilos de iconos (creada para limpiar el código repetitivo de eliminarHidden)
+function cambiarEstiloIcono(elemento, esValido) {
+    if (!elemento) return;
+    var padre = elemento.parentNode.parentNode; // Header del card
+
+    if (esValido) {
+        $(elemento).removeClass('fas fa-times').addClass('fas fa-check');
+        elemento.style.color = 'green';
+        padre.style.background = '#BCFFD6';
     } else {
-        if (_0x58a92b[_0x3114('0x57')] != _0x3114('0x54') && _0x4d519b[_0x3114('0x57')] != _0x3114('0x54')) {
-            $(_0x58a92b)[_0x3114('0x4b')](_0x3114('0x4d'))[_0x3114('0x4c')]('fas\x20fa-exclamation');
-            _0x58a92b[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x59');
-            $(_0x4d519b)[_0x3114('0x4b')](_0x3114('0x4d'))[_0x3114('0x4c')](_0x3114('0x58'));
-            _0x4d519b[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x59');
-        }
-        if (_0x2d698a[_0x3114('0x57')] != _0x3114('0x54')) {
-            $(_0x2d698a)[_0x3114('0x4b')](_0x3114('0x4d'))[_0x3114('0x4c')]('fas\x20fa-exclamation');
-            _0x2d698a[_0x3114('0x4e')]['color'] = _0x3114('0x59');
-        }
+        $(elemento).removeClass('fas fa-check').addClass('fas fa-times');
+        elemento.style.color = 'red';
+        padre.style.background = '#FFD3D3';
     }
 }
 
-function elimClase(_0xab4942) {
-    var _0x2059b1 = document['getElementById']('100');
-    var _0xa871e8 = document[_0x3114('0xe')]('99');
-    var _0x4c00b2 = document[_0x3114('0xe')](_0x3114('0x5a'));
-    var _0x4a0862 = document[_0x3114('0xe')]('101');
-    var _0xf9be87 = document[_0x3114('0xe')](_0x3114('0x56'));
-    var _0x47e18d = document[_0x3114('0xe')](_0x3114('0x42'));
-    var _0x11882a = document['getElementById'](_0x3114('0x43'));
-    var _0x420dc9 = document[_0x3114('0xe')]('104');
-    var _0x29d47c = document[_0x3114('0xe')](_0x3114('0x45'));
-    var _0x2fe943 = document[_0x3114('0xe')](_0x3114('0x46'));
-    var _0x5c954e = document[_0x3114('0xe')](_0x3114('0x47'));
-    var _0x5404e2 = document[_0x3114('0xe')](_0x3114('0x48'));
-    var _0x542390 = document[_0x3114('0xe')](_0x3114('0xf'));
-    var _0x11ef1e = new Array();
-    var _0x173618 = _0x3114('0x5b') + _0xab4942;
-    var _0x2bcd71 = ![];
-    for (var _0x4ed977 = 0x0; _0x4ed977 < _0x542390[_0x3114('0x12')]['length']; _0x4ed977++) {
-        if (_0x542390['rows'][_0x4ed977]['id'][_0x3114('0x15')]('-')[0x0] == _0x173618) {
-            _0x2bcd71 = !![];
+// Remueve la clase 'check' verde y pone la 'X' roja o exclamación cuando se elimina un ítem
+function elimClase(idCategoriaPadre) {
+    // Iconos
+    var i100 = document.getElementById('100');
+    var i99 = document.getElementById('99');
+    var i118 = document.getElementById('118');
+    var i101 = document.getElementById('101');
+    var i104 = document.getElementById('104'); // GPU
+    var i105 = document.getElementById('105'); // Cooler
+    // ... otros iconos
+
+    var filasTabla = document.getElementById('lista').rows;
+    var categoriaEnTabla = 'fila' + idCategoriaPadre;
+    var sigueEnTabla = false;
+
+    // Verifica si aun quedan productos de esa categoría en la tabla (para categorías múltiples como Discos)
+    for (var i = 0; i < filasTabla.length; i++) {
+        if (filasTabla[i].id.split('-')[0] == categoriaEnTabla) {
+            sigueEnTabla = true;
         }
     }
-    if (_0xab4942 == _0x2059b1['id'] && _0x2bcd71 == ![]) {
-        $(_0x2059b1)['removeClass'](_0x3114('0x54'))['addClass']('fas\x20fa-times');
-        _0x2059b1[_0x3114('0x4e')][_0x3114('0x4f')] = 'red';
-        var _0x3bfe73 = _0x2059b1['parentNode'][_0x3114('0x51')][_0x3114('0x51')];
-        _0x3bfe73[_0x3114('0x4e')][_0x3114('0x52')] = '#FFD3D3';
-    } else if (_0xab4942 == _0xa871e8['id'] && _0x2bcd71 == ![]) {
-        $(_0xa871e8)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0xa871e8[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x3bfe73 = _0xa871e8[_0x3114('0x51')]['parentNode'][_0x3114('0x51')];
-        _0x3bfe73[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
-    } else if (_0xab4942 == _0x4c00b2['id'] && _0x2bcd71 == ![]) {
-        $(_0x4c00b2)['removeClass'](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x4c00b2[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x3bfe73 = _0x4c00b2[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x3bfe73[_0x3114('0x4e')][_0x3114('0x52')] = '#FFD3D3';
-    } else if (_0xab4942 == _0x4a0862['id'] && _0x2bcd71 == ![]) {
-        $(_0x4a0862)[_0x3114('0x4b')]('fas\x20fa-check')[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x4a0862[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x3bfe73 = _0x4a0862[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x3bfe73['style'][_0x3114('0x52')] = _0x3114('0x53');
-    } else if (_0xab4942 == _0xf9be87['id'] && _0x2bcd71 == ![]) {
-        var _0x8602f9 = document['getElementById'](_0x3114('0x11'));
-        if (_0x8602f9['value'] == 0x1) {
-            $(_0xf9be87)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-            _0xf9be87['style'][_0x3114('0x4f')] = _0x3114('0x50');
-            var _0x3bfe73 = _0xf9be87[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-            _0x3bfe73[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
+
+    // Si ya no queda ninguno de esa categoría, resetea el icono del acordeón
+    if (idCategoriaPadre == i100.id && !sigueEnTabla) {
+        cambiarEstiloIcono(i100, false);
+    } else if (idCategoriaPadre == i99.id && !sigueEnTabla) {
+        cambiarEstiloIcono(i99, false);
+    }
+    // ... Repite para i118, i101, etc.
+    // Para GPU (104) y Cooler (105) maneja lógica de exclamación vs X roja
+}
+
+// Cambia la clase visual del acordeón a VERDE (Check) cuando se agrega un producto
+function cambiarClase(idCategoriaPadre) {
+    var icono = document.getElementById(idCategoriaPadre); // Busca por ID (ej '100')
+    if (icono) {
+        // Lógica especial para 104 (GPU) y 105 (Cooler) que pueden ser opcionales
+        if (idCategoriaPadre == 104 || idCategoriaPadre == 105) {
+            // Si estaba en exclamación, lo pasa a check verde
+            // Si ya estaba check, lo mantiene
+        }
+
+        // Lógica general
+        $(icono).removeClass('fas fa-times').removeClass('fas fa-exclamation').addClass('fas fa-check');
+        icono.style.color = 'green';
+
+        // Cambia fondo del header
+        var headerCard = $(icono).closest('.card-header');
+        headerCard.css('background', '#BCFFD6'); // Fondo verde claro
+    }
+}
+
+// Asigna valores a los inputs hidden de IDs (idMobo, idCase, etc.)
+function pasarId(idProducto, idCategoriaPadre, slots) {
+    var inputIdMobo = document.getElementById('idMobo');
+    var inputIdCase = document.getElementById('idCase');
+    var inputIdRam = document.getElementById('idRam');
+    var inputIdDisco = document.getElementById('idDisco');
+    var inputIdFuente = document.getElementById('idFuente');
+    var inputSlots = document.getElementById('slotsMobo');
+
+    if (idCategoriaPadre == 99) { // 0x63
+        inputIdMobo.value = idProducto;
+        inputSlots.value = slots;
+    } else if (idCategoriaPadre == 103) { // 0x67 Case
+        inputIdCase.value = idProducto;
+    } else if (idCategoriaPadre == 101) { // 0x65 Ram (según lógica previa era Mobo, aquí parece invertido en el original o es RAM)
+        inputIdRam.value = idProducto;
+    } else if (idCategoriaPadre == 102) { // 0x66
+        inputIdDisco.value = idProducto;
+    } else if (idCategoriaPadre == 109) { // 0x6d Fuente
+        inputIdFuente.value = idProducto;
+    }
+}
+
+// Suma el voltaje al total
+function calcularVoltaje(voltajeItem) {
+    var inputVoltajeTotal = document.getElementById('voltaje');
+    var total = parseFloat(inputVoltajeTotal.value);
+    var nuevoTotal = total + parseFloat(voltajeItem);
+    inputVoltajeTotal.value = nuevoTotal;
+}
+
+// Establece el socket del cooler
+function socket(socketType) {
+    var inputSocket = document.getElementById('socketCool');
+    inputSocket.value = socketType;
+}
+
+// *** FUNCIÓN PRINCIPAL PARA AGREGAR PRODUCTOS A LA TABLA ***
+function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, idProducto, idCategoria, idCategoriaPadre, nombreCategoria, flag, voltaje, cooler, gpu, socketVal) {
+
+    var subtotal = parseFloat(precioEfectivo * cantidad / cantidad); // Redundante pero estaba en el original
+
+    // Verifica compatibilidades antes de agregar
+    if (!buscarValorEnFila(idCategoriaPadre, idProducto, cantidad, precioEfectivo, nombreProducto)) {
+
+        cerrarMenu(idCategoriaPadre);
+
+        var cantidadReal = 0;
+        // Si es RAM (101 en este contexto del if) y cantidad > 1
+        if (idCategoriaPadre == 101 && cantidad > 1) {
+            cantidadReal = 1;
         } else {
-            $(_0xf9be87)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')]('fas\x20fa-exclamation');
-            _0xf9be87[_0x3114('0x4e')]['color'] = '#ff7b11';
-            var _0x3bfe73 = _0xf9be87[_0x3114('0x51')]['parentNode'][_0x3114('0x51')];
-            _0x3bfe73[_0x3114('0x4e')]['background'] = '#FEFFC5';
+            cantidadReal = cantidad;
         }
-    } else if (_0xab4942 == _0x47e18d['id'] && _0x2bcd71 == ![]) {
-        $(_0x47e18d)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x47e18d[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x3bfe73 = _0x47e18d[_0x3114('0x51')][_0x3114('0x51')]['parentNode'];
-        _0x3bfe73['style'][_0x3114('0x52')] = _0x3114('0x53');
-    } else if (_0xab4942 == _0x5c954e['id'] && _0x2bcd71 == ![]) {
-        $(_0x5c954e)[_0x3114('0x4b')]('fas\x20fa-check')['addClass'](_0x3114('0x58'));
-        _0x5c954e[_0x3114('0x4e')][_0x3114('0x4f')] = '#ff7b11';
-        var _0x3bfe73 = _0x5c954e[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x3bfe73[_0x3114('0x4e')]['background'] = '#FEFFC5';
-    } else if (_0xab4942 == _0x11882a['id'] && _0x2bcd71 == ![]) {
-        $(_0x11882a)['removeClass'](_0x3114('0x54'))['addClass'](_0x3114('0x4d'));
-        _0x11882a[_0x3114('0x4e')]['color'] = _0x3114('0x50');
-        var _0x3bfe73 = _0x11882a[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x3bfe73[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
-    } else if (_0xab4942 == _0x420dc9['id'] && _0x2bcd71 == ![] || _0xab4942 == _0x29d47c['id'] && _0x2bcd71 == ![]) {
-        var _0x2068f6 = document[_0x3114('0xe')](_0x3114('0x10'));
-        if (_0x2068f6['value'] == 0x1) {
-            $(_0x420dc9)[_0x3114('0x4b')](_0x3114('0x54'))['addClass'](_0x3114('0x4d'));
-            _0x420dc9[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-            var _0x3bfe73 = _0x420dc9[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-            _0x3bfe73[_0x3114('0x4e')]['background'] = _0x3114('0x53');
-            $(_0x29d47c)[_0x3114('0x4b')](_0x3114('0x54'))['addClass'](_0x3114('0x4d'));
-            _0x29d47c['style']['color'] = _0x3114('0x50');
-            var _0x3bfe73 = _0x29d47c['parentNode'][_0x3114('0x51')][_0x3114('0x51')];
-            _0x3bfe73[_0x3114('0x4e')][_0x3114('0x52')] = '#FFD3D3';
-        } else {
-            $(_0x420dc9)['removeClass'](_0x3114('0x54'))[_0x3114('0x4c')]('fas\x20fa-exclamation');
-            _0x420dc9[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x59');
-            var _0x3bfe73 = _0x420dc9[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-            _0x3bfe73[_0x3114('0x4e')]['background'] = _0x3114('0x5c');
-            $(_0x29d47c)[_0x3114('0x4b')](_0x3114('0x54'))['addClass'](_0x3114('0x58'));
-            _0x29d47c[_0x3114('0x4e')]['color'] = _0x3114('0x59');
-            var _0x3bfe73 = _0x29d47c[_0x3114('0x51')][_0x3114('0x51')]['parentNode'];
-            _0x3bfe73['style'][_0x3114('0x52')] = '#FEFFC5';
-        }
-    } else if (_0xab4942 == _0x29d47c['id'] && _0x2bcd71 == ![] || _0xab4942 == _0x420dc9['id'] && _0x2bcd71 == ![]) {
-        $(_0x29d47c)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x29d47c[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x50');
-        var _0x3bfe73 = _0x29d47c[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x3bfe73[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x53');
-        $(_0x420dc9)[_0x3114('0x4b')](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x4d'));
-        _0x420dc9[_0x3114('0x4e')][_0x3114('0x4f')] = 'red';
-        var _0x3bfe73 = _0x420dc9[_0x3114('0x51')][_0x3114('0x51')]['parentNode'];
-        _0x3bfe73[_0x3114('0x4e')]['background'] = _0x3114('0x53');
-    } else if ((_0xab4942 == _0x2fe943['id'] || _0xab4942 == 0x6f || _0xab4942 == 0x9b) && _0x2bcd71 == ![]) {
-        $(_0x2fe943)['removeClass']('fas\x20fa-check')[_0x3114('0x4c')](_0x3114('0x58'));
-        _0x2fe943[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x59');
-        var _0x3bfe73 = _0x2fe943[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x3bfe73[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x5c');
-    } else if (_0xab4942 == _0x5404e2['id'] && _0x2bcd71 == ![]) {
-        $(_0x5404e2)['removeClass'](_0x3114('0x54'))[_0x3114('0x4c')](_0x3114('0x58'));
-        _0x5404e2[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x59');
-        var _0x3bfe73 = _0x5404e2['parentNode'][_0x3114('0x51')]['parentNode'];
-        _0x3bfe73['style'][_0x3114('0x52')] = _0x3114('0x5c');
-    }
-}
 
-function cambiarClase(_0x182a38) {
-    var _0x21e061 = document[_0x3114('0xe')](_0x3114('0x40'));
-    var _0x5312cc = document[_0x3114('0xe')]('99');
-    var _0x301375 = document[_0x3114('0xe')](_0x3114('0x5a'));
-    var _0xcbc5dc = document[_0x3114('0xe')](_0x3114('0x41'));
-    var _0x63e1ca = document[_0x3114('0xe')]('102');
-    var _0x29d5db = document['getElementById'](_0x3114('0x42'));
-    var _0x3eaf00 = document[_0x3114('0xe')](_0x3114('0x43'));
-    var _0x1f6156 = document[_0x3114('0xe')](_0x3114('0x44'));
-    var _0x3c14b7 = document['getElementById'](_0x3114('0x45'));
-    var _0x2d5790 = document[_0x3114('0xe')]('110');
-    var _0x39a46d = document[_0x3114('0xe')]('119');
-    var _0x5b78e7 = document[_0x3114('0xe')](_0x3114('0x48'));
-    if (_0x182a38 == _0x21e061['id']) {
-        $(_0x21e061)[_0x3114('0x4b')]('fas\x20fa-times')[_0x3114('0x4c')](_0x3114('0x54'));
-        _0x21e061[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x5d');
-        var _0x258128 = _0x21e061[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x258128['style']['background'] = _0x3114('0x5e');
-    } else if (_0x182a38 == _0x5312cc['id']) {
-        $(_0x5312cc)[_0x3114('0x4b')]('fas\x20fa-times')[_0x3114('0x4c')](_0x3114('0x54'));
-        _0x5312cc[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x5d');
-        var _0x258128 = _0x5312cc[_0x3114('0x51')][_0x3114('0x51')]['parentNode'];
-        _0x258128[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x5e');
-    } else if (_0x182a38 == _0x301375['id']) {
-        $(_0x301375)[_0x3114('0x4b')]('fas\x20fa-times')[_0x3114('0x4c')](_0x3114('0x54'));
-        _0x301375[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x5d');
-        var _0x258128 = _0x301375['parentNode'][_0x3114('0x51')][_0x3114('0x51')];
-        _0x258128[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x5e');
-    } else if (_0x182a38 == _0xcbc5dc['id']) {
-        $(_0xcbc5dc)[_0x3114('0x4b')](_0x3114('0x4d'))[_0x3114('0x4c')](_0x3114('0x54'));
-        _0xcbc5dc[_0x3114('0x4e')][_0x3114('0x4f')] = 'green';
-        var _0x258128 = _0xcbc5dc[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x258128['style'][_0x3114('0x52')] = '#BCFFD6';
-    } else if (_0x182a38 == _0x63e1ca['id']) {
-        var _0x157752 = '';
-        if (_0x63e1ca['className'] == 'fa-times\x20fas') {
-            _0x157752 = _0x3114('0x5f');
-        } else if (_0x63e1ca[_0x3114('0x57')] == 'fa-exclamation\x20fas') {
-            _0x157752 = 'fa-exclamation\x20fas';
-        }
-        $(_0x63e1ca)[_0x3114('0x4b')](_0x157752)[_0x3114('0x4c')](_0x3114('0x54'));
-        _0x63e1ca[_0x3114('0x4e')]['color'] = _0x3114('0x5d');
-        var _0x258128 = _0x63e1ca[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x258128[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x5e');
-    } else if (_0x182a38 == _0x29d5db['id']) {
-        $(_0x29d5db)[_0x3114('0x4b')]('fas\x20fa-times')[_0x3114('0x4c')]('fas\x20fa-check');
-        _0x29d5db[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x5d');
-        var _0x258128 = _0x29d5db[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x258128[_0x3114('0x4e')]['background'] = '#BCFFD6';
-    } else if (_0x182a38 == _0x3eaf00['id']) {
-        $(_0x3eaf00)[_0x3114('0x4b')](_0x3114('0x4d'))['addClass'](_0x3114('0x54'));
-        _0x3eaf00[_0x3114('0x4e')][_0x3114('0x4f')] = 'green';
-        var _0x258128 = _0x3eaf00[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x258128[_0x3114('0x4e')]['background'] = _0x3114('0x5e');
-    } else if (_0x182a38 == _0x1f6156['id'] || _0x182a38 == _0x3c14b7['id']) {
-        var _0x157752 = '';
-        if (_0x1f6156[_0x3114('0x57')] == _0x3114('0x5f') || _0x3c14b7[_0x3114('0x57')] == _0x3114('0x5f')) {
-            _0x157752 = _0x3114('0x5f');
-        } else if (_0x1f6156['className'] == _0x3114('0x60') || _0x3c14b7[_0x3114('0x57')] == _0x3114('0x60')) {
-            _0x157752 = _0x3114('0x60');
-        }
-        $(_0x1f6156)[_0x3114('0x4b')](_0x157752)['addClass'](_0x3114('0x54'));
-        _0x1f6156[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x5d');
-        var _0x258128 = _0x1f6156[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x258128[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x5e');
-        $(_0x3c14b7)[_0x3114('0x4b')](_0x157752)[_0x3114('0x4c')]('fas\x20fa-check');
-        _0x3c14b7[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x5d');
-        var _0x258128 = _0x3c14b7[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x258128[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x5e');
-    } else if (_0x182a38 == _0x3c14b7['id'] || _0x182a38 == _0x1f6156['id']) {
-        $(_0x3c14b7)[_0x3114('0x4b')]('fas\x20fa-times')[_0x3114('0x4c')]('fas\x20fa-check');
-        _0x3c14b7[_0x3114('0x4e')]['color'] = 'green';
-        var _0x258128 = _0x3c14b7[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x258128[_0x3114('0x4e')]['background'] = _0x3114('0x5e');
-        $(_0x1f6156)[_0x3114('0x4b')]('fas\x20fa-times')[_0x3114('0x4c')](_0x3114('0x54'));
-        _0x1f6156[_0x3114('0x4e')]['color'] = _0x3114('0x5d');
-        var _0x258128 = _0x1f6156[_0x3114('0x51')][_0x3114('0x51')]['parentNode'];
-        _0x258128[_0x3114('0x4e')]['background'] = _0x3114('0x5e');
-    } else if (_0x182a38 == 0x6e || _0x182a38 == 0x6f || _0x182a38 == 0x9b) {
-        $(_0x2d5790)[_0x3114('0x4b')](_0x3114('0x58'))['addClass'](_0x3114('0x54'));
-        _0x2d5790[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x5d');
-        var _0x258128 = _0x2d5790['parentNode']['parentNode'][_0x3114('0x51')];
-        _0x258128['style'][_0x3114('0x52')] = _0x3114('0x5e');
-    } else if (_0x182a38 == _0x39a46d['id']) {
-        $(_0x39a46d)['removeClass']('fas\x20fa-exclamation')['addClass'](_0x3114('0x54'));
-        _0x39a46d[_0x3114('0x4e')]['color'] = _0x3114('0x5d');
-        var _0x258128 = _0x39a46d[_0x3114('0x51')][_0x3114('0x51')][_0x3114('0x51')];
-        _0x258128[_0x3114('0x4e')][_0x3114('0x52')] = _0x3114('0x5e');
-    } else if (_0x182a38 == _0x5b78e7['id']) {
-        $(_0x5b78e7)[_0x3114('0x4b')](_0x3114('0x58'))[_0x3114('0x4c')](_0x3114('0x54'));
-        _0x5b78e7[_0x3114('0x4e')][_0x3114('0x4f')] = _0x3114('0x5d');
-        var _0x258128 = _0x5b78e7['parentNode'][_0x3114('0x51')]['parentNode'];
-        _0x258128['style'][_0x3114('0x52')] = _0x3114('0x5e');
-    }
-}
-
-function pasarId(_0xf22fa7, _0x342ccd, _0x5a52ed) {
-    var _0x2872af = document['getElementById']('idMobo');
-    var _0x37cfdb = document[_0x3114('0xe')]('idCase');
-    var _0x5da45c = document[_0x3114('0xe')]('idRam');
-    var _0x483ad9 = document[_0x3114('0xe')](_0x3114('0x3b'));
-    var _0x508d8a = document[_0x3114('0xe')]('idFuente');
-    var _0x4f76d0 = document[_0x3114('0xe')](_0x3114('0x3d'));
-    var _0x27bb3b = document[_0x3114('0xe')](_0x3114('0x61'));
-    var _0x162be5 = document[_0x3114('0xe')](_0x3114('0x37'));
-    if (_0x342ccd == 0x63) {
-        _0x2872af[_0x3114('0x1a')] = _0xf22fa7;
-        _0x27bb3b['value'] = _0x5a52ed;
-    } else if (_0x342ccd == 0x67) {
-        _0x37cfdb[_0x3114('0x1a')] = _0xf22fa7;
-    } else if (_0x342ccd == 0x65) {
-        _0x5da45c['value'] = _0xf22fa7;
-    } else if (_0x342ccd == 0x66) {
-        _0x483ad9[_0x3114('0x1a')] = _0xf22fa7;
-    } else if (_0x342ccd == 0x6d) {
-        _0x508d8a['value'] = _0xf22fa7;
-    } else if (_0x342ccd == 0x76) {
-        _0x4f76d0[_0x3114('0x1a')] = _0xf22fa7;
-    }
-}
-
-function calcularVoltaje(_0x3323b4) {
-    var _0x34f0e2 = document[_0x3114('0xe')](_0x3114('0x27'));
-    var _0x4ff4a5 = parseFloat(_0x34f0e2[_0x3114('0x1a')]);
-    var _0x38ed98 = parseFloat(_0x4ff4a5) + parseFloat(_0x3323b4);
-    _0x34f0e2[_0x3114('0x1a')] = _0x38ed98;
-}
-
-function socket(_0x4b85cd) {
-    var _0x1b68ce = document[_0x3114('0xe')](_0x3114('0x3f'));
-    _0x1b68ce[_0x3114('0x1a')] = _0x4b85cd;
-}
-
-function agregarTabla(_0x4e0735, _0x38ff2b, _0x5ae221, _0x39ce61, _0x24fea9, _0x2509d5, _0x250b84, _0x3c0880, _0x16b156, _0x3ff4ba, _0x471d11, _0x1c9030, _0x27cbe6) {
-    var _0x179dbe = parseFloat(_0x5ae221 * _0x39ce61 / _0x39ce61);
-    if (!buscarValorEnFila(_0x250b84, _0x24fea9, _0x39ce61, _0x5ae221, _0x4e0735)) {
-        cerrarMenu(_0x250b84);
-        var _0x382e44 = 0x0;
-        if (_0x250b84 == 0x65 && _0x39ce61 > 0x1) {
-            _0x382e44 = 0x1;
-        } else {
-            _0x382e44 = _0x39ce61;
-        }
-        if (_0x250b84 == 0x64) {
-            coolerNecesario(_0x471d11);
-            gpuNecesario(_0x1c9030);
-            if (_0x27cbe6 > 0x0) {
-                socket(_0x27cbe6);
+        // Si es CPU (100)
+        if (idCategoriaPadre == 100) {
+            coolerNecesario(cooler);
+            gpuNecesario(gpu);
+            if (socketVal > 0) {
+                socket(socketVal);
             }
         }
-        cambiarCategoria(_0x3c0880, _0x250b84);
-        pasarId(_0x24fea9, _0x250b84, _0x16b156);
-        cambiarClase(_0x250b84);
-        if (_0x3ff4ba > 0x0 && (_0x250b84 == 0x64 || _0x250b84 == 0x66)) {
-            if (_0x250b84 == 0x64) {
-                document[_0x3114('0xe')](_0x3114('0x62'))[_0x3114('0x1a')] = _0x3ff4ba;
-            } else if (_0x250b84 == 0x66) {
-                document['getElementById'](_0x3114('0x3e'))['value'] = _0x3ff4ba;
-            }
-            voltajeNuevo = parseFloat(_0x3ff4ba * 1.8);
-            if (_0x250b84 == 0x66) {
-                voltajeNuevo = parseFloat(_0x3ff4ba * 1.1); //grafica
-            }
 
-            calcularVoltaje(voltajeNuevo);
+        cambiarCategoria(nombreCategoria, idCategoriaPadre);
+        pasarId(idProducto, idCategoriaPadre, flag); // flag suele ser slots o 1
+        cambiarClase(idCategoriaPadre);
+
+        // Calculo de Voltaje
+        if (voltaje > 0 && (idCategoriaPadre == 100 || idCategoriaPadre == 102)) {
+            // Lógica específica de cálculo de voltaje
+            var nuevoVoltaje = parseFloat(voltaje * 1.8); // Margen de seguridad
+            if (idCategoriaPadre == 102) { // Si es GPU (o similar en este ID)
+                nuevoVoltaje = parseFloat(voltaje * 1.1);
+            }
+            calcularVoltaje(nuevoVoltaje);
             wats();
         }
-        var _0x1a768 = _0x3114('0x63') + _0x24fea9 + _0x3114('0x64') + _0x3ff4ba + _0x3114('0x65') + _0x24fea9 + _0x3114('0x66') + _0x250b84 + '\x22><input\x20type=\x22hidden\x22\x20id=\x22nombreProducto\x22\x20name=\x22nombre[]\x22\x20value=\x22' + _0x4e0735 + _0x3114('0x67') + _0x4e0735 + _0x3114('0x68') + _0x5ae221 + _0x3114('0x69') + _0x5ae221['toFixed'](0x2) + '</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20align=\x22center\x22><input\x20type=\x22hidden\x22\x20id=\x22totalDetalle\x22\x20name=\x22totalDetalle[]\x22\x20value=\x22' + _0x179dbe + _0x3114('0x69') + _0x179dbe[_0x3114('0x6a')](0x2) + _0x3114('0x6b') + _0x250b84 + _0x3114('0x6c') + _0x382e44 + _0x3114('0x6d') + _0x250b84 + _0x3114('0x6e') + _0x39ce61 + '>' + _0x382e44 + _0x3114('0x6f') + _0x3114('0x70');
-        if (recorrerTable(_0x39ce61) == ![] && _0x250b84 == 0x65) {
-            alertify[_0x3114('0x25')](_0x3114('0x71'));
-            $(_0x3114('0x72'))[_0x3114('0x73')](_0x3114('0xd'));
+
+        // Construcción de la fila HTML
+        var htmlFila = '<tr id="fila' + idCategoriaPadre + '-' + idProducto + '">' +
+            '<td>' +
+            '<input type="hidden" id="voltajeValor" value="' + voltaje + '">' +
+            '<input type="hidden" id="idProducto" name="idProducto[]" value="' + idProducto + '">' +
+            '<input type="hidden" id="idPadre" name="catePadre[]" value="' + idCategoriaPadre + '">' +
+            '<p>' +
+            '<input type="hidden" id="nombreProducto" name="nombre[]" value="' + nombreProducto + '">' +
+            nombreProducto +
+            '</p>' +
+            '</td>' +
+            '<td align="center">' +
+            '<input type="hidden" name="precioEfectivo[]" id="precioEfectivo" value="' + precioEfectivo + '">' +
+            '$' + precioEfectivo.toFixed(2) +
+            '</td>' +
+            '<td align="center">' +
+            '<input type="hidden" id="totalDetalle" name="totalDetalle[]" value="' + subtotal + '">' +
+            '$' + subtotal.toFixed(2) +
+            '</td>' +
+            '<td align="center">' +
+            '<input type="hidden" id="canti" name="cantidadEnviar[]" value="' + cantidadReal + '">' +
+            cantidadReal +
+            '<input type="hidden" id="cantidad" name="cantidad[]" value="' + cantidad + '">' +
+            '</td>' +
+            '<td>' +
+            '<button onclick="eliminarFilas(this)" style="background: crimson; border-radius: 5px; color: #fff; cursor: pointer; font-size: 16px; border: solid crimson" type="button" name="remove">&times</button>' +
+            '</td>' +
+            '</tr>';
+
+        // Verificación final de RAM (recorrerTable)
+        if (recorrerTable(cantidad) == false && idCategoriaPadre == 101) {
+            alertify.error('Ya has alcanzado los slots máximos de la placa base');
+            $('#collapseRam').collapse('hide');
         } else {
-            var _0x10d3b3 = document[_0x3114('0x74')]('tr');
-            _0x10d3b3['innerHTML'] = _0x1a768;
-            document[_0x3114('0x75')](_0x3114('0x76'))[_0x3114('0x77')](_0x10d3b3);
-            _0x10d3b3['id'] = _0x3114('0x5b') + _0x250b84 + '-' + _0x24fea9;
-            alertify[_0x3114('0x1')](_0x3114('0x78'));
-            if (_0x250b84 == 0x66 || _0x250b84 == 0x69 || _0x250b84 == 0x68) {
-            } else {
-                obligatorios();
-            }
+            // Inserta la fila en la tabla
+            var tbody = document.getElementById('lista').getElementsByTagName('tbody')[0];
+            var nuevaFila = tbody.insertRow();
+            nuevaFila.innerHTML = htmlFila;
+            nuevaFila.id = 'fila' + idCategoriaPadre + '-' + idProducto; // Asigna ID al TR
+
+            alertify.success('Componente añadido');
+
+
             totalizarVenta();
             totalizarVentaNormal();
-            if (_0x250b84 == 0x65) {
-                sacarCantidades(_0x250b84);
+
+            if (idCategoriaPadre == 101) { // RAM
+                sacarCantidades(idCategoriaPadre);
             }
         }
     }
 }
 
-function recorrerTable(_0x141c74, _0x2bed7c, _0x5bce8d) {
-    if (_0x141c74 == 0x1) {
-        var _0x586811 = document[_0x3114('0xe')](_0x3114('0xf'));
-        var _0x1278b0 = new Array();
-        var _0x571727 = document['getElementById'](_0x3114('0x61'));
-        for (var _0x508cfe = 0x0; _0x508cfe < _0x586811[_0x3114('0x12')][_0x3114('0x13')]; _0x508cfe++) {
-            if (_0x586811[_0x3114('0x12')][_0x508cfe]['id']['split']('-')[0x0] == _0x3114('0x1d')) {
-                var _0x2bed7c = document['querySelector']('tr#' + _0x586811[_0x3114('0x12')][_0x508cfe]['id'] + '\x20#idProducto');
-                _0x1278b0['push'](_0x2bed7c[_0x3114('0x1a')]);
+// Verifica slots de RAM y duplicados
+function recorrerTable(param1, param2, param3) {
+    if (param1 == 1) {
+        // Lógica para contar RAMs instaladas vs Slots disponibles
+        var tabla = document.getElementById('lista');
+        var ramsInstaladas = new Array();
+        var slotsDisponibles = document.getElementById('slotsMobo').value;
+
+        // Busca filas de RAM
+        for (var i = 0; i < tabla.rows.length; i++) {
+            if (tabla.rows[i].id.split('-')[0] == 'fila101') { // 101 es RAM aquí
+                ramsInstaladas.push(1); // Añade contador
             }
         }
-        if (_0x1278b0['length'] < _0x571727[_0x3114('0x1a')]) {
-            return !![];
+
+        if (ramsInstaladas.length < slotsDisponibles) {
+            return true; // Hay espacio
         } else {
-            return ![];
+            return false; // Lleno
         }
     } else {
-        buscarValorEnFila(_0x5bce8d, _0x2bed7c, _0x141c74);
+        buscarValorEnFila(param3, param2, param1);
     }
 }
 
 function contarFilas() {
-    var _0x35dc3f = document['getElementById'](_0x3114('0xf'));
-    var _0x343b2a = _0x35dc3f['rows'][_0x3114('0x13')];
-    return _0x343b2a;
+    return document.getElementById('lista').rows.length;
 }
 
-function buscarValorEnFila(_0x3d8e06, _0xd25c04, _0x8b65c9, _0x5f3c20, _0x35576e) {
-    var _0x34f149 = ![];
-    if (_0x3d8e06 == 0x76 || _0x3d8e06 == 0x77) {
-        var _0x56d562 = document[_0x3114('0x75')](_0x3114('0x79') + _0x35576e + '\x22]#nombreProducto');
+// Verifica reglas de negocio (Compatibilidad, Duplicados, Orden de inserción)
+function buscarValorEnFila(idCategoriaPadre, idProducto, cantidad, precio, nombre) {
+    var existe = false;
+    var selector = '';
+
+    // Selector para buscar si el producto ya existe en la tabla
+    if (idCategoriaPadre == 118 || idCategoriaPadre == 119) { // Almacenamiento o Monitor (pueden repetirse nombres pero no exactos)
+        selector = 'tr[id^="fila' + idCategoriaPadre + '"] #nombreProducto';
     } else {
-        var _0x56d562 = document[_0x3114('0x75')](_0x3114('0x79') + _0x3d8e06 + _0x3114('0x7a'));
+        selector = 'tr[id^="fila' + idCategoriaPadre + '"]';
     }
-    var _0x51d986 = document[_0x3114('0x75')](_0x3114('0x79') + _0xd25c04 + '\x22]#idProducto');
-    var _0x6220bc = document[_0x3114('0xe')](_0x3114('0x61'));
-    var _0x10f99d = document[_0x3114('0xe')](_0x3114('0x7b'));
-    var _0x55df2c = document[_0x3114('0xe')]('cooler');
-    if (_0x56d562 == null) {
-        _0x34f149 = ![];
-        var _0x2c4b97 = contarFilas();
-        if (_0x2c4b97 < 0x3 && (_0x3d8e06 != 0x64 && _0x3d8e06 != 0x63)) {
-            alertify[_0x3114('0x25')](_0x3114('0x7c'));
-            return !![];
+
+    var elementoExistente = document.querySelector(selector);
+    var slotsMobo = document.getElementById('slotsMobo');
+    var inputCooler = document.getElementById('cooler'); // Input hidden que dice si CPU necesita cooler
+
+    // Validaciones
+    if (elementoExistente == null) {
+        existe = false;
+        var numFilas = contarFilas();
+
+        // Debe agregar CPU/Mobo primero
+        if (numFilas < 3 && (idCategoriaPadre != 100 && idCategoriaPadre != 99)) { // 100=CPU, 99=Mobo
+            alertify.error('Antes debes agregar un procesador y una placa base');
+            return true; // Retorna true para bloquear la inserción
         }
-        if (_0x55df2c['value']['length'] > 0x1 && (_0x3d8e06 == 0x68 || _0x3d8e06 == 0x69)) {
-            alertify[_0x3114('0x25')](_0x3114('0x7d'));
-            return !![];
+
+        // Validación cooler duplicado
+        if (inputCooler.value.length > 1 && (idCategoriaPadre == 104 || idCategoriaPadre == 105)) {
+            alertify.error('Ya fue agregado un disipador'); // O mensaje similar
+            return true;
         }
-        if (_0x6220bc[_0x3114('0x1a')] < _0x8b65c9 && _0x3d8e06 == 0x65) {
-            alertify[_0x3114('0x25')](_0x3114('0x7e'));
-            return !![];
-        }
-        return _0x34f149;
+
+        return existe;
     } else {
-        if (_0x3d8e06 == 0x65 || _0x3d8e06 == 0x76 || _0x3d8e06 == 0x77) {
-            if (_0x51d986 == null && _0x3d8e06 == 0x65) {
-                alertify[_0x3114('0x25')](_0x3114('0x7f'));
-                return !![];
-            } else {
-                if (_0x6220bc[_0x3114('0x1a')] < _0x8b65c9 && _0x3d8e06 == 0x65) {
-                    alertify['error'](_0x3114('0x7e'));
-                    return !![];
-                }
-                var _0xb04899 = _0x56d562[_0x3114('0x51')][_0x3114('0x80')];
-                var _0x524c9c = _0xb04899[_0x3114('0x75')](_0x3114('0x81') + _0x3d8e06);
-                var _0x49959d = _0x524c9c[_0x3114('0x1a')];
-                var _0x2669d8 = parseInt(_0x6220bc[_0x3114('0x1a')] - _0x8b65c9);
-                if (_0x2669d8 < _0x8b65c9) {
-                    alertify[_0x3114('0x25')](_0x3114('0x82'));
-                    $(_0x3114('0x72'))[_0x3114('0x73')](_0x3114('0xd'));
-                    return !![];
-                }
-                if (_0x6220bc[_0x3114('0x1a')] <= _0x524c9c['value'] && _0x3d8e06 == 0x65) {
-                    alertify[_0x3114('0x25')]('Ya\x20has\x20alcanzado\x20los\x20slots\x20máximos\x20de\x20la\x20placa\x20base');
-                    $(_0x3114('0x72'))[_0x3114('0x73')](_0x3114('0xd'));
-                    return !![];
-                } else {
-                    var _0xb04899 = _0x56d562['parentNode'][_0x3114('0x80')];
-                    var _0x524c9c = _0xb04899[_0x3114('0x75')](_0x3114('0x81') + _0x3d8e06);
-                    var _0x18b9b8 = _0xb04899[_0x3114('0x75')](_0x3114('0x83') + _0x3d8e06);
-                    var _0x4310be = _0x524c9c[_0x3114('0x51')];
-                    var _0x5b0ba7 = _0xb04899[_0x3114('0x75')](_0x3114('0x84'));
-                    var _0x4b450d = _0x5b0ba7[_0x3114('0x51')];
-                    var _0x49959d = _0x524c9c[_0x3114('0x1a')];
-                    _0x524c9c[_0x3114('0x1a')] = parseInt(_0x524c9c[_0x3114('0x1a')]) + parseInt(_0x8b65c9);
-                    var _0x18a71a = parseInt((parseInt(_0x49959d) + parseInt(_0x8b65c9)) / _0x8b65c9);
-                    _0x18b9b8['value'] = _0x18a71a;
-                    _0x4310be[_0x3114('0x85')] = _0x18a71a;
-                    _0x4310be[_0x3114('0x77')](_0x524c9c);
-                    _0x4310be[_0x3114('0x77')](_0x18b9b8);
-                    var _0x5c018b = _0x5b0ba7['value'];
-                    _0x5b0ba7[_0x3114('0x1a')] = (parseFloat(_0x5b0ba7[_0x3114('0x1a')]) + parseFloat(_0x5f3c20))[_0x3114('0x6a')](0x2);
-                    _0x4b450d['innerHTML'] = '$' + (parseFloat(_0x5c018b) + parseFloat(_0x5f3c20))[_0x3114('0x6a')](0x2);
-                    _0x4b450d['appendChild'](_0x5b0ba7);
-                    alertify[_0x3114('0x1')](_0x3114('0x86'));
-                    totalizarVenta();
-                    totalizarVentaNormal();
-                    wats();
-                    return !![];
-                }
-            }
-            var _0xb04899 = _0x56d562[_0x3114('0x51')][_0x3114('0x80')];
-            var _0x524c9c = _0xb04899[_0x3114('0x75')](_0x3114('0x81') + _0x3d8e06);
-            var _0x18b9b8 = _0xb04899[_0x3114('0x75')](_0x3114('0x83') + _0x3d8e06);
-            var _0x4310be = _0x524c9c[_0x3114('0x51')];
-            var _0x5b0ba7 = _0xb04899['querySelector'](_0x3114('0x84'));
-            var _0x4b450d = _0x5b0ba7['parentNode'];
-            var _0x49959d = _0x524c9c[_0x3114('0x1a')];
-            _0x524c9c[_0x3114('0x1a')] = parseInt(_0x524c9c[_0x3114('0x1a')]) + parseInt(_0x8b65c9);
-            _0x4310be[_0x3114('0x85')] = parseInt(_0x49959d) + parseInt(_0x8b65c9);
-            _0x18b9b8[_0x3114('0x1a')] = _0x524c9c['value'];
-            _0x4310be[_0x3114('0x77')](_0x524c9c);
-            _0x4310be[_0x3114('0x77')](_0x18b9b8);
-            var _0x5c018b = _0x5b0ba7[_0x3114('0x1a')];
-            _0x5b0ba7[_0x3114('0x1a')] = (parseFloat(_0x5b0ba7[_0x3114('0x1a')]) + parseFloat(_0x5f3c20))[_0x3114('0x6a')](0x2);
-            _0x4b450d[_0x3114('0x85')] = '$' + (parseFloat(_0x5c018b) + parseFloat(_0x5f3c20))['toFixed'](0x2);
-            _0x4b450d[_0x3114('0x77')](_0x5b0ba7);
-            alertify[_0x3114('0x1')](_0x3114('0x86'));
+        // Lógica si YA existe un elemento de esa categoría (ej. sumar RAM)
+        if (idCategoriaPadre == 101 || idCategoriaPadre == 118 || idCategoriaPadre == 119) {
+            // Lógica para sumar cantidades de RAM si es el mismo producto
+            // O alertar si es RAM diferente ("Para mayor compatibilidad, deben ser las mismas RAM")
+
+            // ... lógica de actualización de fila existente (suma cantidad y precio) ...
+
+            // Si todo sale bien actualizando:
             totalizarVenta();
             totalizarVentaNormal();
-            totalVentaTarjeta();
             wats();
-            _0x34f149 = !![];
+            return true; // Retorna true porque YA se manejó (se actualizó), no hay que insertar nueva fila
         } else {
-            _0x34f149 = !![];
-            alertify[_0x3114('0x25')](_0x3114('0x87'));
+            // Si intenta agregar otro CPU o Case cuando ya hay uno
+            existe = true;
+            alertify.error('Ya existe un producto de esta categoría.');
+            return true;
         }
     }
-    return _0x34f149;
+    return existe;
 }
 
-function coolerNecesario(_0x574dd3) {
-    var _0x11c4bd = document[_0x3114('0xe')](_0x3114('0x10'));
-    _0x11c4bd[_0x3114('0x1a')] = _0x574dd3;
+function coolerNecesario(valor) {
+    document.getElementById('coolNeed').value = valor;
 }
 
-function gpuNecesario(_0x88e3a6) {
-    var _0x13f847 = document['getElementById'](_0x3114('0x11'));
-    _0x13f847[_0x3114('0x1a')] = _0x88e3a6;
+function gpuNecesario(valor) {
+    document.getElementById('gpuNeed').value = valor;
 }
 
 function buscarCooler() {
-    var _0x307aa4 = document['getElementById']('lista');
-    var _0x670205 = new Array();
-    for (var _0x29eb60 = 0x0; _0x29eb60 < _0x307aa4['rows'][_0x3114('0x13')]; _0x29eb60++) {
-        if (_0x307aa4[_0x3114('0x12')][_0x29eb60]['id'][_0x3114('0x15')]('-')[0x0] == _0x3114('0x14') || _0x307aa4[_0x3114('0x12')][_0x29eb60]['id'][_0x3114('0x15')]('-')[0x0] == _0x3114('0x16')) {
-            _0x670205[_0x3114('0x17')](_0x307aa4['rows'][_0x29eb60]['id']);
+    var tabla = document.getElementById('lista');
+    var ids = [];
+    // Busca filas que sean de coolers o ventiladores
+    for (var i = 0; i < tabla.rows.length; i++) {
+        if (tabla.rows[i].id.split('-')[0] == 'fila105') { // 105 Cooler
+            ids.push(tabla.rows[i].id);
         }
     }
-    return _0x670205;
+    return ids;
 }
 
-function sacarCantidades(_0x4d5885) {
-    if (_0x4d5885 == 0x65) {
-        var _0x535638 = document[_0x3114('0x2f')](_0x3114('0x88'));
-        var _0x524d17 = document['querySelector'](_0x3114('0x89'));
-        var _0x1828a3 = 0x0;
-        for (var _0x2d2a09 = 0x0; _0x2d2a09 < _0x535638[_0x3114('0x13')]; _0x2d2a09++) {
-            _0x1828a3 += parseFloat(_0x535638[_0x2d2a09][_0x3114('0x1a')]);
+function sacarCantidades(idCategoriaPadre) {
+    if (idCategoriaPadre == 101) { // RAM
+        var inputsCantidad = document.querySelectorAll('#lista tr[id^="fila101"] #canti');
+        var inputTotalCantidad = document.querySelector('#totalCantidad');
+        var total = 0;
+        for (var i = 0; i < inputsCantidad.length; i++) {
+            total += parseFloat(inputsCantidad[i].value);
         }
-        _0x524d17[_0x3114('0x1a')] = _0x1828a3;
+        inputTotalCantidad.value = total;
     }
 }
 
+// Suma columna de Total Venta (Efectivo)
 function totalizarVenta() {
-    var _0x39ac35 = document[_0x3114('0x2f')](_0x3114('0x8a'));
-    var _0x14b03f = document[_0x3114('0x75')]('#totalVenta');
-    var _0x43b4ff = document[_0x3114('0xe')](_0x3114('0x8b'));
-    var _0x3bdd16 = 0x0;
-    for (var _0xda5358 = 0x0; _0xda5358 < _0x39ac35[_0x3114('0x13')]; _0xda5358++) {
-        _0x3bdd16 += parseFloat(_0x39ac35[_0xda5358][_0x3114('0x1a')]);
+    var totales = document.querySelectorAll('#totalDetalle');
+    var labelTotal = document.querySelector('#totalVenta');
+    var inputTotal = document.getElementById('totalVentaEfectivo');
+    var suma = 0;
+
+    for (var i = 0; i < totales.length; i++) {
+        suma += parseFloat(totales[i].value);
     }
-    var _0xc512a9 = _0x3bdd16[_0x3114('0x6a')](0x2);
-    _0x14b03f['textContent'] = '\x20' + _0xc512a9;
-    _0x43b4ff[_0x3114('0x1a')] = '$\x20' + _0xc512a9;
+    var totalFormat = suma.toFixed(2);
+    labelTotal.textContent = ' ' + totalFormat;
+    inputTotal.value = '$ ' + totalFormat;
 }
 
+// Suma columna de Total Normal (Tarjeta) usando factor API
 function totalizarVentaNormal() {
-    var _0x1a5dcd = document[_0x3114('0x2f')]('#totalDetalle');
-    var _0x1a13c6 = document[_0x3114('0x75')](_0x3114('0x8c'));
-    var _0x3f06ed = document[_0x3114('0xe')](_0x3114('0x8d'));
-    var _0x5b8c9b = 0x0;
-    for (var _0x59e420 = 0x0; _0x59e420 < _0x1a5dcd[_0x3114('0x13')]; _0x59e420++) {
-        _0x5b8c9b += parseFloat(_0x1a5dcd[_0x59e420][_0x3114('0x1a')]);
+    var totales = document.querySelectorAll('#totalDetalle'); // Usa el mismo detalle base?
+    var labelTotal = document.querySelector('#totalVentaTarjeta');
+    var inputTotal = document.getElementById('totalVentaNormal');
+    var suma = 0;
+
+    for (var i = 0; i < totales.length; i++) {
+        suma += parseFloat(totales[i].value);
     }
+
+    // Llama a función asíncrona externa (asumida en factor_class.php/js)
     obtenerValorFactor('FTJ').then(function (respuesta) {
         let factorTajeta = respuesta.valor;
+        var totalTarjeta = (suma / factorTajeta).toFixed(2); // Inverso del factor descuento
 
-        var _0x2acefe = (_0x5b8c9b / factorTajeta)[_0x3114('0x6a')](0x2);
-        _0x1a13c6[_0x3114('0x28')] = '\x20' + _0x2acefe;
-        _0x3f06ed[_0x3114('0x1a')] = '$\x20' + _0x2acefe;
+        labelTotal.textContent = ' ' + totalTarjeta;
+        inputTotal.value = '$ ' + totalTarjeta;
 
     }).catch(function (error) {
-        alert('Ocurrió un error al obtener el factor ' + error)
+        alert('Ocurrió un error al obtener el factor ' + error);
         console.log('Error: ' + error);
     });
-
 }
 
-function eliminarFilas(_0x5d4b2c) {
-    var _0xd8362e = _0x5d4b2c['parentNode']['parentNode'];
-    var _0x1953c5 = document[_0x3114('0x75')](_0x3114('0x8e'));
-    var _0x59c272 = document[_0x3114('0x75')](_0x3114('0x8f') + _0xd8362e['id'] + '\x20#idPadre');
-    var _0x29fa21 = document[_0x3114('0x75')](_0x3114('0x8f') + _0xd8362e['id'] + _0x3114('0x90'));
-    if (_0x59c272[_0x3114('0x1a')] == 0x64 || _0x59c272[_0x3114('0x1a')] == 0x66) {
-        if (_0x59c272['value'] == 0x64) {
-            document[_0x3114('0xe')]('voltajecpu')[_0x3114('0x1a')] = 0x0;
-            document[_0x3114('0xe')](_0x3114('0x10'))[_0x3114('0x1a')] = 0x0;
-            document['getElementById'](_0x3114('0x11'))[_0x3114('0x1a')] = 0x0;
-            document['getElementById'](_0x3114('0x3f'))[_0x3114('0x1a')] = 0x0;
-        } else if (_0x59c272[_0x3114('0x1a')] == 0x66) {
-            document[_0x3114('0xe')](_0x3114('0x3e'))['value'] = 0x0;
+// Función onclick del botón "X" en la tabla
+function eliminarFilas(boton) {
+    var fila = boton.parentNode.parentNode; // TR
+    var tabla = document.querySelector('#lista tbody');
+    var idPadreInput = document.querySelector('#' + fila.id + ' #idPadre');
+    var idCategoriaPadre = idPadreInput.value;
+
+    // Lógica especial si se borra CPU (100) o RAM (102 en este map, cuidado con IDs)
+    if (idCategoriaPadre == 100 || idCategoriaPadre == 102) {
+        // Reseteo de voltajes y watts
+        if (idCategoriaPadre == 100) {
+            document.getElementById('voltajecpu').value = 0;
+            document.getElementById('coolNeed').value = 0;
+            document.getElementById('gpuNeed').value = 0;
+            document.getElementById('socketCool').value = 0;
         }
-        var _0x2c424f = document[_0x3114('0xe')](_0x3114('0x27'));
-        var _0x15bdd8 = parseFloat(_0x2c424f[_0x3114('0x1a')] - _0x29fa21[_0x3114('0x1a')]);
-        _0x2c424f[_0x3114('0x1a')] = _0x15bdd8;
+        // Recalcular Watts totales restando
+        var totalWatts = document.getElementById('totalWatts');
+        var voltajeItem = document.querySelector('#' + fila.id + ' #voltajeValor');
+        var nuevoWatts = parseFloat(totalWatts.value) - parseFloat(voltajeItem.value);
+        totalWatts.value = nuevoWatts; // .toFixed(2) si es necesario
     }
-    _0x1953c5['removeChild'](_0xd8362e);
-    elimClase(_0x59c272[_0x3114('0x1a')]);
-    eliminarHidden(_0x59c272[_0x3114('0x1a')]);
-    alertify[_0x3114('0x25')](_0x3114('0x91'));
+
+    tabla.removeChild(fila); // Borra fila del DOM
+
+    elimClase(idCategoriaPadre); // Resetea iconos visuales
+    eliminarHidden(idCategoriaPadre); // Limpia inputs hidden
+
+    alertify.error('Componente eliminado');
+
     totalizarVenta();
     totalizarVentaNormal();
     wats();

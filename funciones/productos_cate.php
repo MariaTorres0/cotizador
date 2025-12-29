@@ -68,35 +68,50 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
     $collapseClass = $show ? 'collapse show' : 'collapse';
     $btnCollapsed = $show ? '' : 'collapsed';
 
-    // Agregar id de categoría al card principal
     $catId = isset($categoria['id_category']) ? $categoria['id_category'] : $index;
 
     echo "<div class='card' id='cat-{$catId}'>
             <div class='card-header degradadoGris' id='{$headingId}'>
-                <h2 class='mb-0 text-left'>
-                    <button class='btn btn-link {$btnCollapsed}' id='{$btnId}Btn' style='color: {$color};' type='button'
-                        data-toggle='collapse' data-target='#{$collapseId}' aria-expanded='{$expanded}' aria-controls='{$collapseId}' data-cat-id='{$catId}'>";
+                <h2 class='mb-0 text-left d-flex align-items-center'>";
+
+    echo "<button class='btn btn-link {$btnCollapsed}' id='{$btnId}Btn'
+                style='color: {$color};'
+                type='button'
+                data-toggle='collapse'
+                data-target='#{$collapseId}'
+                aria-expanded='{$expanded}'
+                aria-controls='{$collapseId}'
+                data-cat-id='{$catId}'>";
 
     if ($showIcon) {
         $iconColor = ($categoria['obligatorio'] ?? 0) == 1 ? 'red' : '';
         $iconClass = ($categoria['obligatorio'] ?? 0) == 1 ? 'fas fa-times' : 'fas fa-exclamation';
-        echo "<img src='iconos_cat/{$categoria['icono']}' width='40' height='40' style='vertical-align: middle; margin-right: 8px;' />";
-        echo "<span>{$categoria['nombre']}</span>";
-        echo "<i class='{$iconClass}' id='{$catId}' style='color: {$iconColor}; margin-left: 6px;'></i>";
 
-        if ($catId == 109) {
-            echo "<span class='fuente-hint'>
-            Las fuentes se sugieren según el consumo de los componentes
-          </span>";
-        }
+        echo "<img src='iconos_cat/{$categoria['icono']}'
+                    width='40' height='40'
+                    style='vertical-align: middle; margin-right: 8px;' />";
+
+        echo "<span>{$categoria['nombre']}</span>";
+
+        echo "<i class='{$iconClass}' id='{$catId}'
+                    style='color: {$iconColor}; margin-left: 6px;'></i>";
     } else {
         echo $categoria['nombre'];
     }
 
-    echo       "</button>
-                </h2>
+    echo "</button>";
+
+    if ($catId == 109) {
+        echo "<span class='fuente-hint ml-0'>
+                Las fuentes se sugieren según el consumo de los componentes seleccionados
+              </span>";
+    }
+
+    echo "      </h2>
             </div>
-            <div id='{$collapseId}' class='{$collapseClass}' aria-labelledby='{$headingId}' data-parent='{$parentId}'>
+            <div id='{$collapseId}' class='{$collapseClass}'
+                aria-labelledby='{$headingId}'
+                data-parent='{$parentId}'>
                 <div class='card-body' id='{$bodyId}'></div>
             </div>
         </div>";
@@ -370,44 +385,64 @@ function mostrarProductosPorCategoria($idCategoria, $idCategoriaPadre, $tipo)
 {
     global $conexion, $factorClass;
 
-    $sqlProd = "SELECT cp.id_product, pl.name AS productoNombre, p.price, p.reference, p.slots, p.voltaje, p.cooler, p.gpu, p.socketCooler,
+    $sqlProd = "SELECT cp.id_product, pl.name AS productoNombre, p.price, p.reference, p.slots,
+                       p.voltaje, p.cooler, p.gpu, p.socketCooler,
                        cl.name AS nombreCategoria
                 FROM ps_category_product cp
                 INNER JOIN ps_product_lang pl ON cp.id_product = pl.id_product
                 INNER JOIN ps_product p ON cp.id_product = p.id_product
                 INNER JOIN ps_category_lang cl ON cp.id_category = cl.id_category
-                WHERE cp.id_category = {$idCategoria} AND p.active = 1 AND pl.id_lang = 2 AND cl.id_lang = 2";
+                WHERE cp.id_category = {$idCategoria}
+                  AND p.active = 1
+                  AND pl.id_lang = 2
+                  AND cl.id_lang = 2";
+
     $resProd = mysqli_query($conexion, $sqlProd);
 
     while ($prod = mysqli_fetch_assoc($resProd)) {
-        $precioNormal = redondear($prod['price'] * 1.13);
-        $precioEfectivo = redondear($precioNormal * $factorClass->getValor('FTJ')['valor']);
-        $srcImg = pathImg($prod['id_product']);
 
-        $nombreProductoJS = str_replace(['"', "'"], '', $prod['productoNombre']);
+        $precioNormal   = redondear($prod['price'] * 1.13);
+        $precioEfectivo = redondear($precioNormal * $factorClass->getValor('FTJ')['valor']);
+        $srcImg         = pathImg($prod['id_product']);
+
+        $nombreProductoJS  = str_replace(['"', "'"], '', $prod['productoNombre']);
         $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
 
-        $onclick = "agregarTabla(\"{$nombreProductoJS}\", " . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, {$prod['id_product']}, {$idCategoria}, {$idCategoriaPadre}, \"{$nombreCategoriaJS}\", 1, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\")";
-        // Extra parámetros solo para unidades y UPS
+        $params = ["\"{$nombreProductoJS}\"", $precioNormal, $precioEfectivo, 1, $prod['id_product'], $idCategoria, $idCategoriaPadre, "\"{$nombreCategoriaJS}\"", 1 ];
+
+        // Solo UPS y unidades reciben estos parámetros extra
         if (in_array($tipo, ['unidades', 'ups'])) {
-            $onclick .= ", 1, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\"";
+            $params[] = $prod['voltaje'];
+            $params[] = $prod['cooler'];
+            $params[] = $prod['gpu'];
+            $params[] = "\"{$prod['socketCooler']}\"";
         }
 
-        $onclick .= ")";
+        $onclick = "agregarTabla(" . implode(',', $params) . ")";
 
-        echo "<div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
-                <div class='card bg-light mb-8 product-card'>
-                    <div class='card-header p-1 text-center product-header'>
-                        <img src='{$srcImg}' style='max-width: 75px; max-height: 75px;' class='zoom mt-3'><br>
-                        <p>{$prod['productoNombre']}</p>
-                    </div>
-                    <div class='card-body p-2'>
-                        <p class='card-title font-weight-bold' style='color:#6D6D6B'>Precio normal: $ " . redondear($precioNormal) . "</p>
-                        <p class='card-title text-success font-weight-bold'>Precio efectivo: $ " . redondear($precioEfectivo) . "</p>
-                        <a class='btn btn-info btn-lg btn-block' style='color:#fff' href='javascript:void(0)' onclick='{$onclick}'>+ Añadir</a>
-                    </div>
+        echo "
+        <div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
+            <div class='card bg-light mb-8 product-card'>
+                <div class='card-header p-1 text-center product-header'>
+                    <img src='{$srcImg}' style='max-width:75px; max-height:75px;' class='zoom mt-3'><br>
+                    <p>{$prod['productoNombre']}</p>
                 </div>
-              </div>";
+                <div class='card-body p-2'>
+                    <p class='card-title font-weight-bold' style='color:#6D6D6B'>
+                        Precio normal: $ {$precioNormal}
+                    </p>
+                    <p class='card-title text-success font-weight-bold'>
+                        Precio efectivo: $ {$precioEfectivo}
+                    </p>
+                    <a class='btn btn-info btn-lg btn-block'
+                       style='color:#fff'
+                       href='javascript:void(0)'
+                       onclick='{$onclick}'>
+                       + Añadir
+                    </a>
+                </div>
+            </div>
+        </div>";
     }
 }
 

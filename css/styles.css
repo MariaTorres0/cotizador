@@ -95,6 +95,8 @@ body {
 
 i.fa-exclamation {
     color: #ff7b11;
+    display: inline-block;
+    transition: all 0.3s ease;
 }
 
 img.zoom {
@@ -165,6 +167,51 @@ img.zoom {
 
     100% {
         transform: translateX(5px) scale(1);
+    }
+}
+
+/* Animación swing para el icono de exclamación */
+@keyframes swing {
+    0%, 100% {
+        transform: rotate(0deg) scale(1);
+    }
+    25% {
+        transform: rotate(-20deg) scale(1.15);
+    }
+    75% {
+        transform: rotate(20deg) scale(1.15);
+    }
+}
+
+/* Animación bounce para el check */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* Animación flip suave para la imagen */
+@keyframes flipIn {
+    0% {
+        transform: perspective(600px) rotateY(90deg);
+        opacity: 0;
+    }
+    100% {
+        transform: perspective(600px) rotateY(0deg);
+        opacity: 1;
+    }
+}
+
+/* Animación subtle de imagen al hover */
+@keyframes imageFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-4px);
     }
 }
 
@@ -366,4 +413,90 @@ img.zoom {
     #lista thead th {
         white-space: nowrap;
     }
+}
+
+/* Animaciones sutiles del acordeón - Sin cambios estructurales */
+.accordion .card-header {
+    transition: background-color 0.3s ease;
+}
+
+.accordion .card-header:hover {
+    background-color: rgba(231, 61, 44, 0.02);
+}
+
+.accordion .card-header .btn-link {
+    transition: color 0.25s ease, padding-left 0.25s ease;
+}
+
+.accordion .card-header .btn-link:hover {
+    color: #e73d2c !important;
+    padding-left: 8px;
+}
+
+.accordion .card-header .btn-link:not(.collapsed) {
+    color: #e73d2c !important;
+}
+
+/* Animación del icono de categoría (primera imagen) */
+.accordion .card-header img {
+    transition: all 0.3s ease;
+}
+
+.accordion .card-header:hover img {
+    transform: scale(1.08) rotate(2deg);
+    filter: drop-shadow(0 2px 4px rgba(231, 61, 44, 0.3));
+}
+
+.accordion .card-header .btn-link:not(.collapsed) img {
+    transform: scale(1.05);
+}
+
+/* Animación del icono X */
+.accordion i.fa-times {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0.6;
+}
+
+.accordion .card-header:hover i.fa-times {
+    opacity: 1;
+    transform: rotate(90deg) scale(1.15);
+    text-shadow: 0 0 6px rgba(200, 35, 51, 0.3);
+}
+
+.accordion .card-header:hover i.fa-exclamation {
+    animation: swing 0.8s ease-in-out infinite;
+    transform-origin: center;
+    font-weight: bold;
+}
+
+/* Animación suave para el texto del botón */
+.accordion .btn-link span {
+    transition: letter-spacing 0.3s ease;
+}
+
+.accordion .card-header:hover .btn-link span {
+    letter-spacing: 0.3px;
+}
+
+/* Animaciones para iconos de estado */
+i.fa-check {
+    color: green;
+    animation: bounce 1.8s ease-in-out infinite;
+    display: inline-block;
+}
+
+/* Imagen con animación mejorada */
+.accordion .card-header img {
+    transition: all 0.3s ease;
+    animation: flipIn 0.6s ease-out;
+}
+
+.accordion .card-header:hover img {
+    transform: scale(1.08) rotateY(5deg);
+    filter: drop-shadow(0 2px 4px rgba(231, 61, 44, 0.3));
+}
+
+.accordion .card-header .btn-link:not(.collapsed) img {
+    transform: scale(1.05);
+    animation: imageFloat 2s ease-in-out infinite;
 }
