@@ -1,24 +1,27 @@
 <?php
 require "../funciones/conexion.php";
-require '../funciones/factor_class.php'; 
+require '../funciones/factor_class.php';
 
 $factorClass = new FactorClass();
 
-function redondear_ajax($valor) {
+function redondear_ajax($valor)
+{
     return number_format(round($valor * 100) / 100, 2, ".", "");
 }
 
-function pathImg_ajax($conexion, $idProducto) {
+function pathImg_ajax($conexion, $idProducto)
+{
     $sql = "SELECT id_image FROM ps_image WHERE ps_image.id_product = $idProducto";
     $resultado = mysqli_query($conexion, $sql);
     if (mysqli_num_rows($resultado) > 0) {
         $filas = mysqli_fetch_array($resultado);
         return crearPath_ajax($filas[0]);
     }
-    return crearPath_ajax("1969"); 
+    return crearPath_ajax("1969");
 }
 
-function crearPath_ajax($nombreImg) {
+function crearPath_ajax($nombreImg)
+{
     $cadena = $nombreImg . ".jpg";
     $idSeparado = $nombreImg;
     $valorArray = array();
@@ -78,7 +81,7 @@ $sqlProd = "SELECT cp.id_product, cp.id_category, pl.name AS productoNombre, p.p
 $resProd = mysqli_query($conexion, $sqlProd);
 
 if (mysqli_num_rows($resProd) > 0) {
-    echo '<div class="row">'; 
+    echo '<div class="row">';
     while ($prod = mysqli_fetch_assoc($resProd)) {
         $precioNormal = redondear_ajax($prod['price'] * 1.13);
         $precioEfectivo = redondear_ajax($precioNormal * $factorClass->getValor('FTJ')['valor']);
@@ -86,7 +89,7 @@ if (mysqli_num_rows($resProd) > 0) {
 
         $nombreProductoJS = str_replace(['"', "'"], '', $prod['productoNombre']);
         $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
-        
+
         $onclick = "agregarTabla(\"{$nombreProductoJS}\", {$precioNormal}, {$precioEfectivo}, 1, {$prod['id_product']}, {$prod['id_category']}, {$cate_padre}, \"{$nombreCategoriaJS}\", 1, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\")";
 
         echo "<div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
@@ -98,13 +101,17 @@ if (mysqli_num_rows($resProd) > 0) {
                     <div class='card-body p-2'>
                         <p class='card-title font-weight-bold' style='color:#6D6D6B'>Precio normal: $ {$precioNormal}</p>
                         <p class='card-title text-success font-weight-bold'>Precio efectivo: $ {$precioEfectivo}</p>
-                        <a class='btn btn-info btn-lg btn-block' style='color:#fff' href='javascript:void(0)' onclick='{$onclick}'>+ Añadir</a>
+                        
+                        <a class='btn btn-info btn-lg btn-block btn-agregar-producto' 
+                           style='color:#fff' 
+                           href='javascript:void(0)' 
+                           data-cate-principal='{$prod['id_category']}'
+                           onclick='{$onclick}'>+ Añadir</a>
                     </div>
                 </div>
               </div>";
     }
-    echo '</div>'; 
+    echo '</div>';
 } else {
     echo "<div class='col-12'><div class='alert alert-info text-center'>No hay stock disponible para las categorías compatibles seleccionadas.</div></div>";
 }
-?>

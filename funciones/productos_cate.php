@@ -216,7 +216,11 @@ function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
                                 <div class='card-body p-2'>
                                     <p class='card-title font-weight-bold' style='color:#6D6D6B'>Precio normal: $ " . redondear($precioNormal) . "</p>
                                     <p class='card-title text-success font-weight-bold'>Precio efectivo: $ " . redondear($precioEfectivo) . "</p>
-                                    <a class='btn btn-info btn-lg btn-block' style='color:#fff' href='javascript:void(0)' 
+                                    
+                                    <a class='btn btn-info btn-lg btn-block btn-agregar-producto' 
+                                    style='color:#fff' 
+                                    href='javascript:void(0)' 
+                                    data-cate-principal='{$subsub['id_category']}'
                                     onclick='agregarTabla(\"{$prod['productoNombre']}\", " . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, {$prod['id_product']}, {$subsub['id_category']}, $idCategoriaPadre, \"{$prod['nombreCategoria']}\", 1, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\")'>
                                     + Añadir
                                     </a>
@@ -408,7 +412,7 @@ function mostrarProductosPorCategoria($idCategoria, $idCategoriaPadre, $tipo)
         $nombreProductoJS  = str_replace(['"', "'"], '', $prod['productoNombre']);
         $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
 
-        $params = ["\"{$nombreProductoJS}\"", $precioNormal, $precioEfectivo, 1, $prod['id_product'], $idCategoria, $idCategoriaPadre, "\"{$nombreCategoriaJS}\"", 1 ];
+        $params = ["\"{$nombreProductoJS}\"", $precioNormal, $precioEfectivo, 1, $prod['id_product'], $idCategoria, $idCategoriaPadre, "\"{$nombreCategoriaJS}\"", 1];
 
         // Solo UPS y unidades reciben estos parámetros extra
         if (in_array($tipo, ['unidades', 'ups'])) {
@@ -421,28 +425,29 @@ function mostrarProductosPorCategoria($idCategoria, $idCategoriaPadre, $tipo)
         $onclick = "agregarTabla(" . implode(',', $params) . ")";
 
         echo "
-        <div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
-            <div class='card bg-light mb-8 product-card'>
-                <div class='card-header p-1 text-center product-header'>
-                    <img src='{$srcImg}' style='max-width:75px; max-height:75px;' class='zoom mt-3'><br>
-                    <p>{$prod['productoNombre']}</p>
+            <div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
+                <div class='card bg-light mb-8 product-card'>
+                    <div class='card-header p-1 text-center product-header'>
+                        <img src='{$srcImg}' style='max-width:75px; max-height:75px;' class='zoom mt-3'><br>
+                        <p>{$prod['productoNombre']}</p>
+                    </div>
+                    <div class='card-body p-2'>
+                        <p class='card-title font-weight-bold' style='color:#6D6D6B'>
+                            Precio normal: $ {$precioNormal}
+                        </p>
+                        <p class='card-title text-success font-weight-bold'>
+                            Precio efectivo: $ {$precioEfectivo}
+                        </p>
+                        <a class='btn btn-info btn-lg btn-block btn-agregar-producto'
+                        style='color:#fff'
+                        href='javascript:void(0)'
+                        data-cate-principal='{$idCategoria}'
+                        onclick='{$onclick}'>
+                        + Añadir
+                        </a>
+                    </div>
                 </div>
-                <div class='card-body p-2'>
-                    <p class='card-title font-weight-bold' style='color:#6D6D6B'>
-                        Precio normal: $ {$precioNormal}
-                    </p>
-                    <p class='card-title text-success font-weight-bold'>
-                        Precio efectivo: $ {$precioEfectivo}
-                    </p>
-                    <a class='btn btn-info btn-lg btn-block'
-                       style='color:#fff'
-                       href='javascript:void(0)'
-                       onclick='{$onclick}'>
-                       + Añadir
-                    </a>
-                </div>
-            </div>
-        </div>";
+            </div>";
     }
 }
 
