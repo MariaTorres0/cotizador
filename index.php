@@ -111,6 +111,7 @@ $categorias = obtenerCategoriasCoti($conexion);
     <input type="hidden" id="catProce" />
     <input type="hidden" id="catMobo" />
     <input type="hidden" id="idMobo" />
+    <input type="hidden" id="idMoboCat" />
     <input type="hidden" id="idCase" />
     <input type="hidden" id="idRam" />
     <input type="hidden" id="idGpu" />
@@ -240,7 +241,8 @@ $categorias = obtenerCategoriasCoti($conexion);
             <div class="col-11 col-lg-12">
               <h3 class="col-12 col-sm-8 ml-0">Mis componentes</h3>
               <div class="table-responsive tabla-mis-componentes">
-                <table class="table table-bordered table-hover table-sm text-center" id="lista">
+                <table class="table table-bordered table-hover table-sm text-center small" id="lista">
+
                   <thead class="thead-dark">
                     <tr>
                       <th>Componente</th>
@@ -383,7 +385,6 @@ $categorias = obtenerCategoriasCoti($conexion);
   </form>
 
   <!-- App scripts -->
-  <script src="js/ajax.js?v1.1" type="text/javascript"></script>
   <script src="js/alertify.min.js" type="text/javascript"></script>
   <script src="js/tabla.js" type="text/javascript"></script>
   <script src="js/obtenerFactorPrecio.js" type="text/javascript"></script>

@@ -35,6 +35,7 @@ function crearPath_ajax($nombreImg)
 $cate_principal = isset($_POST['cate_principal']) ? $_POST['cate_principal'] : 0;
 $cate_padre     = isset($_POST['cate_padre']) ? $_POST['cate_padre'] : 0;
 
+
 if ($cate_principal == 0 || $cate_padre == 0) {
     exit;
 }
@@ -90,7 +91,7 @@ if (mysqli_num_rows($resProd) > 0) {
         $nombreProductoJS = str_replace(['"', "'"], '', $prod['productoNombre']);
         $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
 
-        $onclick = "agregarTabla(\"{$nombreProductoJS}\", {$precioNormal}, {$precioEfectivo}, 1, {$prod['id_product']}, {$prod['id_category']}, {$cate_padre}, \"{$nombreCategoriaJS}\", 1, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\")";
+        $onclick = "agregarTabla(\"{$nombreProductoJS}\", {$precioNormal}, {$precioEfectivo}, 1, {$prod['id_product']}, {$prod['id_category']}, {$cate_padre}, \"{$nombreCategoriaJS}\", {$prod['slots']}, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\")";
 
         echo "<div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
                 <div class='card bg-light mb-8 product-card'>

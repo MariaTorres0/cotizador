@@ -221,7 +221,7 @@ function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
                                     style='color:#fff' 
                                     href='javascript:void(0)' 
                                     data-cate-principal='{$subsub['id_category']}'
-                                    onclick='agregarTabla(\"{$prod['productoNombre']}\", " . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, {$prod['id_product']}, {$subsub['id_category']}, $idCategoriaPadre, \"{$prod['nombreCategoria']}\", 1, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\")'>
+                                    onclick='agregarTabla(\"{$prod['productoNombre']}\", " . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, {$prod['id_product']}, {$subsub['id_category']}, $idCategoriaPadre, \"{$prod['nombreCategoria']}\", {$prod['slots']}, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\")'>
                                     + Añadir
                                     </a>
                                 </div>
@@ -412,7 +412,7 @@ function mostrarProductosPorCategoria($idCategoria, $idCategoriaPadre, $tipo)
         $nombreProductoJS  = str_replace(['"', "'"], '', $prod['productoNombre']);
         $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
 
-        $params = ["\"{$nombreProductoJS}\"", $precioNormal, $precioEfectivo, 1, $prod['id_product'], $idCategoria, $idCategoriaPadre, "\"{$nombreCategoriaJS}\"", 1];
+        $params = ["\"{$nombreProductoJS}\"", $precioNormal, $precioEfectivo, 1, $prod['id_product'], $idCategoria, $idCategoriaPadre, "\"{$nombreCategoriaJS}\"",  $prod['slots']];
 
         // Solo UPS y unidades reciben estos parámetros extra
         if (in_array($tipo, ['unidades', 'ups'])) {
