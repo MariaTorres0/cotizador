@@ -25,8 +25,9 @@ $(document).ready(function() {
         var catIdClickeado = $(this).data('cat-id');
 
         if (categoriasDependientes.includes(catIdClickeado)) {
-            if (idCategoriaPrincipal || catIdClickeado == 109) { // 109 puede cargar sin idPrincipal si hay voltaje
-                // Force reload = false
+            // Se permite cargar si hay un principal, o si es Fuente(109) o si es Cooler(104/105) 
+            // ya que estos últimos validan sus propios hiddens internos.
+            if (idCategoriaPrincipal || catIdClickeado == 109 || catIdClickeado == 104 || catIdClickeado == 105) { 
                 ejecutarCargaAsociados(idCategoriaPrincipal, catIdClickeado, false);
             }
         }
@@ -51,14 +52,12 @@ $(document).ready(function() {
             // ⚡ CASO ESPECIAL: FUENTE DE PODER (ID 109)
             // ============================================================
             if (padreId == 109) {
-                var wattsRequeridos = $('#voltaje').val() || 0; // Obtener valor del hidden
+                var wattsRequeridos = $('#voltaje').val() || 0;
                 
                 $.ajax({
                     url: 'ajax/obtener_fuentes.php',
                     type: 'POST',
-                    data: {
-                        watts: wattsRequeridos
-                    },
+                    data: { watts: wattsRequeridos },
                     beforeSend: function () {
                         contenedorBody.html(
                             '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Buscando fuentes compatibles ('+wattsRequeridos+'W o más)...</div>'
@@ -68,7 +67,6 @@ $(document).ready(function() {
                         contenedorBody.html(response);
                     },
                     error: function () {
-                        console.error("Error al cargar fuentes de poder.");
                         contenedorBody.html('<div class="text-center text-danger">Error al cargar datos.</div>');
                     }
                 });
@@ -76,10 +74,24 @@ $(document).ready(function() {
             }
 
             // ============================================================
-            // 🔗 LÓGICA NORMAL (ASOCIACIONES) PARA EL RESTO
+            // 🧊 CASO ESPECIAL: COOLERS (ID 104 y 105)
             // ============================================================
-            
-            // Validación RAM/GPU usan Placa Base
+            if (padreId == 104 || padreId == 105) {
+                var idCaseSeleccionado = $('#idCaseCat').val(); // Leemos el hidden del Gabinete
+                
+                if (idCaseSeleccionado && idCaseSeleccionado != 0) {
+                    principalId = idCaseSeleccionado; // Forzamos que el principal sea el Case
+                } else {
+                    contenedorBody.html(
+                        '<div class="alert alert-warning text-center"><i class="fas fa-exclamation-triangle"></i> Por favor, primero selecciona un <b>Gabinete</b> para filtrar coolers compatibles con su tamaño.</div>'
+                    );
+                    return; // Detenemos la ejecución si no hay case
+                }
+            }
+
+            // ============================================================
+            // 🔗 LÓGICA DE ASOCIACIÓN PLACA BASE (RAM/GPU)
+            // ============================================================
             if (padreId == 101 || padreId == 102) {
                 var moboPrincipal = $('#idMoboCat').val();
                 if (moboPrincipal && moboPrincipal != 0) {
@@ -87,7 +99,7 @@ $(document).ready(function() {
                 }
             }
 
-            // Si no es fuente y no hay principal (y no es el primer paso), salir
+            // Si llegados a este punto no hay ID principal (y no es el inicio con CPU), salir
             if (!principalId && padreId != 100) return; 
 
             $.ajax({

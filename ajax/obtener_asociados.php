@@ -35,14 +35,13 @@ function crearPath_ajax($nombreImg)
 $cate_principal = isset($_POST['cate_principal']) ? $_POST['cate_principal'] : 0;
 $cate_padre     = isset($_POST['cate_padre']) ? $_POST['cate_padre'] : 0;
 
-
 if ($cate_principal == 0 || $cate_padre == 0) {
     exit;
 }
 
 // Obtener el nivel de asociación
 $sqlNivel = "SELECT tipo_asoc_padre FROM cate_asociado 
-             WHERE cate_principal = $cate_principal AND cate_padre = $cate_padre 
+             WHERE cate_principal = $cate_principal AND cate_padre = $cate_padre AND compatibilidad = 1
              ORDER BY tipo_asoc_padre DESC LIMIT 1";
 $resNivel = mysqli_query($conexion, $sqlNivel);
 
@@ -54,9 +53,9 @@ if (mysqli_num_rows($resNivel) == 0) {
 $fila = mysqli_fetch_assoc($resNivel);
 $tipo_asoc = $fila['tipo_asoc_padre'];
 
-// Obtener los IDs de categorías permitidas
+// Obtener los IDs de categorías (o tamaños) permitidos
 $sqlIds = "SELECT id_cat_asociado FROM cate_asociado 
-           WHERE cate_principal = $cate_principal AND cate_padre = $cate_padre AND tipo_asoc_padre = $tipo_asoc";
+           WHERE cate_principal = $cate_principal AND cate_padre = $cate_padre AND tipo_asoc_padre = $tipo_asoc AND compatibilidad = 1";
 $resIds = mysqli_query($conexion, $sqlIds);
 
 $ids = [];
@@ -70,14 +69,26 @@ if (empty($lista_ids)) {
     exit;
 }
 
-// Consultar productos
-$sqlProd = "SELECT cp.id_product, cp.id_category, pl.name AS productoNombre, p.price, p.reference, p.slots, p.voltaje, p.cooler, p.gpu, p.socketCooler,
-            cl.name AS nombreCategoria
+if ($cate_padre == 104 || $cate_padre == 105) {
+    // Si es cooler, filtramos por la categoría fija y validamos el tamaño compatible
+    $condicionFiltro = "cp.id_category = $cate_padre AND p.tamano IN ($lista_ids)";
+} else {
+    // Lógica normal para el resto de componentes
+    $condicionFiltro = "cp.id_category IN ($lista_ids)";
+}
+
+// Consultar productos con la condición dinámica
+$sqlProd = "SELECT cp.id_product, cp.id_category, pl.name AS productoNombre, p.price, p.reference, p.slots, 
+                   p.voltaje, p.cooler, p.gpu, p.socketCooler, cl.name AS nombreCategoria
             FROM ps_category_product cp
             INNER JOIN ps_product p ON cp.id_product = p.id_product
             INNER JOIN ps_product_lang pl ON cp.id_product = pl.id_product
             INNER JOIN ps_category_lang cl ON cp.id_category = cl.id_category
-            WHERE cp.id_category IN ($lista_ids) AND p.active = 1 AND pl.id_lang = 2 AND cl.id_lang = 2";
+            WHERE $condicionFiltro 
+            AND p.active = 1 
+            AND pl.id_lang = 2 
+            AND cl.id_lang = 2 
+            AND pl.name != ''";
 
 $resProd = mysqli_query($conexion, $sqlProd);
 

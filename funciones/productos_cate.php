@@ -330,7 +330,7 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
                         <div id='{$collapseSub}' class='collapse' aria-labelledby='{$headingSub}' data-parent='{$parentId}'>
                             <div class='card-body'>
                                 <div class='row'>";
-                mostrarProductosPorCategoria($cat['id_category'], 105, $tipo);
+                mostrarProductosPorCategoria($cat['id_category'], $idCategoriaPadre, $tipo);
                 echo "      </div>
                             </div>
                         </div>

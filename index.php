@@ -89,14 +89,53 @@ $categorias = obtenerCategoriasCoti($conexion);
       justify-content: flex-start;
       height: 100%;
     }
-    .fuente-hint {
-    margin-left: 8px;
-    font-size: 13px;
-    color: #9B3A3A;       
-    font-weight: 400;
-    letter-spacing: 0.2px;
-}
 
+    .fuente-hint {
+      margin-left: 8px;
+      font-size: 13px;
+      color: #9B3A3A;
+      font-weight: 400;
+      letter-spacing: 0.2px;
+    }
+
+    #lista thead th {
+      font-size: 14px;
+    }
+
+    #lista tbody td {
+      font-size: 12.9px;
+    }
+
+    #lista {
+      table-layout: fixed;
+      width: 100%;
+    }
+
+    /* Anchos por columna */
+    #lista th:nth-child(1),
+    #lista td:nth-child(1) {
+      width: 46%;
+    }
+
+    #lista th:nth-child(2),
+    #lista td:nth-child(2) {
+      width: 13%;
+    }
+
+    #lista th:nth-child(3),
+    #lista td:nth-child(3) {
+      width: 13%;
+    }
+
+    #lista th:nth-child(4),
+    #lista td:nth-child(4) {
+      width: 16%;
+    }
+
+    #lista th:nth-child(5),
+    #lista td:nth-child(5) {
+      width: 12%;
+    }
   </style>
 </head>
 
@@ -113,6 +152,7 @@ $categorias = obtenerCategoriasCoti($conexion);
     <input type="hidden" id="idMobo" />
     <input type="hidden" id="idMoboCat" />
     <input type="hidden" id="idCase" />
+    <input type="hidden" id="idCaseCat" />
     <input type="hidden" id="idRam" />
     <input type="hidden" id="idGpu" />
     <input type="hidden" id="idFuente" />
@@ -241,8 +281,7 @@ $categorias = obtenerCategoriasCoti($conexion);
             <div class="col-11 col-lg-12">
               <h3 class="col-12 col-sm-8 ml-0">Mis componentes</h3>
               <div class="table-responsive tabla-mis-componentes">
-                <table class="table table-bordered table-hover table-sm text-center small" id="lista">
-
+                <table class="table table-bordered table-hover table-sm text-center" id="lista">
                   <thead class="thead-dark">
                     <tr>
                       <th>Componente</th>

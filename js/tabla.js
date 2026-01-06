@@ -74,7 +74,7 @@ function validarTabla() {
     var idsUnicos = [...new Set(idsEncontrados)];
 
     // Definir requeridos según inputs 
-    var definidos = [...catsCriticas]; 
+    var definidos = [...catsCriticas];
 
     // Ajustes según lógica original de precios (aunque la lógica original era redundante, se respeta)
     if (inputEfectivo.value == 1 && inputTarjeta.value == 1) {
@@ -139,7 +139,7 @@ function recorrer(arrayFaltantes) {
 }
 
 /* ==========================================
-   MANEJO DE DOM Y FORMULARIOS (INPUTS HIDDEN)
+   MANEJO DE DOM Y FORMULARIOS
    ========================================== */
 
 function wats() {
@@ -156,13 +156,13 @@ function cambiarCategoria(nombreCategoria, idCategoriaPadre) {
 }
 
 function pasarId(idProducto, idCategoriaPadre, slots) {
-    // Asigna IDs ocultos según la categoría
     const inputMap = {
         99: 'idMobo',
-        103: 'idCase',
         101: 'idRam',
-        102: 'idDisco', // Nota: En tu código original 102 (GPU) asignaba a idDisco. Lo mantengo así por orden estricta.
-        109: 'idFuente'
+        102: 'idGpu',
+        103: 'idCase',
+        109: 'idFuente',
+        118: 'idDisco'
     };
 
     if (inputMap[idCategoriaPadre]) {
@@ -245,17 +245,31 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
             cerrarMenu(idCategoriaPadre);
         }
 
-        cambiarCategoria(nombreCategoria, idCategoriaPadre);
         pasarId(idProducto, idCategoriaPadre, flag);
+
+        // --- LÓGICA PARA COMPATIBILIDAD DE CASE ---
+        if (idCategoriaPadre == 103) {
+            document.getElementById('idCaseCat').value = idCategoria;
+        }
+
         if (idCategoriaPadre == 99) document.getElementById('idMoboCat').value = idCategoria;
         cambiarClase(idCategoriaPadre);
 
-        // 🔒 LÓGICA GPU OBLIGATORIA AL AGREGAR CPU
+        // 2. SINCRONIZACIÓN VISUAL DE COOLERS
+        if (idCategoriaPadre == 104) cambiarClase(105);
+        if (idCategoriaPadre == 105) cambiarClase(104);
+
+        // LÓGICA GPU OBLIGATORIA
         if (idCategoriaPadre == 100) {
             document.getElementById('gpuNeed').value = gpu;
             if (gpu == 1) {
                 let hayGpu = document.querySelector('tr[id^="fila102-"]');
-                if (!hayGpu) resetearVisual(102, false); // false para no cambiar color de fondo
+                if (!hayGpu) {
+                    resetearVisual(102, false);
+                }
+            } else {
+                let hayGpu = document.querySelector('tr[id^="fila102-"]');
+                if (!hayGpu) resetearVisualGpuWarning();
             }
         }
 
@@ -266,12 +280,16 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
         }
 
         let subtotal = parseFloat(precioEfectivo * cantidad);
+        
         let htmlFila = `
             <tr id="${idFila}">
                 <td>
                     <input type="hidden" id="voltajeValor" value="${voltaje}">
                     <input type="hidden" id="idProducto" name="idProducto[]" value="${idProducto}">
                     <input type="hidden" id="idPadre" name="catePadre[]" value="${idCategoriaPadre}">
+                    
+                    <input type="hidden" id="nombreProducto" name="nombre[]" value="${nombreProducto}">
+                    <input type="hidden" id="precioEfectivo" name="precioEfectivo[]" value="${precioEfectivo}">
                     <p>${nombreProducto}</p>
                 </td>
                 <td align="center">$${precioEfectivo.toFixed(2)}</td>
@@ -307,93 +325,95 @@ function eliminarFilas(boton) {
     var nuevoVoltaje = (parseFloat(inputVoltaje.value) || 0) - wattsItem;
     inputVoltaje.value = Math.max(0, nuevoVoltaje);
 
-    // 2. Limpiezas específicas según la categoría eliminada
+    // --- NUEVO: DETECTAR SI EXISTE GPU ANTES DE BORRAR ---
+    // Checamos si hay filas de la categoría 102 (GPU)
+    var habiaGpu = document.querySelectorAll('tr[id^="fila102-"]').length > 0;
+    // -----------------------------------------------------
+
+    // 2. Limpiezas específicas
     if (idPadre == 100) { // Si se elimina el CPU
         document.getElementById('voltajecpu').value = 0;
         document.getElementById('coolNeed').value = 0;
-        document.getElementById('gpuNeed').value = 0; // Resetear requerimiento de GPU
+        document.getElementById('gpuNeed').value = 0;
         document.getElementById('socketCool').value = 0;
     } else if (idPadre == 102) { // Si se elimina la GPU
         document.getElementById('voltajegpu').value = 0;
     }
 
-    // 3. Eliminar la fila del DOM y limpiar inputs ocultos
+    // 3. Eliminar la fila del DOM y cascada
     fila.remove();
-    eliminarHidden(idPadre);
+    eliminarHidden(idPadre); // Esto borrará las filas de GPU si idPadre es 100
     alertify.error('Componente eliminado');
 
-    // 4. Actualizar cálculos generales
+    // 4. Actualizar cálculos
     actualizarTotales();
     wats();
-    
-    // 5. Actualizar iconos visuales
-    elimClase(idPadre); 
-    
-    // 🔒 VÍNCULO DINÁMICO: Si el componente borrado fue el CPU, 
-    // obligamos a la categoría GPU (102) a re-evaluar su icono.
+
+    // 5. Actualizar iconos visuales de la categoría borrada
+    elimClase(idPadre);
+
+    // Si elimino el 104, también reseteo el visual del 105 (a amarillo) y viceversa.
+    if (idPadre == 104) elimClase(105);
+    if (idPadre == 105) elimClase(104);
+
+    // VÍNCULO DINÁMICO CPU -> GPU
     if (idPadre == 100) {
-        elimClase(102);
+        // AQUÍ ESTA LA MAGIA:
+        // Llamamos a elimClase para la GPU (102).
+        // Le pasamos 'habiaGpu' (true/false) como segundo parámetro.
+        // Si habiaGpu es true -> Pone fondo rojo + icono.
+        // Si habiaGpu es false -> Solo cambia icono (sin fondo rojo).
+        elimClase(102, habiaGpu);
     }
 }
 
-
-/* ==========================================
-   LÓGICA DE LIMPIEZA EN CASCADA (COMPLEJO)
-   ========================================== */
+/* =======================================
+   LÓGICA DE LIMPIEZA EN CASCADA
+   ======================================= */
 
 function eliminarHidden(idCategoria) {
     idCategoria = parseInt(idCategoria);
+    const inputVoltaje = document.getElementById('voltaje');
 
-    // 1. JERARQUÍA (Orden estricto de cascada)
-    const ordenCascada = [
-        100, // PROCESADOR
-        99,  // PLACA BASE
-        103, // GABINETE
-        101, // MEMORIA RAM
-        102, // TARJETA GRÁFICA
-        109, // FUENTE DE PODER
-        118, // UNIDADES DE DATOS
-        104, // COOLER DE AIRE
-        105, // COOLER DE LÍQUIDO
-        110, // PERIFERICOS (Teclado)
-        111, // PERIFERICOS (Mouse)
-        113, // PERIFERICOS (Audífonos)
-        119, // MONITORES
-        122  // UPS
-    ];
+    // 1. DEFINICIÓN DE DEPENDENCIAS (Quién elimina a quién)
+    // Las categorías aisladas (Periféricos, Monitores, UPS) no están aquí porque no eliminan a nadie más.
+    let idsAEliminar = [];
 
-    const indiceInicio = ordenCascada.indexOf(idCategoria);
-    if (indiceInicio === -1) return;
+    switch (idCategoria) {
+        case 100: // PROCESADOR: Elimina TODO excepto aislados (Monitor, Peri, UPS)
+            idsAEliminar = [99, 103, 101, 102, 109, 118, 104, 105];
+            break;
+        case 99: // PLACA BASE: Elimina TODO excepto Procesador y aislados
+            idsAEliminar = [103, 101, 102, 109, 118, 104, 105];
+            break;
+        case 103: // GABINETE: Solo elimina los Coolers
+            idsAEliminar = [104, 105];
+            break;
+        default:
+            // El resto (RAM, GPU, Fuente, Discos, Periféricos, etc.) solo se eliminan a sí mismos.
+            idsAEliminar = [];
+            break;
+    }
 
-    // Inputs a limpiar
+    // Agregamos la propia categoría que se disparó para limpiarla también
+    // (Usamos un Set para evitar duplicados si la lógica cambia futuro)
+    let totalAEliminar = [...new Set([idCategoria, ...idsAEliminar])];
+
+    // Inputs a limpiar (Mapa de IDs a Inputs Hidden)
     const inputsMap = {
-        100: document.getElementById('catProce'),
-        99:  document.getElementById('idMobo'),
-        103: document.getElementById('idCase'),
-        101: document.getElementById('idRam'),
-        102: document.getElementById('idGpu'),
-        109: document.getElementById('idFuente'),
-        118: document.getElementById('idDisco')
+        100: 'catProce', 99: 'idMobo', 103: 'idCase', 101: 'idRam',
+        102: 'idGpu', 109: 'idFuente', 118: 'idDisco'
     };
 
-    const inputVoltaje = document.getElementById('voltaje');
-    const opcionales = [110, 111, 113, 119, 122]; // Se ponen en Amarillo
+    // 2. PROCESAR ELIMINACIÓN
+    totalAEliminar.forEach(catActual => {
 
-    // 2. BUCLE EN CASCADA
-    for (let i = indiceInicio; i < ordenCascada.length; i++) {
-        let catActual = ordenCascada[i];
-        
-        // Buscamos si hay productos agregados en esta categoría
+        // A. Verificar si tenía productos (para saber si poner el Card Rojo)
+        // Buscamos filas en la tabla HTML
         let filas = document.querySelectorAll(`tr[id^="fila${catActual}"]`);
         let teniaProductos = filas.length > 0;
-        
-        // ¿Debemos cambiar el icono/color?
-        // SI es la categoría que el usuario clickeó borrar (idCategoria) -> SI
-        // SI es una categoría inferior Y tenía productos dentro -> SI
-        // SI es una categoría inferior Y estaba vacía -> NO (No la tocamos)
-        let debeResetearVisual = (catActual === idCategoria) || teniaProductos;
 
-        // --- A. LIMPIEZA DE DOM Y VOLTAJE ---
+        // B. Limpieza del DOM y Voltaje (Si hay filas)
         filas.forEach(fila => {
             let voltajeItem = parseFloat(fila.querySelector('#voltajeValor')?.value || 0);
             if (voltajeItem > 0) {
@@ -403,45 +423,45 @@ function eliminarHidden(idCategoria) {
             fila.remove();
         });
 
-        // --- B. LIMPIEZA DE INPUTS HIDDEN ---
-        if (inputsMap[catActual]) inputsMap[catActual].value = '';
+        // C. Limpieza de Inputs Hidden Generales
+        if (inputsMap[catActual]) {
+            let input = document.getElementById(inputsMap[catActual]);
+            if (input) input.value = '';
+        }
 
-        // --- C. LIMPIEZAS ESPECÍFICAS DE LÓGICA ---
-        if (catActual === 100) { 
-            document.getElementById('catMobo').value = ''; 
+        // D. Limpiezas Específicas de Lógica de Negocio
+        if (catActual === 100) { // Si borramos CPU
+            document.getElementById('catMobo').value = '';
             document.getElementById('voltajecpu').value = 0;
             document.getElementById('socketCool').value = 0;
             document.getElementById('coolNeed').value = 0;
             document.getElementById('gpuNeed').value = 0;
             $('#collapseCpu').collapse('hide');
-        } else if (catActual === 99) {
+        } else if (catActual === 99) { // Si borramos Mobo
             document.getElementById('catMobo').value = '';
             document.getElementById('slotsMobo').value = 0;
-        } else if (catActual === 102) {
+        } else if (catActual === 102) { // Si borramos GPU
             document.getElementById('voltajegpu').value = 0;
         }
 
-        // --- D. CAMBIO VISUAL CONDICIONAL ---
-        if (debeResetearVisual) {
-            let elIcono = document.getElementById(catActual);
-            if (elIcono) {
-                if (opcionales.includes(catActual)) {
-                    // MODO AMARILLO (Advertencia)
-                    $(elIcono).removeClass('fas fa-check fas fa-times').addClass('fas fa-exclamation');
-                    elIcono.style.color = '#ff7b11'; 
-                    $(elIcono).closest('.card').css('background', '#FEFFC5'); 
-                    $(elIcono).closest('.card-header').css('background', ''); 
-                } else {
-                    // MODO ROJO (Error/Reset normal)
-                    resetearVisual(catActual);
-                }
-            }
+        // E. ACTUALIZACIÓN VISUAL (ICONOS Y COLORES)
+        // Regla: El card rojo solo sale si la categoría tenía un producto
+        // EXCEPCIÓN: Si es la categoría 102 (GPU) y se eliminó por cascada del CPU (100), 
+        // no debe ponerse roja, debe ponerse naranja.
+
+        if (catActual === 102 && idCategoria === 100) {
+            // Caso especial: CPU eliminó a la GPU -> Resetear a Warning (Naranja)
+            resetearVisualGpuWarning();
+        } else if (teniaProductos || catActual === idCategoria) {
+            // Si tenía productos o es la categoría clickeada -> Resetear visualmente (Rojo o Amarillo según tipo)
+            elimClase(catActual, true); // true = forzar cambio de fondo si aplica
         }
-    }
+    });
 
     wats();
-    actualizarTotales(); 
+    actualizarTotales();
 }
+
 /* ==========================================
    ESTILOS Y VISUALIZACIÓN (ICONOS)
    ========================================== */
@@ -453,63 +473,85 @@ function cambiarClase(id) {
     // Cambiar a Check Verde
     $(el).removeClass('fas fa-times fas fa-exclamation').addClass('fas fa-check');
     el.style.color = 'green';
-
     // Fondo verde claro
     $(el).closest('.card-header').css('background', '#BCFFD6');
-    //$(el).closest('h2').css('background', '#BCFFD6'); // Opcional, dependiendo de estructura HTML exacta
+}
+
+// Función auxiliar para GPU cuando se elimina CPU
+function resetearVisualGpuWarning() {
+    var el = document.getElementById(102);
+    if (!el) return;
+
+    // Icono Warning Naranja, sin fondo rojo
+    $(el).removeClass('fas fa-check fas fa-times').addClass('fas fa-exclamation');
+    el.style.color = '#ff7b11'; // Naranja
+    $(el).closest('.card-header').css('background', ''); // Fondo neutro
 }
 
 function resetearVisual(id, alerta = true) {
     var el = document.getElementById(id);
     if (!el) return;
 
-    $(el).removeClass('fas fa-check').addClass('fas fa-times');
+    $(el).removeClass('fas fa-check fas fa-exclamation').addClass('fas fa-times');
     el.style.color = 'red';
 
-    // Fondo rojo claro
-    if (alerta) $(el).closest('.card-header').css('background', '#FFD3D3');
+    // Fondo rojo claro SOLO si alerta es true
+    if (alerta) {
+        $(el).closest('.card-header').css('background', '#FFD3D3');
+    } else {
+        $(el).closest('.card-header').css('background', '');
+    }
 }
 
-function elimClase(idCategoria) {
-    // Si todavía hay productos de esta categoría en la lista, no cambiamos el icono
+function elimClase(idCategoria, activarFondoRojo = false) {
+    idCategoria = parseInt(idCategoria);
+
+    // Si todavía hay productos de esta categoría, NO cambiamos nada
     if (document.querySelectorAll(`tr[id^="fila${idCategoria}-"]`).length > 0) return;
 
     var el = document.getElementById(idCategoria);
     if (!el) return;
 
-    // 1. CORRECCIÓN AQUÍ:
-    // Movimos 103 (Gabinete), 118 (Discos) y agregué 109 (Fuente) a CRÍTICAS para que se pongan ROJOS.
-    const criticas = [100, 99, 101, 103, 118, 109]; 
-    
-    // Quitamos esos IDs de opcionales
-    const opcionales = [104, 105, 110, 113, 111, 119, 122]; 
+    // Clasificación
+    const categoriasAmarillas = [104, 105, 119, 122];
+    const categoriasRojas = [99, 100, 101, 103, 109, 118, 110, 111, 113];
 
-    // Limpiar todas las clases de iconos posibles antes de asignar la nueva
+    // Limpiar clases previas
     $(el).removeClass('fas fa-check fa-times fa-exclamation');
 
-    if (criticas.includes(parseInt(idCategoria))) {
-        // Estado: X Roja y fondo rojo (Crítico)
-        resetearVisual(idCategoria);
-    } 
-    else if (idCategoria == 102) {
-        // Lógica dinámica para la GPU
+    // --- LÓGICA GPU (102) ---
+    if (idCategoria == 102) {
         let requiereGpu = document.getElementById('gpuNeed').value;
-        
+
         if (requiereGpu == 1) {
-            // Caso: El procesador actual EXIGE gráfica dedicada -> Se pone ROJO
-            resetearVisual(102, false); 
+            // Si es estrictamente necesaria por el CPU actual
+            resetearVisual(102, true);
         } else {
-            // Caso: El procesador tiene integradas -> Se pone AMARILLO
+            // Si es opcional o NO hay CPU (caso eliminar procesador)
+            // SIEMPRE ponemos el signo de admiración
             $(el).addClass('fas fa-exclamation');
-            el.style.color = '#ff7b11'; 
-            $(el).closest('.card-header').css('background', ''); 
+            el.style.color = '#ff7b11'; // Naranja
+
+            // EL FONDO ROJO DEPENDE DE SI HABÍA PRODUCTO
+            if (activarFondoRojo) {
+                $(el).closest('.card-header').css('background', '#FFD3D3');
+            } else {
+                $(el).closest('.card-header').css('background', '');
+            }
         }
     }
-    else if (opcionales.includes(parseInt(idCategoria))) {
-        // Estado: Signo de admiración naranja (Opcional)
+    // --- LÓGICA COOLERS ---
+    else if (categoriasAmarillas.includes(idCategoria)) {
         $(el).addClass('fas fa-exclamation');
         el.style.color = '#ff7b11';
-        $(el).closest('.card-header').css('background', ''); 
+        $(el).closest('.card').css('background', '');
+        $(el).closest('.card-header').css('background', '#FEFFC5');
+    }
+    // --- LÓGICA RESTO (Rojos) ---
+    else if (categoriasRojas.includes(idCategoria)) {
+        // En las demás categorías, si se llama a esta función es porque se borró,
+        // así que aplicamos el estilo rojo estándar.
+        resetearVisual(idCategoria, true);
     }
 }
 
@@ -540,21 +582,22 @@ function totalizarVentaNormal() { actualizarTotales(); }
 
 function buscarValorEnFila(idCategoriaPadre, idProducto, cantidad, precio, nombre) {
     var filasTabla = document.getElementById('lista').rows.length;
+    var idCat = parseInt(idCategoriaPadre);
 
-    // 1. Validar orden de inserción (CPU y Placa base primero)
-    if (filasTabla < 3 && (idCategoriaPadre != 100 && idCategoriaPadre != 99)) {
+    // 1. Validar orden de inserción
+    if (filasTabla < 3 && (idCat != 100 && idCat != 99)) {
         alertify.error('Antes debes agregar un procesador y una placa base');
         return true;
     }
 
-    // 2. CATEGORÍAS MÚLTIPLES (RAM, Almacenamiento, Monitores, Periféricos)
-    // Retornamos 'false' para que la ejecución SIGA hacia agregarTabla y se pueda sumar.
-    if ([101, 118, 119, 110, 111, 113].includes(parseInt(idCategoriaPadre))) {
+    // 2. CATEGORÍAS MÚLTIPLES (AQUÍ AGREGAMOS EL 999)
+    // Agregamos , 999 al final del array
+    if ([101, 118, 119, 110, 111, 113, 999].includes(idCat)) {
         return false;
     }
 
     // 3. VALIDACIÓN ESPECIAL DE COOLERS
-    if (idCategoriaPadre == 104 || idCategoriaPadre == 105) {
+    if (idCat == 104 || idCat == 105) {
         let existeCooler = document.querySelector('tr[id^="fila104-"]') || document.querySelector('tr[id^="fila105-"]');
         if (existeCooler) {
             alertify.error('Ya fue agregado un disipador');
@@ -563,8 +606,8 @@ function buscarValorEnFila(idCategoriaPadre, idProducto, cantidad, precio, nombr
         return false;
     }
 
-    // 4. CATEGORÍAS ÚNICAS (CPU, Mobo, GPU, Fuente, Case, etc.)
-    let existeDeLaCategoria = document.querySelector(`tr[id^="fila${idCategoriaPadre}-"]`);
+    // 4. CATEGORÍAS ÚNICAS
+    let existeDeLaCategoria = document.querySelector(`tr[id^="fila${idCat}-"]`);
     if (existeDeLaCategoria) {
         alertify.error('Ya existe un producto de esta categoría.');
         return true;
