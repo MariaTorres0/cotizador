@@ -150,9 +150,7 @@ $categorias = obtenerCategoriasCoti($conexion);
     <input type="hidden" id="catProce" />
     <input type="hidden" id="catMobo" />
     <input type="hidden" id="idMobo" />
-    <input type="hidden" id="idMoboCat" />
     <input type="hidden" id="idCase" />
-    <input type="hidden" id="idCaseCat" />
     <input type="hidden" id="idRam" />
     <input type="hidden" id="idGpu" />
     <input type="hidden" id="idFuente" />
@@ -168,6 +166,11 @@ $categorias = obtenerCategoriasCoti($conexion);
     <input type="hidden" id="coolNeed" value="0" />
     <input type="hidden" id="gpuNeed" value="0" />
     <input type="hidden" id="socketCool" value="0" />
+
+    <!-- Hidden para guardar id de categorías -->
+    <input type="hidden" id="idProceCat" />
+    <input type="hidden" id="idMoboCat" />
+    <input type="hidden" id="idCaseCat" />
 
     <div class="container second mb-4 pt-4 pt-lg-5 pb-4">
       <center>
