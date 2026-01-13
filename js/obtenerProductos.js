@@ -1,35 +1,77 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
     // Variable global para almacenar el último componente seleccionado
     var idCategoriaPrincipal = null;
 
     // Lista de IDs de categorías que se deben actualizar
-    var categoriasDependientes = [99, 103, 101, 102, 109, 104, 105];
-
-    // 1. DETECTAR CLIC EN "AÑADIR"
-    $(document).on('click', ".btn-agregar-producto", function() {
+    var categoriasDependientes = [99, 103, 101, 102, 109, 118, 104, 105];
+    
+    // DETECTAR CLIC EN "Agregar"
+    $(document).on('click', ".btn-agregar-producto", function () {
         var nuevoIdPrincipal = $(this).data('cate-principal');
         if (nuevoIdPrincipal) {
             idCategoriaPrincipal = nuevoIdPrincipal;
 
-            categoriasDependientes.forEach(function(catId) {
-                // Force reload = true para refrescar dependencias
+            categoriasDependientes.forEach(function (catId) {
                 ejecutarCargaAsociados(idCategoriaPrincipal, catId, true);
             });
         }
     });
 
-    // 2. DETECTAR CLIC EN EL ACORDEÓN
-    $(document).on('click', "button[data-cat-id]", function() {
-        var catIdClickeado = $(this).data('cat-id');
+    // DETECTAR CLIC EN EL ACORDEÓN
+    $(document).on('click', "button[data-cat-id]", function (e) {
+        e.preventDefault();
 
-        if (categoriasDependientes.includes(catIdClickeado)) {
-            // Se permite cargar si hay un principal, o si son categorías especiales que gestionan sus propias dependencias
-            if (idCategoriaPrincipal || 
+        var boton = $(this);
+        var catIdClickeado = boton.data('cat-id');
+        var targetId = boton.data('target');
+        var elTarget = $(targetId); // El div colapsable
+        var contenedorBody = elTarget.find('.card-body');
+
+        // ==========================================
+        // LÓGICA DE TOGGLE (ABRIR / CERRAR)
+        // ==========================================
+
+        // Si el acordeón ya tiene la clase 'show', significa que está abierto
+        if (elTarget.hasClass('show')) {
+            elTarget.collapse('hide');
+            return;
+        }
+
+        // ==================================
+        // CONFIGURACIÓN DEL ORDEN 
+        // ==================================
+
+        var ordenSecuencia = {
+            99: 100, 103: 99, 101: 103, 102: 101,
+            109: 102, 118: 109, 104: 118, 105: 118
+        };
+
+        if (ordenSecuencia[catIdClickeado]) {
+            var idRequerido = ordenSecuencia[catIdClickeado];
+            var yaComproAnterior = document.querySelectorAll(`tr[id^="fila${idRequerido}-"]`).length > 0;
+
+            if (!yaComproAnterior) {
+                contenedorBody.html(
+                    '<div class="alert alert-warning text-center m-0">' +
+                    '<i class="fas fa-lock"></i> ' +
+                    'Debe seleccionar los componentes en el orden de los botones.' +
+                    '</div>'
+                );
+
+                elTarget.collapse('show');
+                return;
+            }
+        }
+
+        if (typeof categoriasDependientes !== 'undefined' && categoriasDependientes.includes(catIdClickeado)) {
+            if ((typeof idCategoriaPrincipal !== 'undefined' && idCategoriaPrincipal) ||
                 [109, 104, 105, 99, 103].includes(catIdClickeado)) {
                 ejecutarCargaAsociados(idCategoriaPrincipal, catIdClickeado, false);
             }
         }
+
+        elTarget.collapse('show');
     });
 
     // Función principal de carga
@@ -46,45 +88,29 @@ $(document).ready(function() {
             return;
         }
 
-        // ============================================================
-        // 1. CASO ESPECIAL: PLACA BASE (ID 99) -> DEPENDE DE PROCESADOR
-        // ============================================================
+        // =======================
+        // CASOS ESPECIALES
+        // =======================
         if (padreId == 99) {
-            var idProceSeleccionado = $('#idProceCat').val(); // <--- OBTENER DEL HIDDEN PROCE
+            var idProceSeleccionado = $('#idProceCat').val();
 
             if (idProceSeleccionado && idProceSeleccionado != 0) {
                 principalId = idProceSeleccionado;
             } else {
-                contenedorBody.html(
-                    '<div class="alert alert-warning text-center">' +
-                    '<i class="fas fa-exclamation-triangle"></i> ' +
-                    'Por favor, primero selecciona un <b>Procesador</b>.</div>'
-                );
-                return; // Detener ejecución si no hay procesador
+                return;
             }
         }
 
-        // ============================================================
-        // 2. CASO ESPECIAL: GABINETE (ID 103) -> DEPENDE DE PLACA BASE
-        // ============================================================
         if (padreId == 103) {
-            var idMoboSeleccionado = $('#idMoboCat').val(); // <--- OBTENER DEL HIDDEN MOBO
+            var idMoboSeleccionado = $('#idMoboCat').val();
 
             if (idMoboSeleccionado && idMoboSeleccionado != 0) {
                 principalId = idMoboSeleccionado;
             } else {
-                contenedorBody.html(
-                    '<div class="alert alert-warning text-center">' +
-                    '<i class="fas fa-exclamation-triangle"></i> ' +
-                    'Por favor, primero selecciona una <b>Placa Base</b>.</div>'
-                );
-                return; // Detener ejecución si no hay placa
+                return;
             }
         }
 
-        // ============================================================
-        // 3. CASO ESPECIAL: FUENTE DE PODER (ID 109)
-        // ============================================================
         if (padreId == 109) {
             var wattsRequeridos = $('#voltaje').val() || 0;
 
@@ -94,7 +120,7 @@ $(document).ready(function() {
                 data: {
                     watts: wattsRequeridos
                 },
-                beforeSend: function() {
+                beforeSend: function () {
                     if (contenedorBody.html().trim() === "") {
                         contenedorBody.html(
                             '<div class="text-center">' +
@@ -103,20 +129,19 @@ $(document).ready(function() {
                         );
                     }
                 },
-                success: function(response) {
+                success: function (response) {
                     contenedorBody.html(response);
                     contenedorBody.data('loaded', true);
+
+                    restaurarEstadoVisual();
                 },
-                error: function() {
+                error: function () {
                     contenedorBody.html('<div class="text-center text-danger">Error al cargar datos.</div>');
                 }
             });
             return;
         }
 
-        // ============================================================
-        // 4. CASO ESPECIAL: COOLERS (ID 104 y 105) -> DEPENDE DE CASE
-        // ============================================================
         if (padreId == 104 || padreId == 105) {
             var idCaseSeleccionado = $('#idCaseCat').val();
 
@@ -132,26 +157,18 @@ $(document).ready(function() {
             }
         }
 
-        // ============================================================
-        // 5. ASOCIACIÓN PLACA BASE (RAM 101 / GPU 102) -> DEPENDE DE MOBO
-        // ============================================================
+        // ============================
+        // ASOCIACIÓN PLACA BASE 
+        // ============================
         if (padreId == 101 || padreId == 102) {
             var moboPrincipal = $('#idMoboCat').val();
             if (moboPrincipal && moboPrincipal != 0) {
                 principalId = moboPrincipal;
             }
-            // Nota: Si no hay mobo, caerá en el check final "if (!principalId)"
         }
 
-        // ============================================================
-        // EJECUCIÓN AJAX ESTÁNDAR (Para 99, 103, 101, 102, 100, 104, 105)
-        // ============================================================
-        
-        // Si después de toda la lógica no tenemos un ID principal válido
         if (!principalId && padreId != 100) {
-             // Opcional: Mostrar mensaje genérico si se intenta abrir sin dependencias
-             // y no cayó en los return anteriores
-             return; 
+            return;
         }
 
         $.ajax({
@@ -161,8 +178,7 @@ $(document).ready(function() {
                 cate_principal: principalId,
                 cate_padre: padreId
             },
-            beforeSend: function() {
-                // Spinner SOLO si está vacío
+            beforeSend: function () {
                 if (contenedorBody.html().trim() === "") {
                     contenedorBody.html(
                         '<div class="text-center">' +
@@ -171,13 +187,47 @@ $(document).ready(function() {
                     );
                 }
             },
-            success: function(response) {
+            success: function (response) {
                 contenedorBody.html(response);
                 contenedorBody.data('loaded', true);
+
+                restaurarEstadoVisual();
             },
-            error: function() {
+            error: function () {
                 contenedorBody.html('<div class="text-center text-danger">Error al cargar datos.</div>');
             }
         });
     }
 });
+
+function restaurarEstadoVisual() {
+    // Obtenemos todos los IDs de productos que ya están en la tabla de la izquierda
+    let productosEnTabla = [];
+    document.querySelectorAll('#lista input[name="idProducto[]"]').forEach(input => {
+        productosEnTabla.push(input.value);
+    });
+
+    // Recorremos los productos cargados en la derecha y los marcamos si coinciden
+    productosEnTabla.forEach(id => {
+        marcarCardVisualmente(id);
+    });
+}
+
+function marcarCardVisualmente(idProducto) {
+    let card = document.getElementById('card-prod-' + idProducto);
+    if (card) {
+        card.classList.remove('bg-light');
+        card.classList.add('producto-agregado');
+
+        let check = card.querySelector('.check-overlay');
+        if (check) check.style.display = 'block';
+
+        let btn = card.querySelector('.btn-agregar-producto');
+        if (btn) {
+            btn.innerHTML = 'Agregado';
+
+            btn.classList.remove('btn-info');
+            btn.classList.add('btn-success');
+        }
+    }
+}

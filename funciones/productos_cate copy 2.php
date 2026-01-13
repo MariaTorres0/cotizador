@@ -77,6 +77,7 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
     echo "<button class='btn btn-link {$btnCollapsed}' id='{$btnId}Btn'
                 style='color: {$color};'
                 type='button'
+                data-toggle='collapse'
                 data-target='#{$collapseId}'
                 aria-expanded='{$expanded}'
                 aria-controls='{$collapseId}'
@@ -138,7 +139,7 @@ function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
         echo "<div class='card' id='cat-{$subId}'>
                 <div class='card-header' id='{$headingSub}'>
                     <h2 class='mb-0 text-left'>
-                        <button class='btn btn-link collapsed' id='btnSub{$subId}'  type='button' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
+                        <button class='btn btn-link collapsed' id='btnSub{$subId}'  type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
                             " . strtoupper($sub['name']) . "
                         </button>
                     </h2>
@@ -173,7 +174,7 @@ function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
                 echo "<div class='card' id='cat-{$subsubId}'>
                         <div class='card-header' id='{$headingSubSub}'>
                             <h2 class='mb-0'>
-                                <button class='btn btn-link collapsed' id='btnSubSub{$subsubId}' data-level='subsub' type='button' data-target='#{$collapseSubSub}' aria-expanded='false' aria-controls='{$collapseSubSub}' style='color:#007bff;' data-cat-id='{$subsubId}'>
+                                <button class='btn btn-link collapsed' id='btnSubSub{$subsubId}' data-level='subsub' type='button' data-toggle='collapse' data-target='#{$collapseSubSub}' aria-expanded='false' aria-controls='{$collapseSubSub}' style='color:#007bff;' data-cat-id='{$subsubId}'>
                                     {$subsub['name']}
                                 </button>
                             </h2>
@@ -287,7 +288,7 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
                 echo "<div class='card' id='cat-{$subId}'>
                         <div class='card-header' id='{$headingSub}'>
                             <h2 class='mb-0 text-left'>
-                                <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
+                                <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
                                     " . strtoupper($sub['name']) . "
                                 </button>
                             </h2>
@@ -328,7 +329,7 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
                 echo "<div class='card' id='cat-{$subId}'>
                         <div class='card-header text-left' id='{$headingSub}'>
                             <h2 class='mb-0'>
-                                <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
+                                <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
                                     " . strtoupper($cat['name']) . "
                                 </button>
                             </h2>
@@ -367,7 +368,7 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
             echo "<div class='card' id='cat-{$subId}'>
                     <div class='card-header' id='{$headingSub}'>
                         <h2 class='mb-0 text-left'>
-                            <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
+                            <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
                                 " . strtoupper($sub['name']) . "
                             </button>
                         </h2>
@@ -483,6 +484,7 @@ function mostrarCardProducto($tipo, $categoriaNombre, $categoriaId = null, $pare
                             id='{$btnId}Btn'
                             style='color: #565652;'
                             type='button'
+                            data-toggle='collapse'
                             data-target='#{$collapseId}'
                             aria-expanded='false'
                             aria-controls='{$collapseId}'

@@ -34,8 +34,8 @@ function crearPath_ajax($nombreImg)
 
 // OBTENER WATTS DEL POST
 $wattsRequeridos = isset($_POST['watts']) ? floatval($_POST['watts']) : 0;
-$idCategoriaFuente = 109; 
-$idIdioma = 2; 
+$idCategoriaFuente = 109;
+$idIdioma = 2;
 
 // CONSULTA DIRECTA A PRODUCTOS
 $sqlProd = "SELECT p.id_product, p.id_category_default, pl.name AS productoNombre, 
@@ -67,23 +67,30 @@ if ($resProd && mysqli_num_rows($resProd) > 0) {
         $onclick = "agregarTabla(\"{$nombreProductoJS}\", {$precioNormal}, {$precioEfectivo}, 1, {$prod['id_product']}, {$prod['id_category_default']}, 109, \"{$nombreCategoriaJS}\", 0, {$prod['voltaje']}, 0, 0, \"0\")";
 
         echo "<div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
-                <div class='card bg-light mb-8 product-card'>
-                    <div class='card-header p-1 text-center product-header'>
+                <div class='card bg-light mb-8 product-card' id='card-prod-{$prod['id_product']}'>
+                    
+                    <div class='card-header p-1 text-center product-header' style='position: relative;'>
+                        
+                        <div class='check-overlay' style='display:none; position: absolute; top: 5px; right: 5px; z-index: 10;'>
+                            <i class='fas fa-check-circle' style='color: #28a745; font-size: 24px; background: white; border-radius: 50%;'></i>
+                        </div>
+                        
                         <img src='{$srcImg}' style='max-width: 75px; max-height: 75px;' class='zoom mt-3'><br>
                         <p>{$prod['productoNombre']}</p>
                     </div>
+                    
                     <div class='card-body p-2'>
                         <p class='card-title font-weight-bold' style='color:#6D6D6B'>Precio normal: $ {$precioNormal}</p>
                         <p class='card-title text-success font-weight-bold'>Precio efectivo: $ {$precioEfectivo}</p>
                         
                         <a class='btn btn-info btn-lg btn-block btn-agregar-producto' 
-                           style='color:#fff' 
-                           href='javascript:void(0)' 
-                           data-cate-principal='{$prod['id_category_default']}'
-                           onclick='{$onclick}'>+ Añadir</a>
+                        style='color:#fff' 
+                        href='javascript:void(0)' 
+                        data-cate-principal='{$prod['id_category_default']}'
+                        onclick='{$onclick}'>+ Agregar</a>
                     </div>
                 </div>
-              </div>";
+            </div>";
     }
     echo '</div>';
 } else {

@@ -500,3 +500,15 @@ i.fa-check {
     transform: scale(1.05);
     animation: imageFloat 2s ease-in-out infinite;
 }
+
+/* Agrega esto en tu archivo CSS o style */
+.producto-agregado {
+    border: 2px solid #28a745 !important;
+    background-color: #d4edda !important; /* Verde claro tipo alerta success */
+    transition: all 0.3s ease;
+}
+
+/* Opcional: animación para el check */
+.check-overlay i {
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}

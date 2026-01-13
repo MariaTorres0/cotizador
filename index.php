@@ -146,18 +146,16 @@ $categorias = obtenerCategoriasCoti($conexion);
         <img src="img/5.png" class="img-fluid logo" alt="KPC Hardware" />
       </a>
     </div>
-
+    <input type="hidden" id="catProce">
+    <input type="hidden" id="catMobo">
     <input type="hidden" id="catProce" />
-    <input type="hidden" id="catMobo" />
-    <input type="hidden" id="idMobo" />
     <input type="hidden" id="idCase" />
     <input type="hidden" id="idRam" />
     <input type="hidden" id="idGpu" />
     <input type="hidden" id="idFuente" />
     <input type="hidden" id="idDisco" />
-    <input type="hidden" id="slotsMobo" />
+    <input type="hidden" id="slotsMobo" value="0" />
     <input type="hidden" id="totalCantidad" />
-    <input type="hidden" id="cooler" />
     <input type="hidden" name="totalVentaEfectivo" id="totalVentaEfectivo" />
     <input type="hidden" name="totalVentaNormal" id="totalVentaNormal" />
     <input type="hidden" name="voltaje" id="voltaje" value="0" />
