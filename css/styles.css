@@ -1,18 +1,22 @@
 * {
-    font-family: sans-serif;
+  font-family: sans-serif;
 }
 
 body {
-    background: rgb(231, 61, 44);
-    background: linear-gradient(180deg, rgba(231, 61, 44, 1) 35%, rgba(128, 0, 0, 1) 100%);
+  background: rgb(231, 61, 44);
+  background: linear-gradient(
+    180deg,
+    rgba(231, 61, 44, 1) 35%,
+    rgba(128, 0, 0, 1) 100%
+  );
 }
 
 .first {
-    /*        background: rgb(231,61,44);
+  /*        background: rgb(231,61,44);
             background: linear-gradient(180deg, rgba(231,61,44,1) 35%, rgba(128,0,0,1) 100%);*/
-    text-align: center;
-    color: #fff;
-    height: 390px;
+  text-align: center;
+  color: #fff;
+  height: 390px;
 }
 
 /*.logo{
@@ -20,295 +24,298 @@ body {
     height: 300px;
 }*/
 .second {
-    margin-top: -130px;
-    background: rgb(230, 230, 230);
-    background: linear-gradient(90deg, rgba(230, 230, 230, 1) 35%, rgba(204, 204, 204, 1) 100%);
-    max-width: 95%;
-    border-radius: 12px;
-    padding: 0px;
+  margin-top: -130px;
+  background: rgb(230, 230, 230);
+  background: linear-gradient(
+    90deg,
+    rgba(230, 230, 230, 1) 35%,
+    rgba(204, 204, 204, 1) 100%
+  );
+  max-width: 95%;
+  border-radius: 12px;
+  padding: 0px;
 }
 
 .tercer {
-    background: #fff;
-    width: 95%;
-    border-radius: 12px;
-
+  background: #fff;
+  width: 95%;
+  border-radius: 12px;
 }
 
 .degradadoGris {
-    background: rgb(230, 230, 230);
-    background: linear-gradient(90deg, rgba(230, 230, 230, 1) 0%, rgba(226, 226, 226, 1) 87%);
+  background: rgb(230, 230, 230);
+  background: linear-gradient(
+    90deg,
+    rgba(230, 230, 230, 1) 0%,
+    rgba(226, 226, 226, 1) 87%
+  );
 }
 
 .total1 {
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .internoTotal1 {
-    background: #e73d2c;
-    height: 10px;
+  background: #e73d2c;
+  height: 10px;
 }
 
 .fondokpc {
-    background: #e73d2c;
-
+  background: #e73d2c;
 }
 
 /*div[class|="col"]{
     border: 1px solid #ffc107;
 }*/
 .interior1 {
-    float: left;
-    /*        background: #A2FCFE;*/
-
+  float: left;
+  /*        background: #A2FCFE;*/
 }
 
 .interior2 {
-    float: left;
+  float: left;
 }
 
 .textoPrecio {
-    color: #6D6D6B;
+  color: #6d6d6b;
 }
 
 .container-first {
-    max-width: 100%;
-
+  max-width: 100%;
 }
 
 .cuadroCel {
-    border-radius: 5px;
-    font-family: sans-serif;
-    color: #fff;
-    text-align: left;
-    /*    background: rgb(30,156,215);
+  border-radius: 5px;
+  font-family: sans-serif;
+  color: #fff;
+  text-align: left;
+  /*    background: rgb(30,156,215);
         background: linear-gradient(111deg, rgba(30,156,215,1) 0%, rgba(0,112,151,1) 100%);*/
-    background: linear-gradient(270deg, #215d72, #30bced);
-    background-size: 400% 400%;
+  background: linear-gradient(270deg, #215d72, #30bced);
+  background-size: 400% 400%;
 
-    -webkit-animation: AnimationName 6s ease infinite;
-    -moz-animation: AnimationName 6s ease infinite;
-    -o-animation: AnimationName 6s ease infinite;
-    animation: AnimationName 6s ease infinite;
+  -webkit-animation: AnimationName 6s ease infinite;
+  -moz-animation: AnimationName 6s ease infinite;
+  -o-animation: AnimationName 6s ease infinite;
+  animation: AnimationName 6s ease infinite;
 }
 
 i.fa-exclamation {
-    color: #ff7b11;
-    display: inline-block;
-    transition: all 0.3s ease;
+  color: #ff7b11;
+  display: inline-block;
+  transition: all 0.3s ease;
 }
 
 img.zoom {
-
-    /* Aumentamos el ancho y la altura durante 1 segundo */
-    transition: width 1s, height 1s, transform 0.5s;
-    -moz-transition: width 1s, height 1s, -moz-transform 0.5s;
-    -webkit-transition: width 1s, height 1s, -webkit-transform 0.5s;
-    -o-transition: width 1s, height 1s, -o-transform 0.5s;
+  /* Aumentamos el ancho y la altura durante 1 segundo */
+  transition: width 1s, height 1s, transform 0.5s;
+  -moz-transition: width 1s, height 1s, -moz-transform 0.5s;
+  -webkit-transition: width 1s, height 1s, -webkit-transform 0.5s;
+  -o-transition: width 1s, height 1s, -o-transform 0.5s;
 }
 
 .zoom:hover {
-    position: relative;
-    z-index: 10 !important;
-    /* tranformamos  su tamaño al pasar el mouse por encima con scale(2.5). */
-    transform: scale(3.5);
-    -moz-transform: scale(3.5);
-    /* Firefox */
-    -webkit-transform: scale(3.5);
-    /* Chrome - Safari */
-    -o-transform: scale(3.5);
-    /* Opera */
+  position: relative;
+  z-index: 10 !important;
+  /* tranformamos  su tamaño al pasar el mouse por encima con scale(2.5). */
+  transform: scale(3.5);
+  -moz-transform: scale(3.5);
+  /* Firefox */
+  -webkit-transform: scale(3.5);
+  /* Chrome - Safari */
+  -o-transform: scale(3.5);
+  /* Opera */
 }
 
 .btn-env {
-    display: inline-flex;
-    justify-content: center;
-    gap: 12px;
-    padding: 14px 28px;
-    border-radius: 14px;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 17px;
-    font-weight: 600;
-    color: #fff;
-    background: #e73d2c;
-    border: none;
-    box-shadow: 0 8px 20px rgba(255, 78, 80, 0.3);
-    transition: all 0.4s ease;
-    cursor: pointer;
-    overflow: hidden;
-    position: relative;
+  display: inline-flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #fff;
+  background: #e73d2c;
+  border: none;
+  box-shadow: 0 8px 20px rgba(255, 78, 80, 0.3);
+  transition: all 0.4s ease;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
 }
 
 .btn-env:hover {
-    transform: scale(1.03);
-    box-shadow: 0 12px 24px rgba(249, 35, 35, 0.4);
-    color: #fff;
+  transform: scale(1.03);
+  box-shadow: 0 12px 24px rgba(249, 35, 35, 0.4);
+  color: #fff;
 }
 
 .btn-env:hover i {
-    transform: translateX(5px);
-    animation: pulse 1s infinite;
+  transform: translateX(5px);
+  animation: pulse 1s infinite;
 }
 
 .btn-env i {
-    font-size: 18px;
-    transition: transform 0.3s ease;
+  font-size: 18px;
+  transition: transform 0.3s ease;
 }
 
 @keyframes pulse {
-    0% {
-        transform: translateX(5px) scale(1);
-    }
+  0% {
+    transform: translateX(5px) scale(1);
+  }
 
-    50% {
-        transform: translateX(7px) scale(1.1);
-    }
+  50% {
+    transform: translateX(7px) scale(1.1);
+  }
 
-    100% {
-        transform: translateX(5px) scale(1);
-    }
+  100% {
+    transform: translateX(5px) scale(1);
+  }
 }
 
 /* Animación swing para el icono de exclamación */
 @keyframes swing {
-    0%, 100% {
-        transform: rotate(0deg) scale(1);
-    }
-    25% {
-        transform: rotate(-20deg) scale(1.15);
-    }
-    75% {
-        transform: rotate(20deg) scale(1.15);
-    }
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-20deg) scale(1.15);
+  }
+  75% {
+    transform: rotate(20deg) scale(1.15);
+  }
 }
 
 /* Animación bounce para el check */
 @keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-8px);
-    }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 /* Animación flip suave para la imagen */
 @keyframes flipIn {
-    0% {
-        transform: perspective(600px) rotateY(90deg);
-        opacity: 0;
-    }
-    100% {
-        transform: perspective(600px) rotateY(0deg);
-        opacity: 1;
-    }
+  0% {
+    transform: perspective(600px) rotateY(90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: perspective(600px) rotateY(0deg);
+    opacity: 1;
+  }
 }
 
 /* Animación subtle de imagen al hover */
 @keyframes imageFloat {
-    0%, 100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-4px);
-    }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
 }
 
 .btn-env:focus {
-    outline: none;
-    box-shadow: none;
+  outline: none;
+  box-shadow: none;
 }
 
 .btn-text {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
-
 @-webkit-keyframes AnimationName {
-    0% {
-        background-position: 0% 52%
-    }
+  0% {
+    background-position: 0% 52%;
+  }
 
-    50% {
-        background-position: 100% 49%
-    }
+  50% {
+    background-position: 100% 49%;
+  }
 
-    100% {
-        background-position: 0% 52%
-    }
+  100% {
+    background-position: 0% 52%;
+  }
 }
 
 @-moz-keyframes AnimationName {
-    0% {
-        background-position: 0% 52%
-    }
+  0% {
+    background-position: 0% 52%;
+  }
 
-    50% {
-        background-position: 100% 49%
-    }
+  50% {
+    background-position: 100% 49%;
+  }
 
-    100% {
-        background-position: 0% 52%
-    }
+  100% {
+    background-position: 0% 52%;
+  }
 }
 
 @-o-keyframes AnimationName {
-    0% {
-        background-position: 0% 52%
-    }
+  0% {
+    background-position: 0% 52%;
+  }
 
-    50% {
-        background-position: 100% 49%
-    }
+  50% {
+    background-position: 100% 49%;
+  }
 
-    100% {
-        background-position: 0% 52%
-    }
+  100% {
+    background-position: 0% 52%;
+  }
 }
 
 @keyframes AnimationName {
-    0% {
-        background-position: 0% 52%
-    }
+  0% {
+    background-position: 0% 52%;
+  }
 
-    50% {
-        background-position: 100% 49%
-    }
+  50% {
+    background-position: 100% 49%;
+  }
 
-    100% {
-        background-position: 0% 52%
-    }
+  100% {
+    background-position: 0% 52%;
+  }
 }
 
 .cuadroVer {
-    border-radius: 5px;
-    font-family: sans-serif;
-    color: #fff;
-    text-align: left;
-    background: linear-gradient(270deg, #178938, #18b954);
-    background-size: 400% 400%;
+  border-radius: 5px;
+  font-family: sans-serif;
+  color: #fff;
+  text-align: left;
+  background: linear-gradient(270deg, #178938, #18b954);
+  background-size: 400% 400%;
 
-    -webkit-animation: AnimationName 6s ease infinite;
-    -moz-animation: AnimationName 6s ease infinite;
-    -o-animation: AnimationName 6s ease infinite;
-    animation: AnimationName 6s ease infinite;
-
+  -webkit-animation: AnimationName 6s ease infinite;
+  -moz-animation: AnimationName 6s ease infinite;
+  -o-animation: AnimationName 6s ease infinite;
+  animation: AnimationName 6s ease infinite;
 }
 
 .cuadroRed {
-    border-radius: 5px;
-    font-family: sans-serif;
-    color: #fff;
-    text-align: left;
-    background: linear-gradient(270deg, #a5382e, #e11f1f);
-    background-size: 400% 400%;
+  border-radius: 5px;
+  font-family: sans-serif;
+  color: #fff;
+  text-align: left;
+  background: linear-gradient(270deg, #a5382e, #e11f1f);
+  background-size: 400% 400%;
 
-    -webkit-animation: AnimationName 6s ease infinite;
-    -moz-animation: AnimationName 6s ease infinite;
-    -o-animation: AnimationName 6s ease infinite;
-    animation: AnimationName 6s ease infinite;
-
+  -webkit-animation: AnimationName 6s ease infinite;
+  -moz-animation: AnimationName 6s ease infinite;
+  -o-animation: AnimationName 6s ease infinite;
+  animation: AnimationName 6s ease infinite;
 }
 
 /*.texto1 {
@@ -320,195 +327,294 @@ img.zoom {
 
 /*// If the screen size is 600px wide or less, set the font-size of <div> to 30px*/
 @media screen and (max-width: 450px) {
-    .logo {}
+  .logo {
+  }
 
-    .first {
-        height: 300px;
-    }
+  .first {
+    height: 300px;
+  }
 
-    .second {
-        margin-top: -120px;
-    }
-
-
+  .second {
+    margin-top: -120px;
+  }
 }
 
 @media screen and (max-width: 400px) {
-    .tamaño400 {
-        color: #6D6D6B;
-        font-size: 18px;
-    }
+  .tamaño400 {
+    color: #6d6d6b;
+    font-size: 18px;
+  }
 
-    .first {
-        height: 220px;
-    }
+  .first {
+    height: 220px;
+  }
 
-    .second {
-        margin-top: -80px;
-    }
+  .second {
+    margin-top: -80px;
+  }
 }
 
 .card-gris {
-    background-color: #f8f9fa;
-    /* gris claro tipo Bootstrap */
+  background-color: #f8f9fa;
+  /* gris claro tipo Bootstrap */
 }
 
 /* Tabla */
 #lista {
-    width: 100%;
-    background-color: #fff;
-    font-family: 'Segoe UI', sans-serif;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  width: 100%;
+  background-color: #fff;
+  font-family: "Segoe UI", sans-serif;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
 #lista thead th {
-    background-color: #2e3e4e;
-    color: #fff;
-    font-weight: bold;
-    padding: 12px 8px;
-    border: 1px solid #dee2e6;
-    text-align: center;
+  background-color: #2e3e4e;
+  color: #fff;
+  font-weight: bold;
+  padding: 12px 8px;
+  border: 1px solid #dee2e6;
+  text-align: center;
 }
 
 #lista td {
-    padding: 10px;
-    border: 1px solid #dee2e6;
-    vertical-align: middle;
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  vertical-align: middle;
 }
 
 #lista tbody tr:hover {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
 }
 
 .table-responsive.tabla-mis-componentes {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 #lista td .fa-trash {
-    color: #e73d2c;
-    cursor: pointer;
-    transition: color 0.3s;
+  color: #e73d2c;
+  cursor: pointer;
+  transition: color 0.3s;
 }
 
 #lista td .fa-trash:hover {
-    color: #c82333;
+  color: #c82333;
 }
 
 .tabla-mis-componentes {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 @media (max-width: 576px) {
-    #lista th,
-    #lista td {
-        font-size: 13px;
-        padding: 8px;
-    }
+  #lista th,
+  #lista td {
+    font-size: 13px;
+    padding: 8px;
+  }
 
-    #lista thead th {
-        white-space: nowrap;
-    }
+  #lista thead th {
+    white-space: nowrap;
+  }
 }
 
 /* Animaciones sutiles del acordeón - Sin cambios estructurales */
 .accordion .card-header {
-    transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .accordion .card-header:hover {
-    background-color: rgba(231, 61, 44, 0.02);
+  background-color: rgba(231, 61, 44, 0.02);
 }
 
 .accordion .card-header .btn-link {
-    transition: color 0.25s ease, padding-left 0.25s ease;
+  transition: color 0.25s ease, padding-left 0.25s ease;
 }
 
 .accordion .card-header .btn-link:hover {
-    color: #e73d2c !important;
-    padding-left: 8px;
+  color: #e73d2c !important;
+  padding-left: 8px;
 }
 
 .accordion .card-header .btn-link:not(.collapsed) {
-    color: #e73d2c !important;
+  color: #e73d2c !important;
 }
 
 /* Animación del icono de categoría (primera imagen) */
 .accordion .card-header img {
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .accordion .card-header:hover img {
-    transform: scale(1.08) rotate(2deg);
-    filter: drop-shadow(0 2px 4px rgba(231, 61, 44, 0.3));
+  transform: scale(1.08) rotate(2deg);
+  filter: drop-shadow(0 2px 4px rgba(231, 61, 44, 0.3));
 }
 
 .accordion .card-header .btn-link:not(.collapsed) img {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 /* Animación del icono X */
 .accordion i.fa-times {
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    opacity: 0.6;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  opacity: 0.6;
 }
 
 .accordion .card-header:hover i.fa-times {
-    opacity: 1;
-    transform: rotate(90deg) scale(1.15);
-    text-shadow: 0 0 6px rgba(200, 35, 51, 0.3);
+  opacity: 1;
+  transform: rotate(90deg) scale(1.15);
+  text-shadow: 0 0 6px rgba(200, 35, 51, 0.3);
 }
 
 .accordion .card-header:hover i.fa-exclamation {
-    animation: swing 0.8s ease-in-out infinite;
-    transform-origin: center;
-    font-weight: bold;
+  animation: swing 0.8s ease-in-out infinite;
+  transform-origin: center;
+  font-weight: bold;
 }
 
 /* Animación suave para el texto del botón */
 .accordion .btn-link span {
-    transition: letter-spacing 0.3s ease;
+  transition: letter-spacing 0.3s ease;
 }
 
 .accordion .card-header:hover .btn-link span {
-    letter-spacing: 0.3px;
+  letter-spacing: 0.3px;
 }
 
 /* Animaciones para iconos de estado */
 i.fa-check {
-    color: green;
-    animation: bounce 1.8s ease-in-out infinite;
-    display: inline-block;
+  color: green;
+  animation: bounce 1.8s ease-in-out infinite;
+  display: inline-block;
 }
 
 /* Imagen con animación mejorada */
 .accordion .card-header img {
-    transition: all 0.3s ease;
-    animation: flipIn 0.6s ease-out;
+  transition: all 0.3s ease;
+  animation: flipIn 0.6s ease-out;
 }
 
 .accordion .card-header:hover img {
-    transform: scale(1.08) rotateY(5deg);
-    filter: drop-shadow(0 2px 4px rgba(231, 61, 44, 0.3));
+  transform: scale(1.08) rotateY(5deg);
+  filter: drop-shadow(0 2px 4px rgba(231, 61, 44, 0.3));
 }
 
 .accordion .card-header .btn-link:not(.collapsed) img {
-    transform: scale(1.05);
-    animation: imageFloat 2s ease-in-out infinite;
+  transform: scale(1.05);
+  animation: imageFloat 2s ease-in-out infinite;
 }
 
 /* Agrega esto en tu archivo CSS o style */
 .producto-agregado {
-    border: 2px solid #28a745 !important;
-    background-color: #d4edda !important; /* Verde claro tipo alerta success */
-    transition: all 0.3s ease;
+  border: 2px solid #28a745 !important;
+  background-color: #d4edda !important; /* Verde claro tipo alerta success */
+  transition: all 0.3s ease;
 }
 
 /* Opcional: animación para el check */
 .check-overlay i {
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.mb-4,
+.my-4 {
+  margin-bottom: 2.5rem !important;
+}
+
+/* Diseño movil */
+
+/* =========================================
+   ESTILOS RESPONSIVE PARA MÓVIL (APP MODE)
+   ========================================= */
+@media screen and (max-width: 950px) {
+  /* 1. Arreglo de la Tabla de Componentes */
+  #lista {
+    table-layout: auto !important; /* Desactiva el ancho fijo que rompe el móvil */
+    width: 100% !important;
+  }
+
+  /* Sobrescribir los anchos fijos de las columnas definidos anteriormente */
+  #lista th:nth-child(1),
+  #lista td:nth-child(1),
+  #lista th:nth-child(2),
+  #lista td:nth-child(2),
+  #lista th:nth-child(3),
+  #lista td:nth-child(3),
+  #lista th:nth-child(4),
+  #lista td:nth-child(4),
+  #lista th:nth-child(5),
+  #lista td:nth-child(5) {
+    width: auto !important;
+  }
+
+  /* Hacer la letra de la tabla un poco más pequeña para que quepa */
+  #lista th,
+  #lista td {
+    font-size: 11px !important;
+    padding: 5px !important;
+  }
+
+  /* Ocultar columnas menos importantes si es necesario (opcional) */
+  /* #lista th:nth-child(2), #lista td:nth-child(2) { display: none; } */
+
+  /* 2. Arreglo de los Encabezados de Categoría (Botones) */
+  .accordion .card-header .btn-link {
+    font-size: 15px; /* Letra más legible en móvil */
+    padding-left: 0 !important;
+    text-decoration: none !important;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .pr-5,
+  .px-5 {
+    padding-right: 1rem !important;
+  }
+
+  /* 3. Arreglo específico para el texto de sugerencia de Fuentes */
+  .fuente-hint {
+    display: block; /* Forzar que baje a una nueva línea */
+    font-size: 11px; /* Letra más pequeña tipo subtítulo */
+    color: #7a2e2e; /* Un rojo oscuro legible */
+    margin-top: 2px;
+    padding-left: 43px; /* Para que se alinee con el texto y no con el icono */
+    line-height: 1.2;
+  }
+
+  /* 4. Ajustes generales de espaciado para sensación de App */
+  .container.second {
+    width: 100% !important;
+    max-width: 98% !important;
+  }
+
+  .h5,
+  h5 {
+    font-size: 1rem !important;
+  }
+
+  .interior1,
+  .interior2 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Ajustar títulos grandes */
+  h3.font-weight-bold {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  /* 5. Tarjetas de Productos */
+  .product-card .card-body {
+    padding: 10px !important;
+  }
+
+  .btn-agregar-producto {
+    font-size: 14px;
+    padding: 8px;
+  }
 }

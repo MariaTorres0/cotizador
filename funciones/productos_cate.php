@@ -72,9 +72,10 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
 
     echo "<div class='card' id='cat-{$catId}'>
             <div class='card-header degradadoGris' id='{$headingId}'>
-                <h2 class='mb-0 text-left d-flex align-items-center'>";
+                <h2 class='mb-0 text-left d-flex align-items-center flex-wrap'>";
 
-    echo "<button class='btn btn-link {$btnCollapsed}' id='{$btnId}Btn'
+    echo "<button class='btn btn-link {$btnCollapsed}'
+                id='{$btnId}Btn'
                 style='color: {$color};'
                 type='button'
                 data-target='#{$collapseId}'
@@ -100,10 +101,26 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
 
     echo "</button>";
 
-    if ($catId == 109) {
-        echo "<span class='fuente-hint ml-0'>
+    /* ===== AVISOS DESKTOP ===== */
+    if ($catId == 101) {
+        echo "<span class='fuente-hint ml-md-2 d-none d-md-inline'>
+                La cantidad máxima de memorias RAM depende de los slots disponibles y de la capacidad soportada por la placa base seleccionada
+              </span>";
+    } else if ($catId == 109) {
+        echo "<span class='fuente-hint ml-md-2 d-none d-md-inline'>
                 Las fuentes se sugieren según el consumo de los componentes seleccionados
               </span>";
+    }
+
+    /* ===== AVISOS SOLO MÓVIL (debajo del nombre) ===== */
+    if ($catId == 101) {
+        echo "<div class='fuente-hint w-100 mt-1 d-block d-md-none'>
+                La cantidad máxima de memorias RAM depende de los slots disponibles y de la capacidad soportada por la placa base seleccionada
+              </div>";
+    } else if ($catId == 109) {
+        echo "<div class='fuente-hint w-100 mt-1 d-block d-md-none'>
+                Las fuentes se sugieren según el consumo de los componentes seleccionados
+              </div>";
     }
 
     echo "      </h2>
@@ -115,6 +132,7 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
             </div>
         </div>";
 }
+
 
 function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
 {
@@ -280,14 +298,14 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
 
             if ($prodCount > 0) {
                 $sIndex++;
-                $collapseSub = "collapseSub{$sIndex}";
-                $headingSub = "headingSub{$sIndex}";
+                $collapseSub = "collapseUnitSub{$sIndex}";
+                $headingSub = "headingUnitSub{$sIndex}";
                 $subId = $sub['id_category'];
 
                 echo "<div class='card' id='cat-{$subId}'>
                         <div class='card-header' id='{$headingSub}'>
                             <h2 class='mb-0 text-left'>
-                                <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
+                                <button class='btn btn-link collapsed' id='btnUnitSub{$subId}' type='button' data-toggle='collapse' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
                                     " . strtoupper($sub['name']) . "
                                 </button>
                             </h2>
