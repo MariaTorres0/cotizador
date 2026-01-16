@@ -534,7 +534,7 @@ function elimClase(idCategoria, teniaProductos) {
     const grupoAmarillo = [102, 104, 105, 999, 119, 122];
     const grupoRojo = [100, 99, 101, 103, 109, 118];
 
-    // Primero limpiamos todas las clases de estado
+    // Limpiar clases
     $(el).removeClass('fas fa-check fa-times fa-exclamation');
 
     // LOGICA GRUPO AMARILLO
@@ -549,30 +549,16 @@ function elimClase(idCategoria, teniaProductos) {
             el.style.color = 'red';
             if (teniaProductos) $(el).closest('.card-header').css('background', '#FFD3D3');
         } else {
-            // Si es opcional vacío, se queda en advertencia
             $(el).addClass('fas fa-exclamation');
             el.style.color = '#ff7b11'; 
             if (teniaProductos) $(el).closest('.card-header').css('background', '#FEFFC5');
-            else {
-                // Si no tenía productos, limpiamos el fondo para que quede limpio
-                $(el).closest('.card-header').css('background', ''); 
-            }
         }
     }
     // LOGICA GRUPO ROJO
     else if (grupoRojo.includes(idCategoria)) {
-        if (teniaProductos) {
-            // Si acabamos de borrar un producto que existía, marcamos rojo
-            $(el).addClass('fas fa-times');
-            el.style.color = 'red';
-            $(el).closest('.card-header').css('background', '#FFD3D3');
-        } else {
-            // Si ya estaba vacío, lo reseteamos a estado neutro
-                        $(el).addClass('fas fa-times');
-
-            el.style.color = 'red'; 
-            $(el).closest('.card-header').css('background', ''); 
-        }
+        $(el).addClass('fas fa-times');
+        el.style.color = 'red';
+        if (teniaProductos) $(el).closest('.card-header').css('background', '#FFD3D3');
     }
 }
 

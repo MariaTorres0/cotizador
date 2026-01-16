@@ -107,7 +107,7 @@ i.fa-exclamation {
   transition: all 0.3s ease;
 }
 
-img.zoom {
+img.zoom mt-3 {
   /* Aumentamos el ancho y la altura durante 1 segundo */
   transition: width 1s, height 1s, transform 0.5s;
   -moz-transition: width 1s, height 1s, -moz-transform 0.5s;
@@ -448,10 +448,7 @@ img.zoom {
   transition: all 0.3s ease;
 }
 
-.accordion .card-header:hover img {
-  transform: scale(1.08) rotate(2deg);
-  filter: drop-shadow(0 2px 4px rgba(231, 61, 44, 0.3));
-}
+
 
 .accordion .card-header .btn-link:not(.collapsed) img {
   transform: scale(1.05);
@@ -495,11 +492,6 @@ i.fa-check {
 .accordion .card-header img {
   transition: all 0.3s ease;
   animation: flipIn 0.6s ease-out;
-}
-
-.accordion .card-header:hover img {
-  transform: scale(1.08) rotateY(5deg);
-  filter: drop-shadow(0 2px 4px rgba(231, 61, 44, 0.3));
 }
 
 .accordion .card-header .btn-link:not(.collapsed) img {
