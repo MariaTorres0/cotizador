@@ -676,29 +676,43 @@ function buscarCooler() {
     return ids;
 }
 
+
+/* ============================
+   FUNCIONES VISUALES
+   ============================ */
 function marcarCardVisualmente(idProducto, idCategoriaPadre) {
     let card = document.getElementById('card-prod-' + idProducto);
     
-    // Lista completa de categorías múltiples
+    // Lista completa de categorías que permiten múltiples productos
+    // Agregué 110, 111, 113 que son los IDs reales de periféricos según tu código anterior
     const categoriasMultiples = [101, 118, 110, 111, 113, 119, 122, 999]; 
 
     if (card) {
+        // --- 1. CAMBIO VISUAL (FONDO VERDE Y CHECK) ---
         card.classList.remove('bg-light');
-        card.classList.add('producto-agregado'); 
+        card.classList.add('producto-agregado');
 
         let check = card.querySelector('.check-overlay');
-        if (check) check.style.display = 'block'; 
+        if (check) check.style.display = 'block';
 
+        // --- 2. LÓGICA DEL BOTÓN ---
         let btn = card.querySelector('.btn-agregar-producto');
         
         if (btn) {
-            // Si falta la categoría, la leemos del botón para evitar parpadeos
+            // CORRECCIÓN DEL PARPADEO:
+            // Si la función fue llamada sin categoría (undefined), la leemos del propio botón
             if (!idCategoriaPadre) {
                 idCategoriaPadre = parseInt(btn.getAttribute('data-cate-principal'));
             }
 
+            // Siempre ponemos el estilo verde
+            btn.classList.remove('btn-info');
+            btn.classList.add('btn-success');
+
+            // --- 3. DECISIÓN DE TEXTO ---
             if (categoriasMultiples.includes(idCategoriaPadre)) {
                 
+                // CASO MEMORIA RAM (101) - Lógica de slots
                 if (idCategoriaPadre == 101) {
                     let slotsInput = document.getElementById('slotsMobo');
                     let slotsTotal = slotsInput ? (parseInt(slotsInput.value) || 0) : 0;
@@ -709,27 +723,21 @@ function marcarCardVisualmente(idProducto, idCategoriaPadre) {
                         ramsUsadas += parseInt(input.value) || 0;
                     });
 
+                    // Solo cambia a "Agregado" si YA NO CABEN más
                     if (ramsUsadas >= slotsTotal && slotsTotal > 0) {
                         btn.innerHTML = 'Agregado';
-                        btn.classList.remove('btn-info');
-                        btn.classList.add('btn-success');
-                    } 
-                    else {
+                    } else {
                         btn.innerHTML = '+ Agregar';
-                        btn.classList.remove('btn-success'); 
-                        btn.classList.add('btn-info');       
                     }
                 } 
+                // CASO PERIFÉRICOS, DISCOS, ETC. (Siempre + Agregar)
                 else {
                     btn.innerHTML = '+ Agregar'; 
-                    btn.classList.remove('btn-success');
-                    btn.classList.add('btn-info');
                 }
 
             } else {
+                // CASO CPU, MOBO, GPU, CASE, FUENTE (Productos únicos)
                 btn.innerHTML = 'Agregado';
-                btn.classList.remove('btn-info');
-                btn.classList.add('btn-success');
             }
         }
     }

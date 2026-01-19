@@ -109,10 +109,22 @@ i.fa-exclamation {
 
 img.zoom mt-3 {
   /* Aumentamos el ancho y la altura durante 1 segundo */
-  transition: width 1s, height 1s, transform 0.5s;
-  -moz-transition: width 1s, height 1s, -moz-transform 0.5s;
-  -webkit-transition: width 1s, height 1s, -webkit-transform 0.5s;
-  -o-transition: width 1s, height 1s, -o-transform 0.5s;
+  transition:
+    width 1s,
+    height 1s,
+    transform 0.5s;
+  -moz-transition:
+    width 1s,
+    height 1s,
+    -moz-transform 0.5s;
+  -webkit-transition:
+    width 1s,
+    height 1s,
+    -webkit-transform 0.5s;
+  -o-transition:
+    width 1s,
+    height 1s,
+    -o-transform 0.5s;
 }
 
 .zoom:hover {
@@ -431,7 +443,9 @@ img.zoom mt-3 {
 }
 
 .accordion .card-header .btn-link {
-  transition: color 0.25s ease, padding-left 0.25s ease;
+  transition:
+    color 0.25s ease,
+    padding-left 0.25s ease;
 }
 
 .accordion .card-header .btn-link:hover {
@@ -447,8 +461,6 @@ img.zoom mt-3 {
 .accordion .card-header img {
   transition: all 0.3s ease;
 }
-
-
 
 .accordion .card-header .btn-link:not(.collapsed) img {
   transform: scale(1.05);
@@ -549,17 +561,12 @@ i.fa-check {
     padding: 5px !important;
   }
 
-  /* Ocultar columnas menos importantes si es necesario (opcional) */
-  /* #lista th:nth-child(2), #lista td:nth-child(2) { display: none; } */
-
-  /* 2. Arreglo de los Encabezados de Categoría (Botones) */
   .accordion .card-header .btn-link {
-    font-size: 15px; /* Letra más legible en móvil */
+    font-size: 15px;
     padding-left: 0 !important;
     text-decoration: none !important;
     display: flex;
     align-items: center;
-    width: 100%;
   }
 
   .pr-5,
@@ -567,17 +574,15 @@ i.fa-check {
     padding-right: 1rem !important;
   }
 
-  /* 3. Arreglo específico para el texto de sugerencia de Fuentes */
   .fuente-hint {
-    display: block; /* Forzar que baje a una nueva línea */
-    font-size: 11px; /* Letra más pequeña tipo subtítulo */
-    color: #7a2e2e; /* Un rojo oscuro legible */
+    display: block;
+    font-size: 11px;
+    color: #7a2e2e;
     margin-top: 2px;
-    padding-left: 43px; /* Para que se alinee con el texto y no con el icono */
+    padding-left: 43px;
     line-height: 1.2;
   }
 
-  /* 4. Ajustes generales de espaciado para sensación de App */
   .container.second {
     width: 100% !important;
     max-width: 98% !important;
@@ -600,7 +605,7 @@ i.fa-check {
     text-align: center;
   }
 
-  /* 5. Tarjetas de Productos */
+  /* Tarjetas de Productos */
   .product-card .card-body {
     padding: 10px !important;
   }
@@ -609,4 +614,99 @@ i.fa-check {
     font-size: 14px;
     padding: 8px;
   }
+  
+  /* Slots movil */
+
+  .ram-counter-box {
+    height: 26px;
+    padding: 0 6px;
+    margin-left: 6px;
+  }
+  .ram-counter-text {
+    font-size: 0.75rem;
+    margin-right: 5px;
+  }
+  .ram-slot-indicator {
+    width: 4px;
+    height: 12px;
+    margin-left: 2px;
+  }
+}
+
+/* Diseño slots */
+
+.ram-counter-box {
+  display: inline-flex !important;
+  align-items: center;
+  background: linear-gradient(135deg, #ff6b5b 0%, #e73d2c 100%);
+  box-shadow: 0 4px 10px rgba(231, 61, 44, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 0 10px;
+  margin-left: 10px;
+  color: #ffffff;
+  height: 28px;
+  vertical-align: middle;
+  white-space: nowrap;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.ram-counter-box::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.ram-counter-text {
+  font-size: 0.85rem;
+  margin-right: 8px;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.5px;
+}
+
+.ram-indicators-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+/* Ranura vacia */
+.ram-slot-indicator {
+  display: block;
+  width: 6px;
+  height: 16px;
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-left: 3px;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Ranura LLENA */
+.ram-slot-indicator.filled {
+  background-color: #39ff14;
+  border-color: #39ff14;
+  box-shadow: 0 0 6px rgba(57, 255, 20, 0.8);
+  transform: scaleY(1.15);
+}
+
+/* Capacidad completa */
+.ram-counter-box.full-capacity {
+  background: linear-gradient(135deg, #2ecc71 0%, #218838 100%);
+  border-color: #218838;
+  box-shadow: 0 4px 10px rgba(40, 167, 69, 0.4);
 }

@@ -103,8 +103,13 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
 
     /* ===== AVISOS DESKTOP ===== */
     if ($catId == 101) {
-        echo "<span class='fuente-hint ml-md-2 d-none d-md-inline'>
-                La cantidad máxima de memorias RAM depende de los slots disponibles y de la capacidad soportada por la placa base seleccionada
+        echo "<div id='ram-live-container' class='ram-counter-box d-none d-sm-inline-flex'>
+            <span class='ram-counter-text'>Slots: 0 / 0</span>
+            <div class='ram-indicators-container'>
+                </div>
+          </div>";
+        echo "<span class='fuente-hint ml-md-3 d-none d-md-inline'>
+                La cantidad máxima de memorias RAM depende de los slots disponibles en la placa base seleccionada
               </span>";
     } else if ($catId == 109) {
         echo "<span class='fuente-hint ml-md-2 d-none d-md-inline'>
