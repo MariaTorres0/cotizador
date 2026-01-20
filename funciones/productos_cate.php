@@ -120,7 +120,7 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
     /* ===== AVISOS SOLO MÓVIL (debajo del nombre) ===== */
     if ($catId == 101) {
         echo "<div class='fuente-hint w-100 mt-1 d-block d-md-none'>
-                La cantidad máxima de memorias RAM depende de los slots disponibles y de la capacidad soportada por la placa base seleccionada
+                La cantidad máxima de memorias RAM depende de los slots disponibles en la placa base seleccionada
               </div>";
     } else if ($catId == 109) {
         echo "<div class='fuente-hint w-100 mt-1 d-block d-md-none'>

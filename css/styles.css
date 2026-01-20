@@ -618,13 +618,13 @@ i.fa-check {
   /* Slots movil */
 
   .ram-counter-box {
-    height: 26px;
-    padding: 0 6px;
-    margin-left: 6px;
+    height: 26px !important;
+    padding: 0 6px !important;
+    margin-left: 5px !important;
   }
   .ram-counter-text {
-    font-size: 0.75rem;
-    margin-right: 5px;
+    font-size: 0.75rem !important;
+    margin-right: 5px !important;
   }
   .ram-slot-indicator {
     width: 4px;
