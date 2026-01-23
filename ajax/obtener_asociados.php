@@ -34,6 +34,8 @@ function crearPath_ajax($nombreImg)
 
 $cate_principal = isset($_POST['cate_principal']) ? $_POST['cate_principal'] : 0;
 $cate_padre     = isset($_POST['cate_padre']) ? $_POST['cate_padre'] : 0;
+// --- NUEVO: Recibimos los slots de la placa base ---
+$slots_placa    = isset($_POST['slots_placa']) ? intval($_POST['slots_placa']) : 0;
 
 if ($cate_principal == 0 || $cate_padre == 0) {
     exit;
@@ -69,17 +71,25 @@ if (empty($lista_ids)) {
     exit;
 }
 
+// --- LOGICA DE FILTRADO ---
 if ($cate_padre == 104 || $cate_padre == 105) {
     // Si es cooler, filtramos por la categoría fija y validamos el tamaño compatible
     $condicionFiltro = "cp.id_category = $cate_padre AND p.tamano IN ($lista_ids)";
-} else {
+} 
+// --- NUEVO: Validación exclusiva para RAM (ID 101) ---
+elseif ($cate_padre == 101 && $slots_placa > 0) {
+    // Filtramos por categoría Y verificamos que el kit de RAM no ocupe más slots de los que tiene la placa
+    $condicionFiltro = "cp.id_category IN ($lista_ids) AND p.slots_ram <= $slots_placa";
+} 
+else {
     // Lógica normal para el resto de componentes
     $condicionFiltro = "cp.id_category IN ($lista_ids)";
 }
 
 // Consultar productos con la condición dinámica
-$sqlProd = "SELECT cp.id_product, cp.id_category, pl.name AS productoNombre, p.price, p.reference, p.slots, 
-                   p.voltaje, p.cooler, p.gpu, p.socketCooler, cl.name AS nombreCategoria
+$sqlProd = "SELECT cp.id_product, cp.id_category, pl.name AS productoNombre, p.price, p.reference, 
+                   p.slots, p.slots_ram, p.voltaje, p.cooler, p.gpu, p.socketCooler, 
+                   cl.name AS nombreCategoria
             FROM ps_category_product cp
             INNER JOIN ps_product p ON cp.id_product = p.id_product
             INNER JOIN ps_product_lang pl ON cp.id_product = pl.id_product
@@ -102,7 +112,8 @@ if (mysqli_num_rows($resProd) > 0) {
         $nombreProductoJS = str_replace(['"', "'"], '', $prod['productoNombre']);
         $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
 
-        $onclick = "agregarTabla(\"{$nombreProductoJS}\", {$precioNormal}, {$precioEfectivo}, 1, {$prod['id_product']}, {$prod['id_category']}, {$cate_padre}, \"{$nombreCategoriaJS}\", {$prod['slots']}, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\")";
+        // Asegúrate de que el orden aquí coincida con tu nueva función JS agregarTabla
+        $onclick = "agregarTabla(\"{$nombreProductoJS}\", {$precioNormal}, {$precioEfectivo}, 1, {$prod['id_product']}, {$prod['id_category']}, {$cate_padre}, \"{$nombreCategoriaJS}\", {$prod['slots']}, {$prod['slots_ram']}, {$prod['voltaje']}, {$prod['gpu']}, \"{$prod['socketCooler']}\")";
 
         echo "<div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
         <div class='card bg-light mb-8 product-card' id='card-prod-{$prod['id_product']}'>
@@ -132,3 +143,4 @@ if (mysqli_num_rows($resProd) > 0) {
 } else {
     echo "<div class='col-12'><div class='alert alert-info text-center'>No hay stock disponible para las categorías compatibles seleccionadas.</div></div>";
 }
+?>

@@ -170,7 +170,11 @@ function socket(socketType) {
    GESTIÓN DE LA TABLA
    =============================== */
 
-function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, idProducto, idCategoria, idCategoriaPadre, nombreCategoria, flag, voltaje, cooler, gpu, socketVal) {
+// He actualizado los argumentos para recibir slotsPCI y slotsRam desde el PHP
+function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, idProducto, idCategoria, idCategoriaPadre, nombreCategoria, slotsPCI, slotsRam, voltaje, gpu, socketVal) {
+
+    // 1. DEFINIR PESO DEL SLOT: Solo si es RAM (101) tomamos el valor real, si no, vale 1.
+    let pesoSlot = (idCategoriaPadre == 101) ? (parseInt(slotsRam) || 1) : 1;
 
     if (buscarValorEnFila(idCategoriaPadre, idProducto, cantidad, precioEfectivo, nombreProducto)) return;
 
@@ -183,21 +187,36 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
         let inputSubtotal = filaExistente.querySelector('#totalDetalle');
         let nuevaCantidad = parseInt(inputCanti.value) + parseInt(cantidad);
 
+        // --- VALIDACIÓN EXCLUSIVA PARA RAM (101) ---
         if (idCategoriaPadre == 101) {
-            let totalActualRams = 0;
-            document.querySelectorAll('tr[id^="fila101-"] #canti').forEach(el => totalActualRams += parseInt(el.value));
+            let slotsOcupados = 0;
+            // Recorremos las filas existentes para sumar sus pesos reales
+            document.querySelectorAll('tr[id^="fila101-"]').forEach(fila => {
+                let qty = parseInt(fila.querySelector('#canti').value) || 0;
+                // Si estamos en la fila que vamos a modificar, usamos la 'nuevaCantidad' para simular
+                if (fila.id === idFila) {
+                   qty = nuevaCantidad;
+                }
+                let peso = parseInt(fila.querySelector('#valSlotsRam').value) || 1;
+                slotsOcupados += (qty * peso);
+            });
+            
+            // Nota: En este bloque no sumamos '+ cantidad' extra porque ya usamos 'nuevaCantidad' arriba
 
-            if (totalActualRams + cantidad > slotsDisponibles) {
-                alertify.error('Ya has alcanzado los slots máximos de la placa base');
+            if (slotsOcupados > slotsDisponibles) {
+                alertify.error(`No hay suficientes slots. Intentas ocupar ${slotsOcupados} de ${slotsDisponibles}.`);
                 return;
             }
-            if (totalActualRams + cantidad === slotsDisponibles) {
+            if (slotsOcupados === slotsDisponibles) {
                 setTimeout(() => { $('#collapseRam').collapse('hide'); }, 300);
             }
         }
+        // -------------------------------------------
 
         let nuevoSubtotal = nuevaCantidad * precioEfectivo;
         inputCanti.value = nuevaCantidad;
+        
+        // Actualizamos HTML de fila existente (Agregamos el hidden valSlotsRam para mantener consistencia)
         filaExistente.querySelector('td:nth-child(4)').innerHTML = `
             <input type="hidden" id="canti" name="cantidadEnviar[]" value="${nuevaCantidad}">
             ${nuevaCantidad}
@@ -206,27 +225,37 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
         inputSubtotal.value = nuevoSubtotal;
         filaExistente.querySelector('td:nth-child(3)').innerHTML = `
             <input type="hidden" id="totalDetalle" name="totalDetalle[]" value="${nuevoSubtotal}">
+            <input type="hidden" id="valSlotsRam" value="${pesoSlot}">
             $${nuevoSubtotal.toFixed(2)}`;
 
         alertify.success('Cantidad actualizada');
     }
     else {
+        // --- VALIDACIÓN EXCLUSIVA PARA RAM (101) ---
         if (idCategoriaPadre == 101) {
-            let totalActualRams = 0;
-            document.querySelectorAll('tr[id^="fila101-"] #canti').forEach(el => totalActualRams += parseInt(el.value));
+            let slotsOcupados = 0;
+            document.querySelectorAll('tr[id^="fila101-"]').forEach(fila => {
+                let qty = parseInt(fila.querySelector('#canti').value) || 0;
+                let peso = parseInt(fila.querySelector('#valSlotsRam').value) || 1;
+                slotsOcupados += (qty * peso);
+            });
 
-            if (totalActualRams + cantidad > slotsDisponibles) {
-                alertify.error('Ya has alcanzado los slots máximos de la placa base');
+            // Calculamos lo que ocupará la NUEVA inserción
+            let slotsNuevos = cantidad * pesoSlot;
+
+            if (slotsOcupados + slotsNuevos > slotsDisponibles) {
+                alertify.error(`No hay suficientes slots. Intentas ocupar ${slotsNuevos} más, excediendo el límite.`);
                 return;
             }
-            if (totalActualRams + cantidad === slotsDisponibles) {
+            if (slotsOcupados + slotsNuevos === slotsDisponibles) {
                 setTimeout(() => { $('#collapseRam').collapse('hide'); }, 300);
             }
         } else {
             cerrarMenu(idCategoriaPadre);
         }
+        // -------------------------------------------
 
-        pasarId(idProducto, idCategoriaPadre, flag);
+        pasarId(idProducto, idCategoriaPadre, slotsPCI); // Usamos slotsPCI que viene del PHP
 
         if (idCategoriaPadre == 100) {
             document.getElementById('idProceCat').value = idCategoria;
@@ -238,24 +267,30 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
             document.getElementById('idCaseCat').value = idCategoria;
         }
 
-        // Si el producto que estamos agregando es un procesador
+        // Lógica Procesador (GPU / Cooler Warning)
         if (idCategoriaPadre == 100) {
             document.getElementById('gpuNeed').value = gpu;
-            document.getElementById('coolNeed').value = cooler;
+            document.getElementById('coolNeed').value = (typeof cooler !== 'undefined') ? cooler : 0; // Ajuste por si cooler no llega directo
 
-
-            if (cooler == 1) {
-                [104, 105].forEach(idCool => {
-                    let hayCooler = document.querySelector(`tr[id^="fila${idCool}-"]`);
-
-                    if (!hayCooler) {
-                        let elIcon = document.getElementById(idCool);
-                        if (elIcon) {
-                            $(elIcon).removeClass('fas fa-check fas fa-exclamation').addClass('fas fa-times');
-                            elIcon.style.color = 'red';
-                        }
+            // Check coolers
+             [104, 105].forEach(idCool => {
+                let hayCooler = document.querySelector(`tr[id^="fila${idCool}-"]`);
+                if (!hayCooler) {
+                    let elIcon = document.getElementById(idCool);
+                    if (elIcon) {
+                        $(elIcon).removeClass('fas fa-check fas fa-exclamation').addClass('fas fa-times');
+                        elIcon.style.color = 'red';
                     }
-                });
+                }
+            });
+            
+            // Check GPU
+            if (gpu == 1) {
+                let hayGpu = document.querySelector('tr[id^="fila102-"]');
+                if (!hayGpu) resetearVisual(102, false);
+            } else {
+                let hayGpu = document.querySelector('tr[id^="fila102-"]');
+                if (!hayGpu) resetearVisualGpuWarning();
             }
         }
 
@@ -269,19 +304,6 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
         if (idCategoriaPadre == 104) cambiarClase(105);
         if (idCategoriaPadre == 105) cambiarClase(104);
 
-        if (idCategoriaPadre == 100) {
-            document.getElementById('gpuNeed').value = gpu;
-            if (gpu == 1) {
-                let hayGpu = document.querySelector('tr[id^="fila102-"]');
-                if (!hayGpu) {
-                    resetearVisual(102, false);
-                }
-            } else {
-                let hayGpu = document.querySelector('tr[id^="fila102-"]');
-                if (!hayGpu) resetearVisualGpuWarning();
-            }
-        }
-
         if (voltaje > 0 && (idCategoriaPadre == 100 || idCategoriaPadre == 102)) {
             let factor = (idCategoriaPadre == 102) ? 1.1 : 1.8;
             let voltajeProcesado = (voltaje * factor);
@@ -292,12 +314,9 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
                 document.getElementById('voltajegpu').value = voltajeProcesado.toFixed(2);
             }
 
-            // Actualizamos el total general de voltaje 
             let vCpu = parseFloat(document.getElementById('voltajecpu').value) || 0;
             let vGpu = parseFloat(document.getElementById('voltajegpu').value) || 0;
-
             document.getElementById('voltaje').value = (vCpu + vGpu).toFixed(2);
-
             wats();
         }
 
@@ -317,6 +336,7 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
                 <td align="center">$${precioEfectivo.toFixed(2)}</td>
                 <td align="center">
                     <input type="hidden" id="totalDetalle" name="totalDetalle[]" value="${subtotal}">
+                    <input type="hidden" id="valSlotsRam" value="${pesoSlot}">
                     $${subtotal.toFixed(2)}
                 </td>
                 <td align="center">
@@ -329,16 +349,10 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
                 </td>
             </tr>`;
 
-        // ... (código anterior donde calculas subtotales y creas el HTML tr) ...
-
         $('#lista tbody').append(htmlFila);
 
-        // === CAMBIO IMPORTANTE AQUÍ ===
-        // Solo mostramos el mensaje de éxito
         alertify.success('Componente añadido');
 
-        // EVITAMOS QUE SE MARQUE COMO "AGREGADO" SI ES RAM O MULTI-PRODUCTO
-        // Si NO es RAM (101) y NO es Almacenamiento/Periféricos, entonces sí marca visualmente
         if (idCategoriaPadre != 101 && ![118, 110, 111, 113, 119, 122].includes(parseInt(idCategoriaPadre))) {
             marcarCardVisualmente(idProducto);
         }
@@ -347,8 +361,6 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
     actualizarTotales();
     if (idCategoriaPadre == 101) sacarCantidades(idCategoriaPadre);
 
-    // === NUEVA LÍNEA ===
-    // Forzamos el recálculo de slots siempre al final de cualquier agregación
     if (idCategoriaPadre == 101 || idCategoriaPadre == 99) {
         actualizarVisualRam();
     }
@@ -757,10 +769,14 @@ function desmarcarCardVisualmente(idProducto) {
 function actualizarVisualRam() {
     let slotsInput = document.getElementById('slotsMobo');
     let slotsTotal = slotsInput ? (parseInt(slotsInput.value) || 0) : 0;
-    let ramsUsadas = 0;
+    let slotsOcupadosReales = 0;
     
-    document.querySelectorAll('tr[id^="fila101-"] input[name="cantidadEnviar[]"]').forEach(input => {
-        ramsUsadas += parseInt(input.value) || 0;
+    // Recorremos la tabla buscando el input hidden que agregamos antes
+    document.querySelectorAll('tr[id^="fila101-"]').forEach(fila => {
+        let cantidad = parseInt(fila.querySelector('input[name="cantidadEnviar[]"]').value) || 0;
+        let pesoSlot = parseInt(fila.querySelector('#valSlotsRam').value) || 1; // Aquí toma el 1, 2, 4, etc.
+        
+        slotsOcupadosReales += (cantidad * pesoSlot);
     });
 
     // Solo buscamos el contenedor ÚNICO
@@ -768,13 +784,14 @@ function actualizarVisualRam() {
     
     if (containerPrincipal) {
         const textoCounter = containerPrincipal.querySelector('.ram-counter-text');
-        if (textoCounter) textoCounter.innerHTML = `Slots: ${ramsUsadas} / ${slotsTotal}`;
+        if (textoCounter) textoCounter.innerHTML = `Slots: ${slotsOcupadosReales} / ${slotsTotal}`;
 
         const indicatorsContainer = containerPrincipal.querySelector('.ram-indicators-container');
         if (indicatorsContainer) {
             let indicatorsHtml = '';
             for (let i = 0; i < slotsTotal; i++) {
-                let estadoClass = (i < ramsUsadas) ? 'filled' : '';
+                // Si el índice es menor a los slots ocupados reales, se pinta
+                let estadoClass = (i < slotsOcupadosReales) ? 'filled' : '';
                 indicatorsHtml += `<div class="ram-slot-indicator ${estadoClass}"></div>`;
             }
             indicatorsContainer.innerHTML = indicatorsHtml;
@@ -782,6 +799,6 @@ function actualizarVisualRam() {
 
         containerPrincipal.classList.remove('full-capacity', 'no-slots');
         if (slotsTotal === 0) containerPrincipal.classList.add('no-slots');
-        else if (ramsUsadas >= slotsTotal && slotsTotal > 0) containerPrincipal.classList.add('full-capacity');
+        else if (slotsOcupadosReales >= slotsTotal && slotsTotal > 0) containerPrincipal.classList.add('full-capacity');
     }
 }
