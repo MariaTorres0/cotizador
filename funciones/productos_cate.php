@@ -55,7 +55,7 @@ function obtenerCategoriasCoti($conexion)
     return $categorias;
 }
 
-$perifericos_ids = [110, 111, 113];
+$perifericos_ids = [189, 110, 111, 113, 153, 152, 112];
 
 
 function mostrarCategoria($categoria, $index, $show = false, $color = '#565652', $showIcon = true, $parentId = '#accordionExample')
@@ -138,7 +138,6 @@ function mostrarCategoria($categoria, $index, $show = false, $color = '#565652',
         </div>";
 }
 
-
 function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
 {
     global $conexion, $factorClass;
@@ -206,7 +205,7 @@ function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
                                 <div class='row'>";
 
                 // PRODUCTOS
-                $sqlProd = "SELECT cp.id_product, pl.name AS productoNombre, p.price, p.reference, p.slots, p.voltaje, p.cooler, p.gpu, p.socketCooler,
+                $sqlProd = "SELECT cp.id_product, pl.name AS productoNombre, p.price, p.reference, p.slots, p.slots_ram, p.voltaje, p.cooler, p.gpu, p.socketCooler,
                                    cl.name AS nombreCategoria
                             FROM ps_category_product cp
                             INNER JOIN ps_product_lang pl ON cp.id_product = pl.id_product
@@ -230,7 +229,7 @@ function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
                     }
 
                     echo "<div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
-                            <div class='card bg-light mb-8 product-card' id='card-prod-{$prod['id_product']}'>
+                            <div class='card mb-8 product-card' id='card-prod-{$prod['id_product']}'>
                                 
                                 <div class='card-header p-1 text-center product-header' style='position: relative;'>
                                     
@@ -243,14 +242,14 @@ function mostrarProce($idCategoriaPadre = 100, $parentId = '#accordionCPU')
                                 </div>
                                 
                                 <div class='card-body p-2'>
-                                    <p class='card-title font-weight-bold' style='color:#6D6D6B'>Precio normal: $ " . redondear($precioNormal) . "</p>
+                                    <p class='card-title font-weight-bold'>Precio normal: $ " . redondear($precioNormal) . "</p>
                                     <p class='card-title text-success font-weight-bold'>Precio efectivo: $ " . redondear($precioEfectivo) . "</p>
                                     
                                     <a class='btn btn-info btn-lg btn-block btn-agregar-producto' 
                                     style='color:#fff' 
                                     href='javascript:void(0)' 
                                     data-cate-principal='{$subsub['id_category']}'
-                                    onclick='agregarTabla(\"{$prod['productoNombre']}\", " . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, {$prod['id_product']}, {$subsub['id_category']}, $idCategoriaPadre, \"{$prod['nombreCategoria']}\", {$prod['slots']}, {$prod['voltaje']}, {$prod['cooler']}, {$prod['gpu']}, \"{$prod['socketCooler']}\")'>
+                                    onclick='agregarTabla(\"{$prod['productoNombre']}\", " . redondear($precioNormal) . "," . redondear($precioEfectivo) . ", 1, {$prod['id_product']}, {$subsub['id_category']}, $idCategoriaPadre, \"{$prod['nombreCategoria']}\", {$prod['slots']}, {$prod['slots_ram']}, {$prod['voltaje']}, {$prod['gpu']}, \"{$prod['socketCooler']}\", {$prod['cooler']})'>
                                     + Agregar
                                     </a>
                                 </div>
@@ -327,7 +326,7 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
         }
     } elseif ($tipo === 'perifericos') {
         $parentId = $parentId ?? '#accordionPerifericos';
-        $perifericosIds = [110, 111, 113];
+        $perifericosIds = [189, 110, 111, 113, 153, 152, 112];
 
         foreach ($perifericosIds as $catId) {
             $sqlCat = "SELECT c.id_category, cl.name 
@@ -411,6 +410,51 @@ function mostrarProductos($tipo = 'unidades', $idCategoriaPadre = null, $parentI
         echo "<div class='row'>";
         mostrarProductosPorCategoria($idCategoria, $idCategoria, $tipo);
         echo "</div>";
+    } elseif ($tipo === 'ventiladores') {
+        $parentId = $parentId ?? '#accordionVentiladores';
+        $idCategoriaPadre = $idCategoriaPadre ?? 106;
+
+        $sqlSub = "SELECT c.id_category, cl.name, COUNT(p.id_product) AS totalProductos
+                   FROM ps_category c
+                   INNER JOIN ps_category_lang cl ON c.id_category = cl.id_category
+                   INNER JOIN ps_category_product cp ON cp.id_category = c.id_category
+                   INNER JOIN ps_product p ON cp.id_product = p.id_product AND p.active = 1
+                   WHERE c.id_parent = $idCategoriaPadre AND c.active = 1 AND cl.id_lang = 2
+                   GROUP BY c.id_category
+                   HAVING totalProductos > 0
+                   ORDER BY cl.name ASC";
+        $resSub = mysqli_query($conexion, $sqlSub);
+
+        while ($sub = mysqli_fetch_assoc($resSub)) {
+            $sIndex++;
+            $collapseSub = "collapse" . ucfirst($tipo) . "Sub{$sIndex}";
+            $headingSub = "heading" . ucfirst($tipo) . "Sub{$sIndex}";
+            $subId = $sub['id_category'];
+
+            echo "<div class='card' id='cat-{$subId}'>
+                    <div class='card-header' id='{$headingSub}'>
+                        <h2 class='mb-0 text-left'>
+                            <button class='btn btn-link collapsed' id='btnSub{$subId}' type='button' data-target='#{$collapseSub}' aria-expanded='false' aria-controls='{$collapseSub}' style='color:#007bff;' data-cat-id='{$subId}'>
+                                " . strtoupper($sub['name']) . "
+                            </button>
+                        </h2>
+                    </div>
+                    <div id='{$collapseSub}' class='collapse' aria-labelledby='{$headingSub}' data-parent='{$parentId}'>
+                        <div class='card-body'>
+                            <div class='row'>";
+            mostrarProductosPorCategoria($sub['id_category'], $idCategoriaPadre, $tipo);
+            echo "      </div>
+                        </div>
+                    </div>
+                  </div>";
+        }
+    } elseif ($tipo === 'muebles') {
+        $parentId = $parentId ?? '#accordionMuebles';
+        $idCategoria = $idCategoriaPadre ?? 121;
+
+        echo "<div class='row'>";
+        mostrarProductosPorCategoria($idCategoria, $idCategoria, $tipo);
+        echo "</div>";
     }
 }
 
@@ -419,7 +463,7 @@ function mostrarProductosPorCategoria($idCategoria, $idCategoriaPadre, $tipo)
     global $conexion, $factorClass;
 
     $sqlProd = "SELECT cp.id_product, pl.name AS productoNombre, p.price, p.reference, p.slots,
-                       p.voltaje, p.cooler, p.gpu, p.socketCooler,
+                       p.slots_ram, p.voltaje, p.cooler, p.gpu, p.socketCooler,
                        cl.name AS nombreCategoria
                 FROM ps_category_product cp
                 INNER JOIN ps_product_lang pl ON cp.id_product = pl.id_product
@@ -441,21 +485,28 @@ function mostrarProductosPorCategoria($idCategoria, $idCategoriaPadre, $tipo)
         $nombreProductoJS  = str_replace(['"', "'"], '', $prod['productoNombre']);
         $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
 
-        $params = ["\"{$nombreProductoJS}\"", $precioNormal, $precioEfectivo, 1, $prod['id_product'], $idCategoria, $idCategoriaPadre, "\"{$nombreCategoriaJS}\"",  $prod['slots']];
-
-        // Solo UPS y unidades reciben estos parámetros extra
-        if (in_array($tipo, ['unidades', 'ups'])) {
-            $params[] = $prod['voltaje'];
-            $params[] = $prod['cooler'];
-            $params[] = $prod['gpu'];
-            $params[] = "\"{$prod['socketCooler']}\"";
-        }
+        $params = [
+            "\"{$nombreProductoJS}\"", 
+            $precioNormal, 
+            $precioEfectivo, 
+            1, 
+            $prod['id_product'], 
+            $idCategoria, 
+            $idCategoriaPadre, 
+            "\"{$nombreCategoriaJS}\"", 
+            $prod['slots'], 
+            $prod['slots_ram'] ?? 0, 
+            $prod['voltaje'] ?? 0, 
+            $prod['gpu'] ?? 0, 
+            "\"{$prod['socketCooler']}\"", 
+            $prod['cooler'] ?? 0
+        ];
 
         $onclick = "agregarTabla(" . implode(',', $params) . ")";
 
         echo "
             <div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
-                <div class='card bg-light mb-8 product-card' id='card-prod-{$prod['id_product']}'>
+                <div class='card mb-8 product-card' id='card-prod-{$prod['id_product']}'>
                     
                     <div class='card-header p-1 text-center product-header' style='position: relative;'>
                     
@@ -468,7 +519,7 @@ function mostrarProductosPorCategoria($idCategoria, $idCategoriaPadre, $tipo)
                     </div>
                     
                     <div class='card-body p-2'>
-                        <p class='card-title font-weight-bold' style='color:#6D6D6B'>
+                        <p class='card-title font-weight-bold'>
                             Precio normal: $ {$precioNormal}
                         </p>
                         <p class='card-title text-success font-weight-bold'>

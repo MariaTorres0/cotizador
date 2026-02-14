@@ -18,7 +18,6 @@ $(document).ready(function () {
         }
     });
 
-    // DETECTAR CLIC EN EL ACORDEÓN
     $(document).on('click', "button[data-cat-id]", function (e) {
         e.preventDefault();
 
@@ -31,7 +30,6 @@ $(document).ready(function () {
         // ======================================
         // RESPALDO DEL CONTENIDO ORIGINAL 
         // ======================================
-        // Si aun no hemos guardado el contenido original y lo que hay no es una alerta, guardamos los productos en memoria para no perderlos
         if (!contenedorBody.data('contenido-original') && contenedorBody.find('.alert').length === 0) {
             contenedorBody.data('contenido-original', contenedorBody.html());
         }
@@ -133,12 +131,14 @@ $(document).ready(function () {
 
         if (padreId == 109) {
             var wattsRequeridos = $('#voltaje').val() || 0;
+            var idCategoriaCase = $('#idCaseCat').val() || 0;
 
             $.ajax({
                 url: 'ajax/obtener_fuentes.php',
                 type: 'POST',
                 data: {
-                    watts: wattsRequeridos
+                    watts: wattsRequeridos,
+                    id_cat_case: idCategoriaCase
                 },
                 beforeSend: function () {
                     if (contenedorBody.html().trim() === "") {
@@ -191,13 +191,17 @@ $(document).ready(function () {
             return;
         }
 
-        $.ajax({
-            url: 'ajax/obtener_asociados.php',
-            type: 'POST',
-            data: {
-                cate_principal: principalId,
-                cate_padre: padreId
-            },
+var idTamanioMoboCase = $('#idTamanioMoboCase').val() || 0;
+
+$.ajax({
+    url: 'ajax/obtener_asociados.php',
+    type: 'POST',
+    data: {
+        cate_principal: principalId,
+        cate_padre: padreId,
+        // Agregamos esta nueva variable al envío
+        id_tamanio_mobo_case: idTamanioMoboCase 
+    },
             beforeSend: function () {
                 if (contenedorBody.html().trim() === "") {
                     contenedorBody.html(
@@ -238,27 +242,26 @@ function restaurarEstadoVisual() {
 
 function marcarCardVisualmente(idProducto, idCategoriaPadre) {
     let card = document.getElementById('card-prod-' + idProducto);
-    
-    // Lista completa de categorías múltiples
-    const categoriasMultiples = [101, 118, 110, 111, 113, 119, 122, 999]; 
+
+    // Lista completa de categorias multiples
+    const categoriasMultiples = [101, 118, 110, 111, 113, 153, 152, 112, 119, 122, 999, 106, 121, 189];
 
     if (card) {
-        card.classList.remove('bg-light');
-        card.classList.add('producto-agregado'); 
+        card.classList.add('producto-agregado');
 
         let check = card.querySelector('.check-overlay');
-        if (check) check.style.display = 'block'; 
+        if (check) check.style.display = 'block';
 
         let btn = card.querySelector('.btn-agregar-producto');
-        
+
         if (btn) {
-            // Si falta la categoría, la leemos del botón para evitar parpadeos
+            // Si falta la categoría, la leemos del boton para evitar parpadeos
             if (!idCategoriaPadre) {
                 idCategoriaPadre = parseInt(btn.getAttribute('data-cate-principal'));
             }
 
             if (categoriasMultiples.includes(idCategoriaPadre)) {
-                
+
                 if (idCategoriaPadre == 101) {
                     let slotsInput = document.getElementById('slotsMobo');
                     let slotsTotal = slotsInput ? (parseInt(slotsInput.value) || 0) : 0;
@@ -273,15 +276,15 @@ function marcarCardVisualmente(idProducto, idCategoriaPadre) {
                         btn.innerHTML = 'Agregado';
                         btn.classList.remove('btn-info');
                         btn.classList.add('btn-success');
-                    } 
+                    }
                     else {
                         btn.innerHTML = '+ Agregar';
-                        btn.classList.remove('btn-success'); 
-                        btn.classList.add('btn-info');       
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-info');
                     }
-                } 
+                }
                 else {
-                    btn.innerHTML = '+ Agregar'; 
+                    btn.innerHTML = '+ Agregar';
                     btn.classList.remove('btn-success');
                     btn.classList.add('btn-info');
                 }

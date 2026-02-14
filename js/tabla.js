@@ -13,28 +13,83 @@ const collapseMap = {
     118: 'collapseUnidades',
     104: 'collapseAir',
     105: 'collapseLiqui',
-    110: 'collapsePeri', 111: 'collapsePeri', 113: 'collapsePeri', // Varios a Periféricos
+    110: 'collapsePeri', 111: 'collapsePeri', 113: 'collapsePeri',  153: 'collapsePeri',  152: 'collapsePeri',  112: 'collapsePeri',
     119: 'collapseMoni',
     122: 'collapseUps'
 };
 
-// Categorías que NO deben cerrar el menú al seleccionarse
-const mantenerAbierto = [101, 118, 110, 111, 119, 113];
+// Categorias que NO deben cerrar el menu al seleccionarse
+const mantenerAbierto = [101, 118, 110, 111, 119, 113, 153, 152, 112];
 
-// Categorías obligatorias básicas para validar (IDs)
+// Categorias obligatorias basicas para validar
 const catsCriticas = ['fila100', 'fila101', 'fila102', 'fila109', 'fila103']; // CPU, Mobo, GPU, Fuente, Case
 
-window.onload = mostrarAlertaBienvenida;
+// Caché de elementos DOM para mejorar rendimiento
+const domCache = {
+    lista: null,
+    slotsMobo: null,
+    voltaje: null,
+    voltajecpu: null,
+    voltajegpu: null,
+    totalWatts: null,
+    gpuNeed: null,
+    coolNeed: null,
+    totalVenta: null,
+    totalVentaEfectivo: null,
+    totalVentaTarjeta: null,
+    totalVentaNormal: null,
+    init() {
+        this.lista = document.getElementById('lista');
+        this.slotsMobo = document.getElementById('slotsMobo');
+        this.voltaje = document.getElementById('voltaje');
+        this.voltajecpu = document.getElementById('voltajecpu');
+        this.voltajegpu = document.getElementById('voltajegpu');
+        this.totalWatts = document.getElementById('totalWatts');
+        this.gpuNeed = document.getElementById('gpuNeed');
+        this.coolNeed = document.getElementById('coolNeed');
+        this.totalVenta = document.querySelector('#totalVenta');
+        this.totalVentaEfectivo = document.getElementById('totalVentaEfectivo');
+        this.totalVentaTarjeta = document.querySelector('#totalVentaTarjeta');
+        this.totalVentaNormal = document.getElementById('totalVentaNormal');
+    }
+};
+
+window.onload = () => {
+    domCache.init();
+    mostrarAlertaBienvenida();
+};
 
 /* ==========================================
    FUNCIONES DE UI Y NAVEGACIÓN
    ========================================== */
 
 function mostrarAlertaBienvenida() {
-    Swal.fire({
-        icon: 'success',
-        title: 'Recuerda que...',
-        text: 'El precio final de tu configuración tendrá un BUEN DESCUENTO cuando envíes tu cotización a KPC.'
+    // Usar requestAnimationFrame para mejor rendimiento
+    requestAnimationFrame(() => {
+        Swal.fire({
+            icon: 'info',
+            title: '<span style="color: #e8e8e8;">Recuerda que...</span>',
+            html: '<p style="font-size: 16px; color: #e8e8e8; margin: 10px 0;">Recuerda que el precio final de tu configuración <strong style="color: #e73d2c;">tendrá descuento</strong> cuando envíes tu cotización.</p>',
+            iconColor: '#3d8bb5',
+            confirmButtonText: '¡Entendido!',
+            confirmButtonColor: '#e73d2c',
+            background: 'linear-gradient(135deg, #2d3d47 0%, #252f38 100%)',
+            backdrop: 'rgba(0, 0, 0, 0.7)',
+            timer: 5000,
+            timerProgressBar: true,
+            showClass: {
+                popup: 'swal-show-animation',
+                backdrop: 'swal-backdrop-show'
+            },
+            hideClass: {
+                popup: 'swal-hide-animation',
+                backdrop: 'swal-backdrop-hide'
+            },
+            willOpen: () => {
+                const popup = Swal.getPopup();
+                popup.style.cssText = 'box-shadow: 0 12px 35px rgba(61, 139, 181, 0.4), 0 6px 20px rgba(231, 61, 44, 0.3); border-radius: 12px; border: 2px solid rgba(61, 139, 181, 0.3); will-change: transform, opacity;';
+            }
+        });
     });
 }
 
@@ -53,21 +108,25 @@ function cerrarMenu(idCategoriaPadre) {
    ==================================== */
 
 function validarTabla() {
-    const filasTabla = document.getElementById('lista').rows;
+    const filasTabla = domCache.lista.rows;
     const categoriasEnTabla = [];
 
-    // Obtener qué categorias estan presentes
+    // Obtener qué categorias estan presentes - Optimizado
     for (let i = 0; i < filasTabla.length; i++) {
-        let idFila = filasTabla[i].id;
-        let idPadre = idFila.split('-')[0].replace('fila', '');
-        categoriasEnTabla.push(parseInt(idPadre));
+        const idFila = filasTabla[i].id;
+        if (!idFila) continue;
+        const dashPos = idFila.indexOf('-');
+        if (dashPos > 0) {
+            const idPadre = parseInt(idFila.substring(4, dashPos));
+            if (!isNaN(idPadre)) categoriasEnTabla.push(idPadre);
+        }
     }
 
-    // Variables de estado
+    // Variables de estado usando caché
     const tieneGpu = categoriasEnTabla.includes(102);
     const tieneCooler = categoriasEnTabla.includes(104) || categoriasEnTabla.includes(105);
-    const gpuObligatoria = document.getElementById('gpuNeed').value == 1;
-    const coolerObligatorio = document.getElementById('coolNeed').value == 1;
+    const gpuObligatoria = domCache.gpuNeed.value == 1;
+    const coolerObligatorio = domCache.coolNeed.value == 1;
 
     // VALIDACIÓN BASICA INICIAL 
     const basicos = [100, 99, 103];
@@ -119,13 +178,10 @@ function validarTabla() {
    ====================================== */
 
 function wats() {
-    var spanWatts = document.getElementById('totalWatts');
-    var vCpu = parseFloat(document.getElementById('voltajecpu').value) || 0;
-    var vGpu = parseFloat(document.getElementById('voltajegpu').value) || 0;
-
-    if (spanWatts) {
-        // Mostramos la suma de ambos componentes procesados
-        spanWatts.innerHTML = (vCpu + vGpu).toFixed(2);
+    if (domCache.totalWatts) {
+        const vCpu = parseFloat(domCache.voltajecpu.value) || 0;
+        const vGpu = parseFloat(domCache.voltajegpu.value) || 0;
+        domCache.totalWatts.textContent = (vCpu + vGpu).toFixed(2);
     }
 }
 
@@ -157,9 +213,8 @@ function pasarId(idProducto, idCategoriaPadre, slots) {
 }
 
 function calcularVoltaje(voltajeItem) {
-    var inputTotal = document.getElementById('voltaje');
-    var actual = parseFloat(inputTotal.value) || 0;
-    inputTotal.value = (actual + parseFloat(voltajeItem));
+    const actual = parseFloat(domCache.voltaje.value) || 0;
+    domCache.voltaje.value = (actual + parseFloat(voltajeItem));
 }
 
 function socket(socketType) {
@@ -170,38 +225,34 @@ function socket(socketType) {
    GESTIÓN DE LA TABLA
    =============================== */
 
-// He actualizado los argumentos para recibir slotsPCI y slotsRam desde el PHP
-function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, idProducto, idCategoria, idCategoriaPadre, nombreCategoria, slotsPCI, slotsRam, voltaje, gpu, socketVal) {
+function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, idProducto, idCategoria, idCategoriaPadre, nombreCategoria, slotsPCI, slotsRam, voltaje, gpu, tamanioMoboCase, cooler) {
 
-    // 1. DEFINIR PESO DEL SLOT: Solo si es RAM (101) tomamos el valor real, si no, vale 1.
+    // Solo si es RAM (101) tomamos el valor real, si no, vale 1
     let pesoSlot = (idCategoriaPadre == 101) ? (parseInt(slotsRam) || 1) : 1;
 
     if (buscarValorEnFila(idCategoriaPadre, idProducto, cantidad, precioEfectivo, nombreProducto)) return;
 
-    let idFila = `fila${idCategoriaPadre}-${idProducto}`;
+    const idFila = `fila${idCategoriaPadre}-${idProducto}`;
     let filaExistente = document.getElementById(idFila);
-    let slotsDisponibles = parseInt(document.getElementById('slotsMobo').value) || 0;
+    const slotsDisponibles = parseInt(domCache.slotsMobo.value) || 0;
 
     if (filaExistente) {
-        let inputCanti = filaExistente.querySelector('#canti');
-        let inputSubtotal = filaExistente.querySelector('#totalDetalle');
-        let nuevaCantidad = parseInt(inputCanti.value) + parseInt(cantidad);
+        const inputCanti = filaExistente.querySelector('#canti');
+        const inputSubtotal = filaExistente.querySelector('#totalDetalle');
+        const nuevaCantidad = parseInt(inputCanti.value) + parseInt(cantidad);
 
         // --- VALIDACIÓN EXCLUSIVA PARA RAM (101) ---
         if (idCategoriaPadre == 101) {
             let slotsOcupados = 0;
-            // Recorremos las filas existentes para sumar sus pesos reales
-            document.querySelectorAll('tr[id^="fila101-"]').forEach(fila => {
+            // Optimizado: obtener todas las filas RAM de una vez
+            const filasRam = domCache.lista.querySelectorAll('tr[id^="fila101-"]');
+            for (const fila of filasRam) {
                 let qty = parseInt(fila.querySelector('#canti').value) || 0;
-                // Si estamos en la fila que vamos a modificar, usamos la 'nuevaCantidad' para simular
-                if (fila.id === idFila) {
-                   qty = nuevaCantidad;
-                }
-                let peso = parseInt(fila.querySelector('#valSlotsRam').value) || 1;
+                if (fila.id === idFila) qty = nuevaCantidad;
+                const peso = parseInt(fila.querySelector('#valSlotsRam').value) || 1;
                 slotsOcupados += (qty * peso);
-            });
-            
-            // Nota: En este bloque no sumamos '+ cantidad' extra porque ya usamos 'nuevaCantidad' arriba
+            }
+
 
             if (slotsOcupados > slotsDisponibles) {
                 alertify.error(`No hay suficientes slots. Intentas ocupar ${slotsOcupados} de ${slotsDisponibles}.`);
@@ -211,19 +262,21 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
                 setTimeout(() => { $('#collapseRam').collapse('hide'); }, 300);
             }
         }
-        // -------------------------------------------
 
-        let nuevoSubtotal = nuevaCantidad * precioEfectivo;
+        const nuevoSubtotal = nuevaCantidad * precioEfectivo;
         inputCanti.value = nuevaCantidad;
+
+        // Actualizamos filas - batch update para reducir reflows
+        const tdCantidad = filaExistente.querySelector('td:nth-child(4)');
+        const tdSubtotal = filaExistente.querySelector('td:nth-child(3)');
         
-        // Actualizamos HTML de fila existente (Agregamos el hidden valSlotsRam para mantener consistencia)
-        filaExistente.querySelector('td:nth-child(4)').innerHTML = `
+        tdCantidad.innerHTML = `
             <input type="hidden" id="canti" name="cantidadEnviar[]" value="${nuevaCantidad}">
             ${nuevaCantidad}
             <input type="hidden" id="cantidad" name="cantidad[]" value="${nuevaCantidad}">`;
-
+        
         inputSubtotal.value = nuevoSubtotal;
-        filaExistente.querySelector('td:nth-child(3)').innerHTML = `
+        tdSubtotal.innerHTML = `
             <input type="hidden" id="totalDetalle" name="totalDetalle[]" value="${nuevoSubtotal}">
             <input type="hidden" id="valSlotsRam" value="${pesoSlot}">
             $${nuevoSubtotal.toFixed(2)}`;
@@ -234,13 +287,13 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
         // --- VALIDACIÓN EXCLUSIVA PARA RAM (101) ---
         if (idCategoriaPadre == 101) {
             let slotsOcupados = 0;
-            document.querySelectorAll('tr[id^="fila101-"]').forEach(fila => {
-                let qty = parseInt(fila.querySelector('#canti').value) || 0;
-                let peso = parseInt(fila.querySelector('#valSlotsRam').value) || 1;
+            const filasRam = domCache.lista.querySelectorAll('tr[id^="fila101-"]');
+            for (const fila of filasRam) {
+                const qty = parseInt(fila.querySelector('#canti').value) || 0;
+                const peso = parseInt(fila.querySelector('#valSlotsRam').value) || 1;
                 slotsOcupados += (qty * peso);
-            });
+            }
 
-            // Calculamos lo que ocupará la NUEVA inserción
             let slotsNuevos = cantidad * pesoSlot;
 
             if (slotsOcupados + slotsNuevos > slotsDisponibles) {
@@ -253,27 +306,26 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
         } else {
             cerrarMenu(idCategoriaPadre);
         }
-        // -------------------------------------------
 
-        pasarId(idProducto, idCategoriaPadre, slotsPCI); // Usamos slotsPCI que viene del PHP
+        pasarId(idProducto, idCategoriaPadre, slotsPCI); 
 
         if (idCategoriaPadre == 100) {
             document.getElementById('idProceCat').value = idCategoria;
         }
         else if (idCategoriaPadre == 99) {
             document.getElementById('idMoboCat').value = idCategoria;
+            document.getElementById('idTamanioMoboCase').value = tamanioMoboCase;
         }
         else if (idCategoriaPadre == 103) {
             document.getElementById('idCaseCat').value = idCategoria;
         }
 
-        // Lógica Procesador (GPU / Cooler Warning)
+        // Logica Procesador
         if (idCategoriaPadre == 100) {
-            document.getElementById('gpuNeed').value = gpu;
-            document.getElementById('coolNeed').value = (typeof cooler !== 'undefined') ? cooler : 0; // Ajuste por si cooler no llega directo
+            domCache.gpuNeed.value = gpu;
+            domCache.coolNeed.value = cooler || 0; 
 
-            // Check coolers
-             [104, 105].forEach(idCool => {
+            [104, 105].forEach(idCool => {
                 let hayCooler = document.querySelector(`tr[id^="fila${idCool}-"]`);
                 if (!hayCooler) {
                     let elIcon = document.getElementById(idCool);
@@ -283,7 +335,7 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
                     }
                 }
             });
-            
+
             // Check GPU
             if (gpu == 1) {
                 let hayGpu = document.querySelector('tr[id^="fila102-"]');
@@ -305,18 +357,18 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
         if (idCategoriaPadre == 105) cambiarClase(104);
 
         if (voltaje > 0 && (idCategoriaPadre == 100 || idCategoriaPadre == 102)) {
-            let factor = (idCategoriaPadre == 102) ? 1.1 : 1.8;
-            let voltajeProcesado = (voltaje * factor);
+            const factor = (idCategoriaPadre == 102) ? 1.2 : 2;
+            const voltajeProcesado = (voltaje * factor).toFixed(2);
 
             if (idCategoriaPadre == 100) {
-                document.getElementById('voltajecpu').value = voltajeProcesado.toFixed(2);
+                domCache.voltajecpu.value = voltajeProcesado;
             } else if (idCategoriaPadre == 102) {
-                document.getElementById('voltajegpu').value = voltajeProcesado.toFixed(2);
+                domCache.voltajegpu.value = voltajeProcesado;
             }
 
-            let vCpu = parseFloat(document.getElementById('voltajecpu').value) || 0;
-            let vGpu = parseFloat(document.getElementById('voltajegpu').value) || 0;
-            document.getElementById('voltaje').value = (vCpu + vGpu).toFixed(2);
+            const vCpu = parseFloat(domCache.voltajecpu.value) || 0;
+            const vGpu = parseFloat(domCache.voltajegpu.value) || 0;
+            domCache.voltaje.value = (vCpu + vGpu).toFixed(2);
             wats();
         }
 
@@ -353,7 +405,7 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
 
         alertify.success('Componente añadido');
 
-        if (idCategoriaPadre != 101 && ![118, 110, 111, 113, 119, 122].includes(parseInt(idCategoriaPadre))) {
+        if (idCategoriaPadre != 101 && ![118, 110, 111, 113, 153, 152, 112, 119, 122, 106].includes(parseInt(idCategoriaPadre))) {
             marcarCardVisualmente(idProducto);
         }
     }
@@ -371,14 +423,13 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
    ============================ */
 
 function eliminarFilas(boton) {
-    var fila = boton.closest('tr')
-    var inputIdProd = fila.querySelector('#idProducto');
-    var idProductoAEliminar = inputIdProd ? inputIdProd.value : null;;
-    var idPadre = parseInt(fila.querySelector('#idPadre').value);
-    var wattsItem = parseFloat(fila.querySelector('#voltajeValor')?.value || 0);
-    var inputVoltaje = document.getElementById('voltaje');
-    var nuevoVoltaje = (parseFloat(inputVoltaje.value) || 0) - wattsItem;
-    inputVoltaje.value = Math.max(0, nuevoVoltaje);
+    const fila = boton.closest('tr');
+    const inputIdProd = fila.querySelector('#idProducto');
+    const idProductoAEliminar = inputIdProd ? inputIdProd.value : null;
+    const idPadre = parseInt(fila.querySelector('#idPadre').value);
+    const wattsItem = parseFloat(fila.querySelector('#voltajeValor')?.value || 0);
+    const nuevoVoltaje = (parseFloat(domCache.voltaje.value) || 0) - wattsItem;
+    domCache.voltaje.value = Math.max(0, nuevoVoltaje);
 
     // Eliminacion masiva
     if (idPadre === 100 || idPadre === 99 || idPadre === 103) {
@@ -388,7 +439,6 @@ function eliminarFilas(boton) {
             document.getElementById('voltajecpu').value = 0;
             document.getElementById('coolNeed').value = 0;
             document.getElementById('gpuNeed').value = 0;
-            document.getElementById('socketCool').value = 0;
         }
 
         eliminarHidden(idPadre);
@@ -414,6 +464,19 @@ function eliminarFilas(boton) {
                 let input = document.getElementById(inputsMap[idPadre]);
                 if (input) input.value = '';
             }
+            
+            // Limpiezas adicionales específicas para cada categoría
+            if (idPadre === 101) {
+                document.getElementById('totalCantidad').value = 0;
+            }
+            if (idPadre === 99) {
+                document.getElementById('idMoboCat').value = '';
+                document.getElementById('idTamanioMoboCase').value = '';
+            }
+            if (idPadre === 103) {
+                document.getElementById('idCaseCat').value = '';
+            }
+            
             if (idPadre === 102) document.getElementById('voltajegpu').value = 0;
 
             elimClase(idPadre, true);
@@ -448,10 +511,10 @@ function eliminarHidden(idCategoria) {
     let idsAEliminar = [];
     switch (idCategoria) {
         case 100:
-            idsAEliminar = [99, 103, 101, 102, 109, 118, 104, 105, 999, 119, 122];
+            idsAEliminar = [99, 103, 101, 102, 109, 118, 104, 105, 999, 119, 122, 106, 121];
             break;
         case 99:
-            idsAEliminar = [103, 101, 102, 109, 118, 104, 105, 999, 119, 122];
+            idsAEliminar = [103, 101, 102, 109, 118, 104, 105, 999, 119, 122, 106, 121];
             break;
         case 103:
             idsAEliminar = [104, 105];
@@ -499,12 +562,25 @@ function eliminarHidden(idCategoria) {
         }
 
         // Limpiezas Lógicas
-        if (catActual === 100) $('#collapseCpu').collapse('hide');
-        if (catActual === 100) $('#collapseCpu').collapse('hide');
+        if (catActual === 100) {
+            $('#collapseCpu').collapse('hide');
+            document.getElementById('idMoboCat').value = '';
+            document.getElementById('idCaseCat').value = '';
+            document.getElementById('idTamanioMoboCase').value = '';
+        }
         if (catActual === 99) {
             document.getElementById('catMobo').value = '';
             document.getElementById('slotsMobo').value = 0;
+            document.getElementById('idMoboCat').value = '';
+            document.getElementById('idCaseCat').value = '';
+            document.getElementById('idTamanioMoboCase').value = '';
             actualizarVisualRam();
+        }
+        if (catActual === 101) {
+            document.getElementById('totalCantidad').value = 0;
+        }
+        if (catActual === 103) {
+            document.getElementById('idCaseCat').value = '';
         }
         if (catActual === 102) document.getElementById('voltajegpu').value = 0;
 
@@ -528,8 +604,8 @@ function cambiarClase(id) {
     var el = document.getElementById(id);
     if (!el) return;
     $(el).removeClass('fas fa-times fas fa-exclamation').addClass('fas fa-check');
-    el.style.color = 'green';
-    $(el).closest('.card-header').css('background', '#BCFFD6');
+    el.style.color = '#01c94d';
+    $(el).closest('.card-header').css('background', '#01752e');
 }
 
 function resetearVisualGpuWarning() {
@@ -537,7 +613,7 @@ function resetearVisualGpuWarning() {
     if (!el) return;
 
     $(el).removeClass('fas fa-check fas fa-times').addClass('fas fa-exclamation');
-    el.style.color = '#ff7b11';
+    el.style.color = '#ff6100';
 }
 
 function resetearVisual(id, alerta = true) {
@@ -548,7 +624,7 @@ function resetearVisual(id, alerta = true) {
     el.style.color = 'red';
 
     if (alerta) {
-        $(el).closest('.card-header').css('background', '#FFD3D3');
+        $(el).closest('.card-header').css('background', '#920d00');
     } else {
     }
 }
@@ -562,7 +638,7 @@ function elimClase(idCategoria, teniaProductos) {
     if (!el) return;
 
     // GRUPOS
-    const grupoAmarillo = [102, 104, 105, 999, 119, 122];
+    const grupoAmarillo = [102, 104, 105, 999, 119, 122, 106, 121];
     const grupoRojo = [100, 99, 101, 103, 109, 118];
 
     // Primero limpiamos todas las clases de estado
@@ -578,12 +654,12 @@ function elimClase(idCategoria, teniaProductos) {
         if (esObligatorio) {
             $(el).addClass('fas fa-times');
             el.style.color = 'red';
-            if (teniaProductos) $(el).closest('.card-header').css('background', '#FFD3D3');
+            if (teniaProductos) $(el).closest('.card-header').css('background', '#920d00');
         } else {
             // Si es opcional vacío, se queda en advertencia
             $(el).addClass('fas fa-exclamation');
-            el.style.color = '#ff7b11';
-            if (teniaProductos) $(el).closest('.card-header').css('background', '#FEFFC5');
+            el.style.color = '#ff6100';
+            if (teniaProductos) $(el).closest('.card-header').css('background', '#c99d17');
             else {
                 // Si no tenía productos, limpiamos el fondo para que quede limpio
                 $(el).closest('.card-header').css('background', '');
@@ -596,7 +672,7 @@ function elimClase(idCategoria, teniaProductos) {
             // Si acabamos de borrar un producto que existía, marcamos rojo
             $(el).addClass('fas fa-times');
             el.style.color = 'red';
-            $(el).closest('.card-header').css('background', '#FFD3D3');
+            $(el).closest('.card-header').css('background', '#920d00');
         } else {
             // Si ya estaba vacío, lo reseteamos a estado neutro
             $(el).addClass('fas fa-times');
@@ -612,19 +688,25 @@ function elimClase(idCategoria, teniaProductos) {
    ================================ */
 
 function actualizarTotales() {
-    var inputsDetalle = document.querySelectorAll('#totalDetalle');
-    var suma = 0;
-    inputsDetalle.forEach(input => suma += parseFloat(input.value));
-
-    // Efectivo
-    document.querySelector('#totalVenta').textContent = ' ' + suma.toFixed(2);
-    document.getElementById('totalVentaEfectivo').value = '$ ' + suma.toFixed(2);
+    const inputsDetalle = domCache.lista.querySelectorAll('#totalDetalle');
+    let suma = 0;
+    
+    // Optimizado: for loop más rápido que forEach
+    for (let i = 0; i < inputsDetalle.length; i++) {
+        suma += parseFloat(inputsDetalle[i].value) || 0;
+    }
+    
+    const sumaFmt = suma.toFixed(2);
+    
+    // Batch DOM updates
+    if (domCache.totalVenta) domCache.totalVenta.textContent = ' ' + sumaFmt;
+    if (domCache.totalVentaEfectivo) domCache.totalVentaEfectivo.value = '$ ' + sumaFmt;
 
     // Tarjeta
     obtenerValorFactor('FTJ').then(res => {
-        let totalTarj = (suma / res.valor).toFixed(2);
-        document.querySelector('#totalVentaTarjeta').textContent = ' ' + totalTarj;
-        document.getElementById('totalVentaNormal').value = '$ ' + totalTarj;
+        const totalTarj = (suma / res.valor).toFixed(2);
+        if (domCache.totalVentaTarjeta) domCache.totalVentaTarjeta.textContent = ' ' + totalTarj;
+        if (domCache.totalVentaNormal) domCache.totalVentaNormal.value = '$ ' + totalTarj;
     }).catch(err => console.error('Error factor:', err));
 }
 
@@ -632,8 +714,8 @@ function totalizarVenta() { actualizarTotales(); }
 function totalizarVentaNormal() { actualizarTotales(); }
 
 function buscarValorEnFila(idCategoriaPadre, idProducto, cantidad, precio, nombre) {
-    var filasTabla = document.getElementById('lista').rows.length;
-    var idCat = parseInt(idCategoriaPadre);
+    const filasTabla = domCache.lista.rows.length;
+    const idCat = parseInt(idCategoriaPadre);
 
     // Validar orden de insercion
     if (filasTabla < 3 && (idCat != 100 && idCat != 99)) {
@@ -642,7 +724,7 @@ function buscarValorEnFila(idCategoriaPadre, idProducto, cantidad, precio, nombr
     }
 
     // CATEGORIAS MULTIPLES 
-    if ([101, 118, 119, 110, 111, 113, 999].includes(idCat)) {
+    if ([101, 118, 119, 110, 111, 113, 153, 152, 112, 999, 106, 121].includes(idCat)) {
         return false;
     }
 
@@ -690,27 +772,25 @@ function buscarCooler() {
 
 function marcarCardVisualmente(idProducto, idCategoriaPadre) {
     let card = document.getElementById('card-prod-' + idProducto);
-    
-    // Lista completa de categorías múltiples
-    const categoriasMultiples = [101, 118, 110, 111, 113, 119, 122, 999]; 
+
+    // Lista completa de categorias multiples
+    const categoriasMultiples = [101, 118, 110, 111, 113, 153, 152, 112, 119, 122, 999, 106, 121];
 
     if (card) {
-        card.classList.remove('bg-light');
-        card.classList.add('producto-agregado'); 
+        card.classList.add('producto-agregado');
 
         let check = card.querySelector('.check-overlay');
-        if (check) check.style.display = 'block'; 
+        if (check) check.style.display = 'block';
 
         let btn = card.querySelector('.btn-agregar-producto');
-        
+
         if (btn) {
-            // Si falta la categoría, la leemos del botón para evitar parpadeos
             if (!idCategoriaPadre) {
                 idCategoriaPadre = parseInt(btn.getAttribute('data-cate-principal'));
             }
 
             if (categoriasMultiples.includes(idCategoriaPadre)) {
-                
+
                 if (idCategoriaPadre == 101) {
                     let slotsInput = document.getElementById('slotsMobo');
                     let slotsTotal = slotsInput ? (parseInt(slotsInput.value) || 0) : 0;
@@ -725,15 +805,15 @@ function marcarCardVisualmente(idProducto, idCategoriaPadre) {
                         btn.innerHTML = 'Agregado';
                         btn.classList.remove('btn-info');
                         btn.classList.add('btn-success');
-                    } 
+                    }
                     else {
                         btn.innerHTML = '+ Agregar';
-                        btn.classList.remove('btn-success'); 
-                        btn.classList.add('btn-info');       
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-info');
                     }
-                } 
+                }
                 else {
-                    btn.innerHTML = '+ Agregar'; 
+                    btn.innerHTML = '+ Agregar';
                     btn.classList.remove('btn-success');
                     btn.classList.add('btn-info');
                 }
@@ -751,12 +831,11 @@ function desmarcarCardVisualmente(idProducto) {
     let card = document.getElementById('card-prod-' + idProducto);
     if (card) {
         card.classList.remove('producto-agregado');
-        card.classList.add('bg-light');
 
         let check = card.querySelector('.check-overlay');
         if (check) check.style.display = 'none';
 
-        // Restaurar botón
+        // Restaurar boton
         let btn = card.querySelector('.btn-agregar-producto');
         if (btn) {
             btn.innerHTML = '+ Agregar';
@@ -770,18 +849,18 @@ function actualizarVisualRam() {
     let slotsInput = document.getElementById('slotsMobo');
     let slotsTotal = slotsInput ? (parseInt(slotsInput.value) || 0) : 0;
     let slotsOcupadosReales = 0;
-    
+
     // Recorremos la tabla buscando el input hidden que agregamos antes
     document.querySelectorAll('tr[id^="fila101-"]').forEach(fila => {
         let cantidad = parseInt(fila.querySelector('input[name="cantidadEnviar[]"]').value) || 0;
-        let pesoSlot = parseInt(fila.querySelector('#valSlotsRam').value) || 1; // Aquí toma el 1, 2, 4, etc.
-        
+        let pesoSlot = parseInt(fila.querySelector('#valSlotsRam').value) || 1;
+
         slotsOcupadosReales += (cantidad * pesoSlot);
     });
 
     // Solo buscamos el contenedor ÚNICO
     const containerPrincipal = document.getElementById('ram-live-container');
-    
+
     if (containerPrincipal) {
         const textoCounter = containerPrincipal.querySelector('.ram-counter-text');
         if (textoCounter) textoCounter.innerHTML = `Slots: ${slotsOcupadosReales} / ${slotsTotal}`;
@@ -802,3 +881,17 @@ function actualizarVisualRam() {
         else if (slotsOcupadosReales >= slotsTotal && slotsTotal > 0) containerPrincipal.classList.add('full-capacity');
     }
 }
+
+/* ======================================
+   ACCORDION: CLICK EN TODA LA CABECERA
+   ====================================== */
+document.addEventListener('click', function (event) {
+    const header = event.target.closest('.accordion .card-header');
+    if (!header) return;
+
+    // Si ya se hizo click en el boton, no hacemos doble toggle
+    if (event.target.closest('.btn-link, button, a, input, select, textarea')) return;
+
+    const toggleButton = header.querySelector('[data-toggle="collapse"], .btn-link');
+    if (toggleButton) toggleButton.click();
+});
