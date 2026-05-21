@@ -8,25 +8,82 @@ function redondear_ajax($valor) {
     return number_format(round($valor * 100) / 100, 2, ".", "");
 }
 
-function pathImg_ajax($conexion, $idProducto) {
-    $sql = "SELECT id_image FROM ps_image WHERE ps_image.id_product = $idProducto ORDER BY position ASC LIMIT 1";
-    $resultado = mysqli_query($conexion, $sql);
-    if (mysqli_num_rows($resultado) > 0) {
-        $filas = mysqli_fetch_array($resultado);
-        return crearPath_ajax($filas[0]);
+function preloadImageCache($conexion, $productIds = null)
+{
+    // Si ya se carg車 el cach谷 en esta ejecuci車n, no hacemos nada
+    if (isset($GLOBALS['image_cache_loaded']) && $GLOBALS['image_cache_loaded']) {
+        return;
     }
-    return crearPath_ajax("1969");
+
+    // Buscar SOLO imagen principal: position = 1 y cover = 1
+    $whereClause = "WHERE cover = 1"; 
+
+    if ($productIds && is_array($productIds) && count($productIds) > 0) {
+        $ids = implode(',', array_map('intval', $productIds));
+        $whereClause .= " AND id_product IN ($ids)";
+    }
+
+    $sql = "SELECT id_product, id_image FROM ps_image $whereClause";
+    $resultado = mysqli_query($conexion, $sql);
+
+    if ($resultado) {
+        while ($row = mysqli_fetch_assoc($resultado)) {
+            $GLOBALS['image_cache'][$row['id_product']] = $row['id_image'];
+        }
+    }
+
+    $GLOBALS['image_cache_loaded'] = true;
 }
 
-function crearPath_ajax($nombreImg) {
-    $cadena = $nombreImg . ".jpg";
-    $idSeparado = $nombreImg;
-    $valorArray = array();
-    for ($i = 0; $i < strlen($idSeparado); $i++) {
-        array_push($valorArray, $idSeparado[$i]);
+/**
+ * Obtiene la ruta de la imagen usando el cach谷 si est芍 disponible.
+ */
+function pathImg_ajax($conexion, $idProducto)
+{
+    // 1. Intentar usar el cach谷 global primero
+    if (isset($GLOBALS['image_cache'][$idProducto])) {
+        return crearPath_ajax($GLOBALS['image_cache'][$idProducto]);
     }
-    $rutaId = implode("/", $valorArray);
-    return "https://kpchardware.com/img/p/" . $rutaId . "/" . $cadena;
+
+    // 2. Buscar imagen principal en DB
+    $sql = "SELECT id_image 
+            FROM ps_image 
+            WHERE id_product = $idProducto
+              AND cover = 1
+            LIMIT 1";
+
+    $resultado = mysqli_query($conexion, $sql);
+    
+    if ($resultado && mysqli_num_rows($resultado) > 0) {
+        $filas = mysqli_fetch_array($resultado);
+        $idImg = $filas[0];
+
+        // Guardar en cach谷
+        $GLOBALS['image_cache'][$idProducto] = $idImg;
+
+        return crearPath_ajax($idImg);
+    }
+
+    // 3. Imagen por defecto
+    return "https://kpchardware.com/img/logokpc.jpeg";
+}
+
+/**
+ * Construye la URL de la imagen desglosando el ID en carpetas.
+ */
+function crearPath_ajax($nombreImg)
+{
+    // Si el ID es nulo, vac赤o o el viejo 1969, retornar el logo
+    if (empty($nombreImg) || $nombreImg == "1969") {
+        return "https://kpchardware.com/img/logokpc.jpeg";
+    }
+
+    $idSeparado = (string)$nombreImg;
+
+    // Convertimos "123" en "1/2/3"
+    $rutaId = implode("/", str_split($idSeparado));
+    
+    return "https://kpchardware.com/img/p/" . $rutaId . "/" . $nombreImg . ".jpg";
 }
 
 // Obtener datos POST
@@ -40,7 +97,7 @@ $filtroCategoriasCompatibles = "";
 // Logica de asociacion
 if ($catePrincipal > 0) {
     
-    // Buscamos reglas de asociación
+    // Buscamos reglas de asociaci車n
     $sqlNivel = "SELECT tipo_asoc_padre FROM cate_asociado 
                  WHERE cate_principal = $catePrincipal AND cate_padre = $catePadreFuentes AND compatibilidad = 1
                  ORDER BY tipo_asoc_padre DESC LIMIT 1";
@@ -124,7 +181,7 @@ if ($resProd && mysqli_num_rows($resProd) > 0) {
 } else {
     // Mensaje de no se encontraron productos    
     if ($catePrincipal > 0) {
-        $txtError = "No se encontraron fuentes de {$wattsRequeridos}W compatibles con la categoría de gabinete seleccionada.";
+        $txtError = "No se encontraron fuentes de {$wattsRequeridos}W compatibles con la categor赤a de gabinete seleccionada.";
     } else {
         $txtError = "No se encontraron fuentes de {$wattsRequeridos}W.";
     }

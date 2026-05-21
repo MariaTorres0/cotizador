@@ -9,27 +9,82 @@ function redondear_ajax($valor)
     return number_format(round($valor * 100) / 100, 2, ".", "");
 }
 
-function pathImg_ajax($conexion, $idProducto)
+function preloadImageCache($conexion, $productIds = null)
 {
-    $sql = "SELECT id_image FROM ps_image WHERE ps_image.id_product = $idProducto";
-    $resultado = mysqli_query($conexion, $sql);
-    if (mysqli_num_rows($resultado) > 0) {
-        $filas = mysqli_fetch_array($resultado);
-        return crearPath_ajax($filas[0]);
+    // Si ya se cargó el caché en esta ejecución, no hacemos nada
+    if (isset($GLOBALS['image_cache_loaded']) && $GLOBALS['image_cache_loaded']) {
+        return;
     }
-    return crearPath_ajax("1969");
+
+    // Buscar solo imagen principal
+    $whereClause = "WHERE cover = 1"; 
+
+    if ($productIds && is_array($productIds) && count($productIds) > 0) {
+        $ids = implode(',', array_map('intval', $productIds));
+        $whereClause .= " AND id_product IN ($ids)";
+    }
+
+    $sql = "SELECT id_product, id_image FROM ps_image $whereClause";
+    $resultado = mysqli_query($conexion, $sql);
+
+    if ($resultado) {
+        while ($row = mysqli_fetch_assoc($resultado)) {
+            $GLOBALS['image_cache'][$row['id_product']] = $row['id_image'];
+        }
+    }
+
+    $GLOBALS['image_cache_loaded'] = true;
 }
 
+/**
+ * Obtiene la ruta de la imagen usando el caché si está disponible.
+ */
+function pathImg_ajax($conexion, $idProducto)
+{
+    // 1. Intentar usar el caché global primero
+    if (isset($GLOBALS['image_cache'][$idProducto])) {
+        return crearPath_ajax($GLOBALS['image_cache'][$idProducto]);
+    }
+
+    // 2. Buscar imagen principal en DB
+    $sql = "SELECT id_image 
+            FROM ps_image 
+            WHERE id_product = $idProducto 
+              AND cover = 1 
+            LIMIT 1";
+
+    $resultado = mysqli_query($conexion, $sql);
+    
+    if ($resultado && mysqli_num_rows($resultado) > 0) {
+        $filas = mysqli_fetch_array($resultado);
+        $idImg = $filas[0];
+
+        // Guardar en caché
+        $GLOBALS['image_cache'][$idProducto] = $idImg;
+
+        return crearPath_ajax($idImg);
+    }
+
+    // 3. Imagen por defecto
+    return "https://kpchardware.com/img/logokpc.jpeg";
+}
+
+/**
+ * Construye la URL de la imagen desglosando el ID en carpetas.
+ */
 function crearPath_ajax($nombreImg)
 {
-    $cadena = $nombreImg . ".jpg";
-    $idSeparado = $nombreImg;
-    $valorArray = array();
-    for ($i = 0; $i < strlen($idSeparado); $i++) {
-        array_push($valorArray, $idSeparado[$i]);
+    // Si el ID es nulo, vacío o el viejo 1969, retornar el logo
+    if (empty($nombreImg) || $nombreImg == "1969") {
+        return "https://kpchardware.com/img/logokpc.jpeg";
     }
-    $rutaId = implode("/", $valorArray);
-    return "https://kpchardware.com/img/p/" . $rutaId . "/" . $cadena;
+
+    $idSeparado = (string)$nombreImg;
+
+    // Convertimos "123" en "1/2/3"
+    $rutaId = implode("/", str_split($idSeparado));
+    
+    return "https://kpchardware.com/img/p/" . $rutaId . "/" . $nombreImg . ".jpg";
 }
 
 $cate_principal = isset($_POST['cate_principal']) ? $_POST['cate_principal'] : 0;
@@ -107,8 +162,10 @@ elseif ($cate_padre == 103) {
 }
 
 $sqlProd = "SELECT cp.id_product, cp.id_category, pl.name AS productoNombre, p.price, p.reference, 
-                   p.slots, p.slots_ram, p.voltaje, p.cooler, p.gpu, p.socketCooler, p.id_tamanio_mobo_case,
-                   cl.name AS nombreCategoria
+             p.slots, p.slots_ram, p.voltaje, p.cooler, p.gpu, p.socketCooler, p.id_tamanio_mobo_case,
+             COALESCE(p.incluye_fuente, 0) AS incluye_fuente,
+             COALESCE(p.incluye_cooler, 0) AS incluye_cooler,
+             cl.name AS nombreCategoria
             FROM ps_category_product cp
             INNER JOIN ps_product p ON cp.id_product = p.id_product
             INNER JOIN ps_product_lang pl ON cp.id_product = pl.id_product
@@ -117,7 +174,8 @@ $sqlProd = "SELECT cp.id_product, cp.id_category, pl.name AS productoNombre, p.p
             AND p.active = 1 
             AND pl.id_lang = 2 
             AND cl.id_lang = 2 
-            AND pl.name != ''";
+            AND pl.name != ''
+            ORDER BY p.price ASC";
 
 $resProd = mysqli_query($conexion, $sqlProd);
 
@@ -131,7 +189,7 @@ if (mysqli_num_rows($resProd) > 0) {
         $nombreProductoJS = str_replace(['"', "'"], '', $prod['productoNombre']);
         $nombreCategoriaJS = str_replace(['"', "'"], '', $prod['nombreCategoria']);
 
-        $onclick = "agregarTabla(\"{$nombreProductoJS}\", {$precioNormal}, {$precioEfectivo}, 1, {$prod['id_product']}, {$prod['id_category']}, {$cate_padre}, \"{$nombreCategoriaJS}\", {$prod['slots']}, {$prod['slots_ram']}, {$prod['voltaje']}, {$prod['gpu']}, \"{$prod['id_tamanio_mobo_case']}\")";
+        $onclick = "agregarTabla(\"{$nombreProductoJS}\", {$precioNormal}, {$precioEfectivo}, 1, {$prod['id_product']}, {$prod['id_category']}, {$cate_padre}, \"{$nombreCategoriaJS}\", {$prod['slots']}, {$prod['slots_ram']}, {$prod['voltaje']}, {$prod['gpu']}, \"{$prod['id_tamanio_mobo_case']}\", {$prod['cooler']}, {$prod['incluye_fuente']}, {$prod['incluye_cooler']})";
 
         echo "<div class='col-lg-4 col-md-6 col-sm-12 mb-3'>
         <div class='card mb-8 product-card' id='card-prod-{$prod['id_product']}'>

@@ -8,6 +8,18 @@ $(document).ready(function () {
 
     // DETECTAR CLIC EN "Agregar"
     $(document).on('click', ".btn-agregar-producto", function () {
+        // Si el botón está dentro de una categoría bloqueada (por Case), no disparamos recargas
+        // (agregarTabla ya se encarga de mostrar la alerta y bloquear el agregado)
+        var collapsePadre = $(this).closest('.collapse');
+        if (collapsePadre.length) {
+            var collapseId = collapsePadre.attr('id');
+            var caseIncluyeFuente = parseInt($('#caseIncluyeFuente').val() || 0) === 1;
+            var caseIncluyeCooler = parseInt($('#caseIncluyeCooler').val() || 0) === 1;
+
+            if (collapseId === 'collapseFuente' && caseIncluyeFuente) return;
+            if ((collapseId === 'collapseAir' || collapseId === 'collapseLiqui') && caseIncluyeCooler) return;
+        }
+
         var nuevoIdPrincipal = $(this).data('cate-principal');
         if (nuevoIdPrincipal) {
             idCategoriaPrincipal = nuevoIdPrincipal;
@@ -23,6 +35,23 @@ $(document).ready(function () {
 
         var boton = $(this);
         var catIdClickeado = boton.data('cat-id');
+
+        // =========================================
+        // BLOQUEO POR CASE (Fuente / Coolers)
+        // =========================================
+        var caseIncluyeFuente = parseInt($('#caseIncluyeFuente').val() || 0) === 1;
+        var caseIncluyeCooler = parseInt($('#caseIncluyeCooler').val() || 0) === 1;
+
+        if (parseInt(catIdClickeado) === 109 && caseIncluyeFuente) {
+            alertify.error('Categoría inhabilitada: el case seleccionado ya incluye este componente');
+            return;
+        }
+
+        if ((parseInt(catIdClickeado) === 104 || parseInt(catIdClickeado) === 105) && caseIncluyeCooler) {
+            alertify.error('Categoría inhabilitada: el case seleccionado ya incluye este componente');
+            return;
+        }
+
         var targetId = boton.data('target');
         var elTarget = $(targetId);
         var contenedorBody = elTarget.find('.card-body');
@@ -54,6 +83,15 @@ $(document).ready(function () {
 
         if (ordenSecuencia[catIdClickeado]) {
             var idRequerido = ordenSecuencia[catIdClickeado];
+
+            // Si el gabinete incluye fuente, Unidades (118) no debe depender de Fuente (109)
+            if (catIdClickeado === 118) {
+                var caseIncluyeFuente = parseInt($('#caseIncluyeFuente').val() || 0) === 1;
+                if (caseIncluyeFuente) {
+                    idRequerido = 102; // GPU
+                }
+            }
+
             var yaComproAnterior = document.querySelectorAll(`tr[id^="fila${idRequerido}-"]`).length > 0;
 
             if (!yaComproAnterior) {
@@ -184,6 +222,17 @@ $(document).ready(function () {
             var moboPrincipal = $('#idMoboCat').val();
             if (moboPrincipal && moboPrincipal != 0) {
                 principalId = moboPrincipal;
+            }
+        }
+
+        // UNIDADES (118): usar siempre la placa base como principal
+        // Esto evita que el listado dependa del último componente agregado (ej. Fuente)
+        if (padreId == 118) {
+            var moboPrincipalUnidades = $('#idMoboCat').val();
+            if (moboPrincipalUnidades && moboPrincipalUnidades != 0) {
+                principalId = moboPrincipalUnidades;
+            } else {
+                return;
             }
         }
 

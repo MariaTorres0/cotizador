@@ -58,7 +58,6 @@ $categorias = obtenerCategoriasCoti($conexion);
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Cotiza tu KPC" />
   <meta property="og:description" content="Realiza tu cotización online con KPC Hardware" />
-  <meta property="og:image" content="https://www.kpchardware.com/personalizacion/img/fb_shares.jpg" />
   <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.2/css/all.css'
     integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous'>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
@@ -164,6 +163,9 @@ $categorias = obtenerCategoriasCoti($conexion);
     <input type="hidden" id="coolNeed" value="0" />
     <input type="hidden" id="gpuNeed" value="0" />
     <input type="hidden" id="idTamanioMoboCase" value="0" />
+
+    <input type="hidden" id="caseIncluyeFuente" value="0" />
+    <input type="hidden" id="caseIncluyeCooler" value="0" />
 
     <!-- Hidden para guardar id de categorías -->
     <input type="hidden" id="idProceCat" />
@@ -428,7 +430,7 @@ $categorias = obtenerCategoriasCoti($conexion);
 
             <div class="modal-footer" style="border-top-color: #3a4a55;">
             <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background-color: #3a4a55; border-color: #3a4a55;">Cerrar</button>
-            <button type="submit" class="btn btn-primary btn-send-modal" name="enviado">
+            <button type="submit" class="btn btn-primary" name="enviado">
               <i class="fas fa-paper-plane"></i>
               <span>Enviar</span>
             </button>

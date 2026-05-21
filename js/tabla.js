@@ -104,6 +104,123 @@ function cerrarMenu(idCategoriaPadre) {
 }
 
 /* ====================================
+   BLOQUEO DE CATEGORÍAS POR CASE
+   ==================================== */
+
+function categoriaEstaBloqueada(catId) {
+    const card = document.getElementById(`cat-${parseInt(catId)}`);
+    return !!(card && card.classList.contains('cat-disabled'));
+}
+
+function cerrarCollapseInstantPorCategoria(catId) {
+    catId = parseInt(catId);
+    const idCollapse = collapseMap[catId];
+    if (!idCollapse) return;
+
+    const collapseEl = document.getElementById(idCollapse);
+    if (!collapseEl) return;
+
+    // Cerrar sin animación ni plugin de Bootstrap
+    collapseEl.classList.remove('show');
+    collapseEl.classList.remove('collapsing');
+    collapseEl.classList.add('collapse');
+    collapseEl.style.height = '';
+
+    const btn = document.querySelector(`button[data-cat-id='${catId}']`);
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+}
+
+function setCategoriaBloqueada(catId, bloqueada) {
+    catId = parseInt(catId);
+
+    const card = document.getElementById(`cat-${catId}`);
+    const btn = document.querySelector(`button[data-cat-id='${catId}']`);
+    const iconEstado = document.getElementById(String(catId));
+
+    if (!card || !btn) return;
+
+    // Forzar cierre del acordeón sin animación
+    cerrarCollapseInstantPorCategoria(catId);
+
+    if (bloqueada) {
+        card.classList.add('cat-disabled');
+        btn.setAttribute('aria-disabled', 'true');
+        btn.setAttribute('data-coti-bloqueada', '1');
+
+        // Congelar color del texto para que Bootstrap no lo cambie en hover/focus
+        if (!btn.dataset.cotiPrevColor) {
+            btn.dataset.cotiPrevColor = btn.style.getPropertyValue('color') || '';
+            btn.dataset.cotiPrevColorPriority = btn.style.getPropertyPriority('color') || '';
+        }
+        const colorActual = window.getComputedStyle(btn).color;
+        btn.style.setProperty('color', colorActual, 'important');
+
+        // Ocultar el icono de estado (X / ! / check)
+        if (iconEstado) {
+            iconEstado.style.display = 'none';
+            // Limpiar estilos inline que cambian el color de fondo
+            $(iconEstado).closest('.card-header').css('background', '');
+        }
+
+        // Agregar icono de bloqueado si no existe
+        if (!btn.querySelector(`[data-disabled-icon='${catId}']`)) {
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-ban cat-disabled-icon';
+            icon.setAttribute('data-disabled-icon', String(catId));
+            btn.appendChild(icon);
+        }
+    } else {
+        card.classList.remove('cat-disabled');
+        btn.removeAttribute('aria-disabled');
+        btn.removeAttribute('data-coti-bloqueada');
+
+        // Restaurar color previo
+        const prevColor = btn.dataset.cotiPrevColor;
+        const prevPrio = btn.dataset.cotiPrevColorPriority;
+        delete btn.dataset.cotiPrevColor;
+        delete btn.dataset.cotiPrevColorPriority;
+
+        if (prevColor) {
+            btn.style.setProperty('color', prevColor, prevPrio || '');
+        } else {
+            btn.style.removeProperty('color');
+        }
+
+        // Restaurar icono de estado
+        if (iconEstado) {
+            iconEstado.style.display = '';
+        }
+
+        // Quitar icono de bloqueado
+        const icon = btn.querySelector(`[data-disabled-icon='${catId}']`);
+        if (icon) icon.remove();
+    }
+}
+
+function actualizarBloqueosPorCase() {
+    const caseIncluyeFuente = parseInt(document.getElementById('caseIncluyeFuente')?.value || 0) === 1;
+    const caseIncluyeCooler = parseInt(document.getElementById('caseIncluyeCooler')?.value || 0) === 1;
+
+    setCategoriaBloqueada(109, caseIncluyeFuente);
+    setCategoriaBloqueada(104, caseIncluyeCooler);
+    setCategoriaBloqueada(105, caseIncluyeCooler);
+}
+
+function eliminarFilasPorCategoria(idPadre) {
+    idPadre = parseInt(idPadre);
+    let fila;
+    // Mientras existan filas de esa categoría, eliminarlas usando la misma lógica
+    while ((fila = document.querySelector(`tr[id^='fila${idPadre}-']`))) {
+        const btnEliminar = fila.querySelector('button');
+        if (!btnEliminar) {
+            fila.remove();
+        } else {
+            eliminarFilas(btnEliminar);
+        }
+    }
+}
+
+/* ====================================
    LÓGICA DE VALIDACIÓN Y CALCULOS
    ==================================== */
 
@@ -127,6 +244,9 @@ function validarTabla() {
     const tieneCooler = categoriasEnTabla.includes(104) || categoriasEnTabla.includes(105);
     const gpuObligatoria = domCache.gpuNeed.value == 1;
     const coolerObligatorio = domCache.coolNeed.value == 1;
+
+    const caseIncluyeFuente = parseInt(document.getElementById('caseIncluyeFuente')?.value || 0) === 1;
+    const caseIncluyeCooler = parseInt(document.getElementById('caseIncluyeCooler')?.value || 0) === 1;
 
     // VALIDACIÓN BASICA INICIAL 
     const basicos = [100, 99, 103];
@@ -152,7 +272,7 @@ function validarTabla() {
     }
 
     // FUENTE DE PODER (109)
-    if (!categoriasEnTabla.includes(109)) {
+    if (!caseIncluyeFuente && !categoriasEnTabla.includes(109)) {
         alertify.error('La configuración requiere FUENTE DE PODER');
         return;
     }
@@ -164,7 +284,7 @@ function validarTabla() {
     }
 
     // COOLERS
-    if (coolerObligatorio && !tieneCooler) {
+    if (coolerObligatorio && !caseIncluyeCooler && !tieneCooler) {
         alertify.error('La configuración seleccionada requiere DISIPADOR');
         return;
     }
@@ -225,7 +345,22 @@ function socket(socketType) {
    GESTIÓN DE LA TABLA
    =============================== */
 
-function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, idProducto, idCategoria, idCategoriaPadre, nombreCategoria, slotsPCI, slotsRam, voltaje, gpu, tamanioMoboCase, cooler) {
+function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, idProducto, idCategoria, idCategoriaPadre, nombreCategoria, slotsPCI, slotsRam, voltaje, gpu, tamanioMoboCase, cooler, incluyeFuente, incluyeCooler) {
+
+    // Bloqueo por Case: si el gabinete ya incluye Fuente/Cooler, no permitir agregar
+    const caseIncluyeFuente = parseInt(document.getElementById('caseIncluyeFuente')?.value || 0) === 1;
+    const caseIncluyeCooler = parseInt(document.getElementById('caseIncluyeCooler')?.value || 0) === 1;
+    if (parseInt(idCategoriaPadre) === 109 && caseIncluyeFuente) {
+        alertify.error('Categoría inhabilitada: El case seleccionado ya incluye este componente');
+        return;
+    }
+    if ((parseInt(idCategoriaPadre) === 104 || parseInt(idCategoriaPadre) === 105) && caseIncluyeCooler) {
+        alertify.error('Categoría inhabilitada: El case seleccionado ya incluye este componente');
+        return;
+    }
+
+    incluyeFuente = parseInt(incluyeFuente) || 0;
+    incluyeCooler = parseInt(incluyeCooler) || 0;
 
     // Solo si es RAM (101) tomamos el valor real, si no, vale 1
     let pesoSlot = (idCategoriaPadre == 101) ? (parseInt(slotsRam) || 1) : 1;
@@ -318,6 +453,27 @@ function agregarTabla(nombreProducto, precioNormal, precioEfectivo, cantidad, id
         }
         else if (idCategoriaPadre == 103) {
             document.getElementById('idCaseCat').value = idCategoria;
+
+            const elIncluyeFuente = document.getElementById('caseIncluyeFuente');
+            const elIncluyeCooler = document.getElementById('caseIncluyeCooler');
+            if (elIncluyeFuente) elIncluyeFuente.value = incluyeFuente;
+            if (elIncluyeCooler) elIncluyeCooler.value = incluyeCooler;
+
+            // Si el case incluye Fuente/Cooler, eliminar selecciones existentes de esas categorías
+            if (incluyeFuente === 1) {
+                eliminarFilasPorCategoria(109);
+            }
+            if (incluyeCooler === 1) {
+                eliminarFilasPorCategoria(104);
+                eliminarFilasPorCategoria(105);
+            }
+
+            // Aplicar/retirar bloqueos visuales
+            actualizarBloqueosPorCase();
+
+            // Refrescar iconos de fuente/cooler para reflejar opcionalidad
+            // (no muestra mensajes, solo cambia indicador visual)
+            refrescarIconosFuenteCooler();
         }
 
         // Logica Procesador
@@ -442,6 +598,16 @@ function eliminarFilas(boton) {
         }
 
         eliminarHidden(idPadre);
+
+        if (idPadre === 103) {
+            const elIncluyeFuente = document.getElementById('caseIncluyeFuente');
+            const elIncluyeCooler = document.getElementById('caseIncluyeCooler');
+            if (elIncluyeFuente) elIncluyeFuente.value = 0;
+            if (elIncluyeCooler) elIncluyeCooler.value = 0;
+
+            // Refrescar iconos
+            refrescarIconosFuenteCooler();
+        }
         alertify.error('Componente eliminado');
 
     } else {
@@ -581,6 +747,11 @@ function eliminarHidden(idCategoria) {
         }
         if (catActual === 103) {
             document.getElementById('idCaseCat').value = '';
+
+            const elIncluyeFuente = document.getElementById('caseIncluyeFuente');
+            const elIncluyeCooler = document.getElementById('caseIncluyeCooler');
+            if (elIncluyeFuente) elIncluyeFuente.value = 0;
+            if (elIncluyeCooler) elIncluyeCooler.value = 0;
         }
         if (catActual === 102) document.getElementById('voltajegpu').value = 0;
 
@@ -592,6 +763,10 @@ function eliminarHidden(idCategoria) {
         }
     });
 
+    // Si en esta cascada se removió/cambió el Case, asegurar que el bloqueo visual se sincronice
+    actualizarBloqueosPorCase();
+    refrescarIconosFuenteCooler();
+
     wats();
     actualizarTotales();
 }
@@ -601,11 +776,39 @@ function eliminarHidden(idCategoria) {
    ========================================== */
 
 function cambiarClase(id) {
+    if (categoriaEstaBloqueada(id)) return;
     var el = document.getElementById(id);
     if (!el) return;
     $(el).removeClass('fas fa-times fas fa-exclamation').addClass('fas fa-check');
     el.style.color = '#01c94d';
     $(el).closest('.card-header').css('background', '#01752e');
+}
+
+function refrescarIconosFuenteCooler() {
+    // Primero, aplicar bloqueos (si procede)
+    actualizarBloqueosPorCase();
+
+    const caseIncluyeFuente = parseInt(document.getElementById('caseIncluyeFuente')?.value || 0) === 1;
+    const caseIncluyeCooler = parseInt(document.getElementById('caseIncluyeCooler')?.value || 0) === 1;
+
+    // Fuente (109)
+    if (!caseIncluyeFuente) {
+        const hayFuente = document.querySelector('tr[id^="fila109-"]');
+        if (hayFuente) cambiarClase(109);
+        else elimClase(109, false);
+    }
+
+    // Coolers (104/105)
+    if (!caseIncluyeCooler) {
+        const hayCooler = document.querySelector('tr[id^="fila104-"]') || document.querySelector('tr[id^="fila105-"]');
+        if (hayCooler) {
+            cambiarClase(104);
+            cambiarClase(105);
+        } else {
+            elimClase(104, false);
+            elimClase(105, false);
+        }
+    }
 }
 
 function resetearVisualGpuWarning() {
@@ -617,6 +820,7 @@ function resetearVisualGpuWarning() {
 }
 
 function resetearVisual(id, alerta = true) {
+    if (categoriaEstaBloqueada(id)) return;
     var el = document.getElementById(id);
     if (!el) return;
 
@@ -631,11 +835,15 @@ function resetearVisual(id, alerta = true) {
 
 function elimClase(idCategoria, teniaProductos) {
     idCategoria = parseInt(idCategoria);
+    if (categoriaEstaBloqueada(idCategoria)) return;
     var el = document.getElementById(idCategoria);
 
     if (!el && idCategoria === 999) el = document.getElementById('999') || document.getElementById('110');
 
     if (!el) return;
+
+    const caseIncluyeFuente = parseInt(document.getElementById('caseIncluyeFuente')?.value || 0) === 1;
+    const caseIncluyeCooler = parseInt(document.getElementById('caseIncluyeCooler')?.value || 0) === 1;
 
     // GRUPOS
     const grupoAmarillo = [102, 104, 105, 999, 119, 122, 106, 121];
@@ -644,12 +852,17 @@ function elimClase(idCategoria, teniaProductos) {
     // Primero limpiamos todas las clases de estado
     $(el).removeClass('fas fa-check fa-times fa-exclamation');
 
+    // Si el case incluye Fuente/Cooler, esas categorías se bloquean y no llevan estado
+    if ((idCategoria === 109 && caseIncluyeFuente) || ((idCategoria === 104 || idCategoria === 105) && caseIncluyeCooler)) {
+        return;
+    }
+
     // LOGICA GRUPO AMARILLO
     if (grupoAmarillo.includes(idCategoria)) {
         let esObligatorio = false;
 
         if (idCategoria === 102 && parseInt(document.getElementById('gpuNeed').value) === 1) esObligatorio = true;
-        if ((idCategoria === 104 || idCategoria === 105) && parseInt(document.getElementById('coolNeed').value) === 1) esObligatorio = true;
+        if ((idCategoria === 104 || idCategoria === 105) && parseInt(document.getElementById('coolNeed').value) === 1 && !caseIncluyeCooler) esObligatorio = true;
 
         if (esObligatorio) {
             $(el).addClass('fas fa-times');
